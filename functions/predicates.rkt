@@ -40,7 +40,6 @@
 (define (metadata? string)
   (ormap true? (valmap string (list reference? global-comment? local-comment?))))
 
-; TODO: test
 ; is-token?
 ; String -> Boolean
 ; produce true if string contains SEPARATOR
