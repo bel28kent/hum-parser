@@ -77,7 +77,7 @@
 ;;    and one-and-only-one GlobalSpine. TOKEN
 ;;    is separated from others by SEPARATOR.
 
-(define-struct token (token type record-number))
+(define-struct token (token type record-number) #:transparent)
 ; Token is (make-token String TokenType Natural)
 ;  Represents a single piece of data from a Spine
 ;  CONSTRAINT: record-number >= 0
@@ -125,7 +125,7 @@
 ;;    SPINE is a collection of TOKEN from a single
 ;;    column in a Humdrum file.
 
-(define-struct record (record type split record-number))
+(define-struct record (record type split record-number) #:transparent)
 ; Record is one of:
 ;  - (make-record String (listof Reference)     Natural)
 ;  - (make-record String (listof GlobalComment) Natural)
@@ -138,7 +138,7 @@
 (define RECORD-GC-EX (list "!! First ending")) ; gershwin30.krn
 (define RECORD-LC-EX (list "! Adagio\t!\t! Adagio\t!\t! Adagio\t!\t! Adagio\t!")) ; mozart/quartet/k080-01.krn
 
-(define-struct global-spine (tokens spine-number))
+(define-struct global-spine (tokens spine-number) #:transparent)
 ; GlobalSpine is (make-spine (listof Token) Natural)
 ;  Represents a singe global column of a Humdrum file.
 ;  CONSTRAINT: spine-number >= 0
@@ -152,7 +152,7 @@
 ;;  FILE
 ;;    FILE is a collection of records.
 
-(define-struct hfile (filename records))
+(define-struct hfile (filename records) #:transparent)
 ;  HumdrumFile is (make-hfile String (listof Records))
 ;    Represents a humdrum file.
 (define GERSH-01-FILE-EX (make-hfile "gersh-01.krn" (list (make-record "!! George Gershwin: (I've Got) Beginner's Luck"
@@ -220,7 +220,7 @@
                                                                        (list (make-token "*-" SPINE-TERMINATOR 15))
                                                                        15))))
 
-(define-struct spine-arity (global lolon))
+(define-struct spine-arity (global lolon) #:transparent)
 ; SpineStructure is (make-spine-arity Natural (listof Natural))
 ;  Represents the structure of a file's spines, with the number of
 ;    global spines and a list of number of subspines for each global

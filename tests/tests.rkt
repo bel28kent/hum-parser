@@ -246,7 +246,6 @@
 ;;  ABSTRACT FUNCTIONS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; TODO
 ; tag=?
 (check-expect (tag=? "!!!COM: Scriabin, Alexander" 3 REFERENCE-TAG) #t)
 (check-expect (tag=? "*\t*8va\t*" 3 REFERENCE-TAG)                  #f)
@@ -258,4 +257,25 @@
 (check-expect (tag=? "=1\t=1" 1 MEASURE-TAG)                        #t)
 (check-expect (tag=? "*\t*8va\t*" 1 MEASURE-TAG)                    #f)
 
+; filter-type
+(check-expect (filter-type record-type TOKEN empty) empty)
+(check-expect (map (lambda (r) (record-type r)) (filter-type record-type
+                                                             TOKEN
+                                                             (hfile-records (los->hfile "berg.pc"
+                                                                                        (read-file BERG-PATH)))))
+              (list TOKEN
+                    TOKEN
+                    TOKEN
+                    TOKEN
+                    TOKEN
+                    TOKEN
+                    TOKEN
+                    TOKEN
+                    TOKEN
+                    TOKEN
+                    TOKEN
+                    TOKEN
+                    TOKEN
+                    TOKEN
+                    TOKEN))
 (test)
