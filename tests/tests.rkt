@@ -155,6 +155,11 @@
 (check-expect (spine-data? EXCLUSIVE-TAG)                       #f)
 (check-expect (spine-data? TANDEM-TAG)                          #f)
 
+; type-metadata
+(check-expect (type-metadata "!!!COM: Scriabin, Alexander")   REFERENCE-RECORD)
+(check-expect (type-metadata "!! See pg. 5 of print edition") GLOBAL-COMMENT)
+(check-expect (type-metadata "!\t! In some editions A#")      LOCAL-COMMENT)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  TOKEN FUNCTIONS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -185,6 +190,7 @@
 ;;  RECORD FUNCTIONS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+; type-record
 (check-expect (type-record "!!!COM: Scriabin, Alexander")   REFERENCE-RECORD)
 (check-expect (type-record "!! See pg. 5 of print edition") GLOBAL-COMMENT)
 (check-expect (type-record "!\t! In some editions A#")      LOCAL-COMMENT)
