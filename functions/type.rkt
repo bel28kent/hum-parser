@@ -29,7 +29,6 @@
 ;;  RECORD FUNCTIONS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; TODO: test
 ; type-record
 ; String -> MetadataType or Token or false
 ; produce the type of the record or false if unknown
