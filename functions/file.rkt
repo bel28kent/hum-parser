@@ -13,7 +13,7 @@
 (provide (all-defined-out))
 
 ; read-file
-; String -> (listof (listof String))
+; String -> (listof String)
 ; reads in a file at given path and produces a list of its records split into fields
 
 (define (read-file path)
