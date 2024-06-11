@@ -230,6 +230,23 @@
                                     "!!!T33: 1"
                                     "!!!T35: 0"))
 
+; los->hfile
+(check-expect (los->hfile "empty-file.krn" empty) (make-hfile "empty-file.krn" empty))
+(check-expect (los->hfile "berg01.pc" (list "!!!COM: Berg, Alban"))
+              (make-hfile "berg01.pc" (list (make-record "!!!COM: Berg, Alban"
+                                                         REFERENCE-RECORD
+                                                         (list "!!!COM: Berg, Alban")
+                                                         0))))
+(check-expect (los->hfile "berg01.pc" (list "!!!COM: Berg, Alban" "**pc\t**kern"))
+              (make-hfile "berg01.pc" (list (make-record "!!!COM: Berg, Alban"
+                                                         REFERENCE-RECORD
+                                                         (list "!!!COM: Berg, Alban")
+                                                         0)
+                                            (make-record "**pc\t**kern"
+                                                         TOKEN
+                                                         (list (make-token "**pc" EXCLUSIVE-INTERPRETATION 1)
+                                                               (make-token "**kern" EXCLUSIVE-INTERPRETATION 1))
+                                                         1))))
 ; TODO
 ; write-file
 
@@ -263,19 +280,7 @@
                                                              TOKEN
                                                              (hfile-records (los->hfile "berg.pc"
                                                                                         (read-file BERG-PATH)))))
-              (list TOKEN
-                    TOKEN
-                    TOKEN
-                    TOKEN
-                    TOKEN
-                    TOKEN
-                    TOKEN
-                    TOKEN
-                    TOKEN
-                    TOKEN
-                    TOKEN
-                    TOKEN
-                    TOKEN
-                    TOKEN
-                    TOKEN))
+              (list TOKEN TOKEN TOKEN TOKEN TOKEN
+                    TOKEN TOKEN TOKEN TOKEN TOKEN
+                    TOKEN TOKEN TOKEN TOKEN TOKEN))
 (test)
