@@ -17,7 +17,6 @@
   (and (>= (string-length string) upto)
        (string=? (substring string 0 upto) constant)))
 
-; TODO: test
 ; filter-type
 ; proc String (listof X) -> (listof X)
 ; produces listof X whose type matches String
