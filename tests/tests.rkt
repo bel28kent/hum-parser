@@ -196,33 +196,33 @@
 
 ; read-file
 (check-expect (read-file BERG-PATH)
-                              (list (list "!!!COM: Berg, Alban")
-                                    (list "!!!OTL: Chamber Concerto")
-                                    (list "!!!OMV: Movements 1 and 3")
-                                    (list "!!!ODT: 1925")
-                                    (list "!!!ONB: In German, the last 8 notes are the capitalized letters in ArnolD SCHoenBErG.")
-                                    (list "**pc" "**kern")
-                                    (list "*X:" "*X:")
-                                    (list "0" "F")
-                                    (list "1" "F#")
-                                    (list "3" "G#")
-                                    (list "8" "C#")
-                                    (list "4" "A")
-                                    (list "9" "D")
-                                    (list "10" "E-")
-                                    (list "7" "C")
-                                    (list "6" "B")
-                                    (list "5" "B-")
-                                    (list "11" "E")
-                                    (list "2" "G")
-                                    (list "*-" "*-")
-                                    (list "!!!YOR: Dave Headlam, The Music of Alban Berg (New Haven, CT: Yale University Press, 1996), p. 391")
-                                    (list "!!!ref: @{COM}: <i>@{OTL}</i> (@{ODT}), @{OMV} <br>@{ONB}")
-                                    (list "!!!SEM: This row contains 4 instances of the semitone interval class.")
-                                    (list "!!!AIR: This is an all-interval row.")
-                                    (list "!!!RKY: 0.55")
-                                    (list "!!!T33: 1")
-                                    (list "!!!T35: 0")))
+                              (list "!!!COM: Berg, Alban"
+                                    "!!!OTL: Chamber Concerto"
+                                    "!!!OMV: Movements 1 and 3"
+                                    "!!!ODT: 1925"
+                                    "!!!ONB: In German, the last 8 notes are the capitalized letters in ArnolD SCHoenBErG."
+                                    "**pc\t**kern"
+                                    "*X:\t*X:"
+                                    "0\tF"
+                                    "1\tF#"
+                                    "3\tG#"
+                                    "8\tC#"
+                                    "4\tA"
+                                    "9\tD"
+                                    "10\tE-"
+                                    "7\tC"
+                                    "6\tB"
+                                    "5\tB-"
+                                    "11\tE"
+                                    "2\tG"
+                                    "*-\t*-"
+                                    "!!!YOR: Dave Headlam, The Music of Alban Berg (New Haven, CT: Yale University Press, 1996), p. 391"
+                                    "!!!ref: @{COM}: <i>@{OTL}</i> (@{ODT}), @{OMV} <br>@{ONB}"
+                                    "!!!SEM: This row contains 4 instances of the semitone interval class."
+                                    "!!!AIR: This is an all-interval row."
+                                    "!!!RKY: 0.55"
+                                    "!!!T33: 1"
+                                    "!!!T35: 0"))
 
 ; TODO
 ; write-file
