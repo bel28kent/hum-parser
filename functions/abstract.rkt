@@ -9,7 +9,6 @@
 
 (provide (all-defined-out))
 
-; TODO: test
 ; tag=?
 ; String Natural String -> Boolean 
 ; produce true if first string starts with second string
