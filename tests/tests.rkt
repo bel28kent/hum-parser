@@ -111,7 +111,7 @@
 (check-expect (spine-split? TERMINATOR)                          #f)
 (check-expect (spine-split? REFERENCE-RECORD-EX)                 #f)
 (check-expect (spine-split? MEASURE-TAG)                         #f)
-(check-expect (spine-split? (token-token MUSIC-TOKEN-EX))      #f)
+(check-expect (spine-split? (token-token MUSIC-TOKEN-EX))        #f)
 
 ; spine-join?
 (check-expect (spine-join? JOIN-TOKEN)                          #t)
@@ -119,7 +119,7 @@
 (check-expect (spine-join? TERMINATOR)                          #f)
 (check-expect (spine-join? REFERENCE-RECORD-EX)                 #f)
 (check-expect (spine-join? MEASURE-TAG)                         #f)
-(check-expect (spine-join? (token-token MUSIC-TOKEN-EX))      #f)
+(check-expect (spine-join? (token-token MUSIC-TOKEN-EX))        #f)
 
 ; spine-terminator?
 (check-expect (spine-terminator? TERMINATOR)                          #t)
@@ -127,7 +127,7 @@
 (check-expect (spine-terminator? SPLIT-TOKEN)                         #f)
 (check-expect (spine-terminator? REFERENCE-RECORD-EX)                 #f)
 (check-expect (spine-terminator? MEASURE-TAG)                         #f)
-(check-expect (spine-terminator? (token-token MUSIC-TOKEN-EX))      #f)
+(check-expect (spine-terminator? (token-token MUSIC-TOKEN-EX))        #f)
 
 ; spine-structure?
 (check-expect (spine-structure? SPLIT-TOKEN)                         #t)
@@ -135,7 +135,7 @@
 (check-expect (spine-structure? TERMINATOR)                          #t)
 (check-expect (spine-structure? REFERENCE-RECORD-EX)                 #f)
 (check-expect (spine-structure? MEASURE-TAG)                         #f)
-(check-expect (spine-structure? (token-token MUSIC-TOKEN-EX))      #f)
+(check-expect (spine-structure? (token-token MUSIC-TOKEN-EX))        #f)
 
 ; measure?
 (check-expect (measure? MEASURE-TAG)                         #t)
@@ -144,10 +144,10 @@
 (check-expect (measure? LOCAL-COMMENT-EX)                    #f)
 (check-expect (measure? EXCLUSIVE-TAG)                       #f)
 (check-expect (measure? TANDEM-TAG)                          #f)
-(check-expect (measure? (token-token MUSIC-TOKEN-EX))      #f)
+(check-expect (measure? (token-token MUSIC-TOKEN-EX))        #f)
 
 ; spine-data?
-(check-expect (spine-data? (token-token MUSIC-TOKEN-EX))      #t)
+(check-expect (spine-data? (token-token MUSIC-TOKEN-EX))        #t)
 (check-expect (spine-data? MEASURE-TAG)                         #f)
 (check-expect (spine-data? REFERENCE-RECORD-EX)                 #f)
 (check-expect (spine-data? GLOBAL-COMMENT-EX)                   #f)
@@ -181,6 +181,14 @@
 (check-expect (type-tandem "*M3/4") #f)
 (check-expect (type-tandem "*k[]")  #f)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  RECORD FUNCTIONS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(check-expect (type-record "!!!COM: Scriabin, Alexander")   REFERENCE-RECORD)
+(check-expect (type-record "!! See pg. 5 of print edition") GLOBAL-COMMENT)
+(check-expect (type-record "!\t! In some editions A#")      LOCAL-COMMENT)
+(check-expect (type-record "4a\t4aa\tf")                    TOKEN)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  FILE FUNCTIONS

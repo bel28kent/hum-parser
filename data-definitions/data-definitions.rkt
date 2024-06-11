@@ -25,7 +25,6 @@
 (define REFERENCE-RECORD         "ReferenceRecord")
 (define GLOBAL-COMMENT           "GlobalComment")
 (define LOCAL-COMMENT            "LocalComment")
-; TODO: tests
 (define TOKEN                    "Token")
 
 (define EXCLUSIVE-INTERPRETATION "ExclusiveInterpretation")
