@@ -25,7 +25,6 @@
   (call-with-input-file path
                         (lambda (in) (read-file empty in)))))
 
-; TODO: Test
 ; los->hfile
 ; String (listof String) -> HumdrumFile
 ; produces the given lolos as a HumdrumFile
