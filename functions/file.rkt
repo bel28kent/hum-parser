@@ -30,12 +30,12 @@
 ; produces the given lolos as a HumdrumFile
 
 (define (los->hfile filename los)
-  ; TODO: abstraction
+  ; TODO: make record-number a local constant
   (local [(define (los->lor los record-number)
             (cond [(empty? los) empty]
                   [else
-                     (cons (str->record (first los) record-number)
-                           (los->lor (rest los) (add1 record-number)))]))
+                    (cons (str->record (first los) record-number)
+                          (los->lor (rest los) (add1 record-number)))]))
 
           (define (str->record str record-number)
             (make-record str
@@ -48,8 +48,8 @@
           (define (los->lot los record-number)
             (cond [(empty? los) empty]
                   [else
-                     (cons (str->token (first los) record-number)
-                           (los->lot (rest los) record-number))]))
+                    (cons (str->token (first los) record-number)
+                          (los->lot (rest los) record-number))]))
 
           (define (str->token str record-number)
             (make-token str (type-token str) record-number))]
