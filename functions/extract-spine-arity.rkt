@@ -1,9 +1,9 @@
-; List of token records and empty list
-; If token record is not spine structure, just add a copy of the previous list of numbers to the empty list
-; If token record is spine structure
-;    If spine structure is spine split, find which spines split and increment their numbers
-;    If spine structure is spine join, find which spine joins and decrement its number.
-;    Add to the empty list
+#lang racket
+
+(require "../data-definitions/data-definitions.rkt"
+         "../../abstract-fns/functions/functions.rkt")
+
+(provide extract-spine-arity)
 
 ; TODO: test
 ; extract-spine-arity
@@ -24,9 +24,9 @@
 
           ; Record -> (listof Natural)
           (define (!!! record)
-            (cond [(spine-struct? record) ___]
+            (cond [(spine-struct? record) (struct-lon record)]
                   [else
-                     ___]))
+                     (lon record)]))
 
           ; Record -> Boolean
           (define (spine-struct? record)
@@ -34,8 +34,23 @@
 
                     (define (spine-struct? lot)
                       (cond [(empty? lot) #f]
-                            [(spine-structure? (first lot)) #t]
+                            [(or (string=? (token-type (first lot)) SPINE-SPLIT)
+                                 (string=? (token-type (first lot)) SPINE-JOIN)) #t]
                             [else
                                (spine-struct? (rest lot))]))]
-              (spine-struct? tokens)))]
+              (spine-struct? tokens)))
+
+          ; Record -> (listof Natural)
+          (define (struct-lon record)
+            ())
+
+          ; Record -> (listof Natural)
+          (define (lon record)
+            (local [(define tokens (record-split record))
+
+                    (define (lon ___)
+                      (cond [(string=? (token-type (first lot)) EXCLUSIVE-INTERPRETATION) (one-per-spine 0)]
+                            [else
+                               ___]))]
+              ()))]
     (make-spine-arity number-global-spines ???)))
