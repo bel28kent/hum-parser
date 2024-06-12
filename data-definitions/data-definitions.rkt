@@ -7,6 +7,7 @@
 ;;        All type constants are at the top of file
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+; TODO: refactor record-number fields to just be number
 (provide (all-defined-out))
 
 (define SEPARATOR "\t")
@@ -221,7 +222,7 @@
                                                                        15))))
 
 (define-struct spine-arity (global lolon) #:transparent)
-; SpineStructure is (make-spine-arity Natural (listof Natural))
+; SpineArity is (make-spine-arity Natural (listof Natural))
 ;  Represents the structure of a file's spines, with the number of
 ;    global spines and a list of number of subspines for each global
 ;    spine on each record.
