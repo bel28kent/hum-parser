@@ -35,6 +35,7 @@
 (define SPINE-SPLIT              "SpineSplit")
 (define SPINE-JOIN               "SpineJoin")
 (define SPINE-TERMINATOR         "SpineTerminator")
+(define NULL-INTERPRETATION      "NullInterpretation")
 (define CLEF                     "Clef")
 (define TIME-SIG                 "TimeSignature")
 
@@ -101,7 +102,9 @@
 ;  - SpineSplit
 ;  - SpineJoin
 ;  - SpineTerminator
+;  - NullInterpretation
 ;  - Clef
+;  - TimeSignature
 ;  Represents a token starting with TANDEM-TAG
 
 ; SpineSplit is "SpineSplit"
@@ -112,6 +115,17 @@
 
 ; SpineTerminator is "SpineTerminator"
 ;  Represents a token that equals TERMINATOR
+
+; NullInterpretation is "NullInterpretation"
+;  Represents a token that equals TANDEM-TAG
+
+; TODO
+; Clef is "Clef"
+;  Represents a token that begins with "*clef"
+
+; TODO
+; TimeSignature is "TimeSignature"
+;  Represents a token that begins with "*M"
 
 ; Measure is "Measure"
 ;  Represents a token starting with MEASURE-TAG

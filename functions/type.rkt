@@ -65,5 +65,6 @@
   (cond [(spine-split? token) SPINE-SPLIT]
         [(spine-join? token) SPINE-JOIN]
         [(spine-terminator? token) SPINE-TERMINATOR]
+        [(null-interpretation? token) NULL-INTERPRETATION]
         [else
           #f]))

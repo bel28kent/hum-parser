@@ -91,6 +91,14 @@
 (define (spine-terminator? token)
   (string=? token TERMINATOR))
 
+; null-interpretation?
+; String -> Boolean
+; produce true if string exactly matches TANDEM-TAG
+
+(define (null-interpretation? token)
+  (and (tag=? token 1 TANDEM-TAG)
+       (= 1 (string-length token))))
+
 ; spine-structure?
 ; String -> Boolean
 ; produce true if string is spine split, spine join, or terminator
