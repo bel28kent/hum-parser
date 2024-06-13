@@ -5,19 +5,23 @@
 
 (provide (all-defined-out))
 
+; BASE CASE:  a list of only one record, the exclusive interpretation record
+; ASSUMPTION: the first record must be the exclusive interpretation record,
+;             otherwise is humdrum syntax error
+
 ; TODO: test
 ; extract-spine-arity
 ; (listof Record) -> SpineArity
 ; produces the spine arity from a list of token records
 
-;(define (extract-spine-arity records)
-;  (local [; first record must be exclusive interpretation, otherwise is humdrum syntax error
-;          (define number-global-spines (length (first records)))]
-;    (make-spine-arity number-global-spines ???)))
+(define (extract-spine-arity records)
+  (make-spine-arity (length (record-split (first records)))
+                    (lolon records)))
 
 ; lolon
 ; (listof Record) -> (listof (listof Natural))
 ; produces the lolon field of the spine arity struct
+
 (define (lolon records)
   (local [(define (iterator records lolon previous)
             (cond [(empty? records) lolon]
@@ -34,6 +38,7 @@
 ; lon-caller
 ; Record Record (listof (listof Natural)) -> (listof Natural)
 ; if first record is spine structure, call struct-lon helper, else call lon helper
+
 (define (lon-caller previous record lolon)
   (cond [(previous-spine-struct? previous) (struct-lon previous record lolon)]
         [else
@@ -80,7 +85,7 @@
 
 ; struct-lon
 ; Record Record (listof Natural) -> (listof Natural)
-; produces the lon for the second record
+; produces the lon for the second record, which follows a spine structure record
 ; TODO: should be this record, which is AFTER structure
 
 (define (struct-lon previous record prev-lon)
@@ -105,7 +110,9 @@
                              (if (= (add1 num-tokens) (first prev))
                                  (split (rest tokens) 0  1 (rest prev) (cons (add1 num-spine) current))
                                  (split (rest tokens) (add1 num-tokens) (add1 num-spine) prev current))]
-                            [(= (add1 num-tokens) (first prev)) (split (rest tokens) 0 1 (rest prev) (cons num-spine current))]
+                            [(= (add1 num-tokens) (first prev))
+
+                             (split (rest tokens) 0 1 (rest prev) (cons num-spine current))]
                             [else
                               (split (rest tokens) (add1 num-tokens) num-spine prev current)]))]
               (split prev-tokens 0  1 prev-lon empty)))
@@ -125,7 +132,9 @@
                              (if (= (+ 2 num-tokens) (first prev))
                                  (join (shift (rest tokens)) 0 1 (rest prev) (cons num-spine current))
                                  (join (shift (rest tokens)) (+ 2 num-tokens) (add1 num-spine) prev current))]
-                            [(= (add1 num-tokens) (first prev)) (join (rest tokens) 0 1 (rest prev) (cons num-spine current))]
+                            [(= (add1 num-tokens) (first prev))
+
+                             (join (rest tokens) 0 1 (rest prev) (cons num-spine current))]
                             [else
                               (join (rest tokens) (add1 num-tokens) num-spine prev current)]))]
               (join prev-tokens 0 1 prev-lon empty)))]
