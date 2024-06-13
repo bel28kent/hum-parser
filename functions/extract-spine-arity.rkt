@@ -107,8 +107,17 @@
                                                                  (make-token "4aa" SPINE-DATA 4)
                                                                  (make-token "4aaa" SPINE-DATA 4))
                                                             4))
+(define JOIN (make-record "*\t*v\t*v\t*" TOKEN (list (make-token "*" NULL-INTERPRETATION 3)
+                                                     (make-token "*v" SPINE-JOIN 3)
+                                                     (make-token "*v" SPINE-JOIN 3)
+                                                     (make-token "*" NULL-INTERPRETATION 3))
+                                               3))
+(define AFTER-JOIN (make-record "4A\t4a\t4aaa" TOKEN (list (make-token "4A" SPINE-DATA 4)
+                                                                 (make-token "4a" SPINE-DATA 4)
+                                                                 (make-token "4aaa" SPINE-DATA 4))
+                                                            4))
 (check-expect (struct-lon SPLIT AFTER-SPLIT (list 1 1 1)) (list 1 2 1)) ; split case
-;(check-expect (struct-lon ) ) ; join case
+(check-expect (struct-lon JOIN AFTER-JOIN (list 1 2 1)) (list 1 1 1)) ; join case
 
 (define (struct-lon previous record prev-lon)
   (local [(define prev-tokens (record-split previous))
@@ -132,6 +141,7 @@
                              (if (= (add1 num-tokens) (first prev))
                                  (split (rest tokens) 0  1 (rest prev) (cons (add1 num-spine) current))
                                  (split (rest tokens) (add1 num-tokens) (add1 num-spine) prev current))]
+                            [(= (add1 num-tokens) (first prev)) (split (rest tokens) 0 1 (rest prev) (cons num-spine current))]
                             [else
                               (split (rest tokens) (add1 num-tokens) num-spine prev current)]))]
               (split prev-tokens 0  1 prev-lon empty)))
@@ -149,8 +159,9 @@
                             [(string=? (token-type (first tokens)) SPINE-JOIN)
 
                              (if (= (+ 2 num-tokens) (first prev))
-                                 (join (shift (rest tokens)) 0 1 (rest prev) (cons (add1 num-spine) current))
-                                 (join (shift (rest tokens)) (+ 2 num-tokens) (add1 (num-spine) prev current)))]
+                                 (join (shift (rest tokens)) 0 1 (rest prev) (cons num-spine current))
+                                 (join (shift (rest tokens)) (+ 2 num-tokens) (add1 num-spine) prev current))]
+                            [(= (add1 num-tokens) (first prev)) (join (rest tokens) 0 1 (rest prev) (cons num-spine current))]
                             [else
                               (join (rest tokens) (add1 num-tokens) num-spine prev current)]))]
               (join prev-tokens 0 1 prev-lon empty)))]
