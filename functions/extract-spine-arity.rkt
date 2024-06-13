@@ -27,7 +27,7 @@
             (cond [(empty? records) lolon]
                   [else
                     (iterator (rest records)
-                              (cons (lon-caller (first records) lolon) lolon)
+                              (cons (lon-caller (first records) (first lolon)) lolon)
                               (first records))]))]
     (if (= (length records) 1)
         (list (one-per-spine (length (record-split (first records)))))
@@ -36,13 +36,13 @@
                   (first records)))))
 
 ; lon-caller
-; Record Record (listof (listof Natural)) -> (listof Natural)
-; if first record is spine structure, call struct-lon helper, else call lon helper
+; Record Record (listof Natural) -> (listof Natural)
+; if first record is spine structure, call struct-lon helper, just return previous lon
 
-(define (lon-caller previous record lolon)
-  (cond [(previous-spine-struct? previous) (struct-lon previous record lolon)]
+(define (lon-caller previous record prev-lon)
+  (cond [(previous-spine-struct? previous) (struct-lon previous record prev-lon)]
         [else
-          (copy-previous record lolon)]))
+          prev-lon]))
 
 ; previous-spine-struct?
 ; Record -> Boolean
@@ -150,16 +150,3 @@
                   [else
                     (cons 1 (one-per-spine (add1 counter)))]))]
     (one-per-spine 0)))
-
-; copy-previous
-; Natural (listof (listof Natural)) -> (listof Natural)
-; copies the previous lon
-
-(define (copy-previous record-number lolon)
-  (local [(define (iterator counter lolon)
-            (cond [(= counter record-number) (first lolon)]
-                  [else
-                    (iterator (add1 counter) (rest lolon))]))]
-    (if (= 1 (length lolon))
-      (first lolon)
-      (iterator 0 lolon))))

@@ -47,6 +47,12 @@
 (check-expect (lolon (list TEST-RECORD-1)) (list (list 1)))
 
 ; lon-caller
+(check-expect (lon-caller SPLIT AFTER-SPLIT (list 1 1 1)) (list 1 2 1))
+(check-expect (lon-caller JOIN AFTER-JOIN (list 1 2 1)) (list 1 1 1))
+(check-expect (lon-caller (make-record "4a" TOKEN (list (make-token "4a" SPINE-DATA 9)) 9)
+                          (make-record "4b" TOKEN (list (make-token "4b" SPINE-DATA 10)) 10)
+                          (list 1))
+              (list 1))
 
 ; previous-spine-struct?
 (check-expect (previous-spine-struct? TEST-RECORD-1) #f)
@@ -67,17 +73,10 @@
 (check-expect (split-or-join-record TEST-RECORD-4) #f)
 
 ; struct-lon
-(check-expect (struct-lon SPLIT AFTER-SPLIT (list 1 1 1)) (list 1 2 1)) ; split case
-(check-expect (struct-lon JOIN AFTER-JOIN (list 1 2 1)) (list 1 1 1)) ; join case
+(check-expect (struct-lon SPLIT AFTER-SPLIT (list 1 1 1)) (list 1 2 1))
+(check-expect (struct-lon JOIN AFTER-JOIN (list 1 2 1)) (list 1 1 1))
 
 ; one-per-spine
 (check-expect (one-per-spine 5) (list 1 1 1 1 1))
-
-; copy-previous
-(check-expect (copy-previous 1 (list (list 1)))
-              (list 1))
-(check-expect (copy-previous 1 (list (list 1 1 1)
-                                     (list 1 2 1)))
-              (list 1 2 1))
 
 (test)
