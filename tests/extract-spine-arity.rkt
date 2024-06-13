@@ -54,7 +54,21 @@
 (define BERG (filter-type record-type TOKEN (hfile-records (los->hfile "berg" (read-file "data/berg01.pc")))))
 
 ; extract-spine-arity
-
+(check-expect (extract-spine-arity BERG) (make-spine-arity 2 (list (list 1 1)
+                                                                   (list 1 1)
+                                                                   (list 1 1)
+                                                                   (list 1 1)
+                                                                   (list 1 1)
+                                                                   (list 1 1)
+                                                                   (list 1 1)
+                                                                   (list 1 1)
+                                                                   (list 1 1)
+                                                                   (list 1 1)
+                                                                   (list 1 1)
+                                                                   (list 1 1)
+                                                                   (list 1 1)
+                                                                   (list 1 1)
+                                                                   (list 1 1))))
 ; lolon
 (check-expect (lolon (list TEST-RECORD-1)) (list (list 1)))
 (check-expect (lolon BERG) (list (list 1 1)
