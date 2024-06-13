@@ -1,30 +1,16 @@
 #lang racket
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  hum-parser: TEST
+;;  hum-parser: tests for predicates
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../functions/abstract.rkt"
-         "../functions/file.rkt"
-         "../functions/predicates.rkt"
-         "../functions/split-and-gather.rkt"
-         "../functions/type.rkt"
+(require "../functions/predicates.rkt"
          "../data-definitions/data-definitions.rkt"
          test-engine/racket-tests)
-
-(provide BERG-PATH)
-
-(define BERG-PATH "data/berg01.pc")
 
 ; TODO
 ;  More robust tests would use real examples that contain each tag.
 ;  Could use constants.
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  PREDICATES
-;;    These functions can be called on any string.
-;;    #f only signifies that the string is not a type.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; reference?
 (check-expect (reference? REFERENCE-RECORD-EX)               #t)
@@ -159,132 +145,4 @@
 (check-expect (spine-data? EXCLUSIVE-TAG)                       #f)
 (check-expect (spine-data? TANDEM-TAG)                          #f)
 
-; type-metadata
-(check-expect (type-metadata "!!!COM: Scriabin, Alexander")   REFERENCE-RECORD)
-(check-expect (type-metadata "!! See pg. 5 of print edition") GLOBAL-COMMENT)
-(check-expect (type-metadata "!\t! In some editions A#")      LOCAL-COMMENT)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  TOKEN FUNCTIONS
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-; Should only be called on strings that are tokens.
-; #f indicates only that the token type is not known,
-;   and does not indicate that string is not a token.
-; type-token
-(check-expect (type-token "**kern\t**kern") EXCLUSIVE-INTERPRETATION)
-(check-expect (type-token "*\t*8va\t*")     #f)
-(check-expect (type-token "=4||")           MEASURE)
-(check-expect (type-token "16.aaLL]")       SPINE-DATA)
-
-; TODO
-; Should only be called on strings that are tandem tokens.
-; #f indicates only that the tandem type is not known,
-;   and does not indicate that string is not a tandem token.
-; type-tandem
-(check-expect (type-tandem "*^")    SPINE-SPLIT)
-(check-expect (type-tandem "*v")    SPINE-JOIN)
-(check-expect (type-tandem "*-")    SPINE-TERMINATOR)
-(check-expect (type-tandem "*")     #f)
-(check-expect (type-tandem "X8va")  #f)
-(check-expect (type-tandem "*M3/4") #f)
-(check-expect (type-tandem "*k[]")  #f)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  RECORD FUNCTIONS
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-; type-record
-(check-expect (type-record "!!!COM: Scriabin, Alexander")   REFERENCE-RECORD)
-(check-expect (type-record "!! See pg. 5 of print edition") GLOBAL-COMMENT)
-(check-expect (type-record "!\t! In some editions A#")      LOCAL-COMMENT)
-(check-expect (type-record "4a\t4aa\tf")                    TOKEN)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  FILE FUNCTIONS
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-; read-file
-(check-expect (read-file BERG-PATH)
-                              (list "!!!COM: Berg, Alban"
-                                    "!!!OTL: Chamber Concerto"
-                                    "!!!OMV: Movements 1 and 3"
-                                    "!!!ODT: 1925"
-                                    "!!!ONB: In German, the last 8 notes are the capitalized letters in ArnolD SCHoenBErG."
-                                    "**pc\t**kern"
-                                    "*X:\t*X:"
-                                    "0\tF"
-                                    "1\tF#"
-                                    "3\tG#"
-                                    "8\tC#"
-                                    "4\tA"
-                                    "9\tD"
-                                    "10\tE-"
-                                    "7\tC"
-                                    "6\tB"
-                                    "5\tB-"
-                                    "11\tE"
-                                    "2\tG"
-                                    "*-\t*-"
-                                    "!!!YOR: Dave Headlam, The Music of Alban Berg (New Haven, CT: Yale University Press, 1996), p. 391"
-                                    "!!!ref: @{COM}: <i>@{OTL}</i> (@{ODT}), @{OMV} <br>@{ONB}"
-                                    "!!!SEM: This row contains 4 instances of the semitone interval class."
-                                    "!!!AIR: This is an all-interval row."
-                                    "!!!RKY: 0.55"
-                                    "!!!T33: 1"
-                                    "!!!T35: 0"))
-
-; los->hfile
-(check-expect (los->hfile "empty-file.krn" empty) (make-hfile "empty-file.krn" empty))
-(check-expect (los->hfile "berg01.pc" (list "!!!COM: Berg, Alban"))
-              (make-hfile "berg01.pc" (list (make-record "!!!COM: Berg, Alban"
-                                                         REFERENCE-RECORD
-                                                         (list "!!!COM: Berg, Alban")
-                                                         0))))
-(check-expect (los->hfile "berg01.pc" (list "!!!COM: Berg, Alban" "**pc\t**kern"))
-              (make-hfile "berg01.pc" (list (make-record "!!!COM: Berg, Alban"
-                                                         REFERENCE-RECORD
-                                                         (list "!!!COM: Berg, Alban")
-                                                         0)
-                                            (make-record "**pc\t**kern"
-                                                         TOKEN
-                                                         (list (make-token "**pc" EXCLUSIVE-INTERPRETATION 1)
-                                                               (make-token "**kern" EXCLUSIVE-INTERPRETATION 1))
-                                                         1))))
-; TODO
-; write-file
-
-; split
-(check-expect (split "") empty)
-(check-expect (split "**kern") (list "**kern"))
-(check-expect (split "**kern\t**kern\t**kern") (list "**kern" "**kern" "**kern"))
-(check-expect (split "**kern\t**dynam\t**kern\t**text") (list "**kern" "**dynam" "**kern" "**text"))
-
-; TODO
-; gather
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  ABSTRACT FUNCTIONS
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-; tag=?
-(check-expect (tag=? "!!!COM: Scriabin, Alexander" 3 REFERENCE-TAG) #t)
-(check-expect (tag=? "*\t*8va\t*" 3 REFERENCE-TAG)                  #f)
-(check-expect (tag=? "!! This is a global comment" 2 GLOBAL-TAG)    #t)
-(check-expect (tag=? "!\t! Possibly Bn" 1 LOCAL-TAG)                #t)
-(check-expect (tag=? "**kern\t**kern" 2 EXCLUSIVE-TAG)              #t)
-(check-expect (tag=? "!! Global comment" 2 EXCLUSIVE-TAG)           #f)
-(check-expect (tag=? "*\t*8va\t*" 1 TANDEM-TAG)                     #t)
-(check-expect (tag=? "=1\t=1" 1 MEASURE-TAG)                        #t)
-(check-expect (tag=? "*\t*8va\t*" 1 MEASURE-TAG)                    #f)
-
-; filter-type
-(check-expect (filter-type record-type TOKEN empty) empty)
-(check-expect (map (lambda (r) (record-type r)) (filter-type record-type
-                                                             TOKEN
-                                                             (hfile-records (los->hfile "berg.pc"
-                                                                                        (read-file BERG-PATH)))))
-              (list TOKEN TOKEN TOKEN TOKEN TOKEN
-                    TOKEN TOKEN TOKEN TOKEN TOKEN
-                    TOKEN TOKEN TOKEN TOKEN TOKEN))
 (test)
