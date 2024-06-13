@@ -4,8 +4,8 @@
 ;;  hum-parser: tests for file functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../functions/file.rkt"
-         "../data-definitions/data-definitions.rkt"
+(require "../data-definitions/data-definitions.rkt"
+         "../functions/file.rkt"
          test-engine/racket-tests)
 
 (provide BERG-PATH)

@@ -4,8 +4,8 @@
 ;;  hum-parser: tests for type functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../functions/type.rkt"
-         "../data-definitions/data-definitions.rkt"
+(require "../data-definitions/data-definitions.rkt"
+         "../functions/type.rkt"
          test-engine/racket-tests)
 
 ; TODO
