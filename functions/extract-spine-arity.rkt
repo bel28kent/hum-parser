@@ -27,12 +27,12 @@
             (cond [(empty? records) lolon]
                   [else
                     (iterator (rest records)
-                              (cons (lon-caller (first records) (first lolon)) lolon)
+                              (cons (lon-caller previous (first records) (first lolon)) lolon)
                               (first records))]))]
     (if (= (length records) 1)
         (list (one-per-spine (length (record-split (first records)))))
         (iterator (rest records)
-                  (one-per-spine (length (record-split (first records))))
+                  (list (one-per-spine (length (record-split (first records)))))
                   (first records)))))
 
 ; lon-caller
@@ -63,7 +63,8 @@
 ; produces type if SpineSplit or SpineJoin, else false
 
 (define (split-or-join-token token)
-  (cond [(string=? (token-type token) SPINE-SPLIT) SPINE-SPLIT]
+  (cond [(false? (token-type token)) #f]
+        [(string=? (token-type token) SPINE-SPLIT) SPINE-SPLIT]
         [(string=? (token-type token) SPINE-JOIN) SPINE-JOIN]
         [else
           #f]))
@@ -77,6 +78,7 @@
 
           (define (split-or-join tokens)
             (cond [(empty? tokens) #f]
+                  [(false? (token-type (first tokens))) (split-or-join (rest tokens))]
                   [(string=? (token-type (first tokens)) SPINE-SPLIT) SPINE-SPLIT]
                   [(string=? (token-type (first tokens)) SPINE-JOIN) SPINE-JOIN]
                   [else

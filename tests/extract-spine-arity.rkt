@@ -5,9 +5,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "../data-definitions/data-definitions.rkt"
+         "../functions/abstract.rkt"
          "../functions/extract-spine-arity.rkt"
+         "../functions/file.rkt"
          test-engine/racket-tests)
 
+(provide BERG)
 ; TODO
 ;  More robust tests would use real examples that contain each tag.
 ;  Could use constants.
@@ -22,29 +25,53 @@
 (define TEST-RECORD-3 (make-record "*v"     TOKEN (list TEST-TOKEN-3) 3))
 (define TEST-RECORD-4 (make-record "4a"     TOKEN (list TEST-TOKEN-4) 3))
 
-(define SPLIT (make-record "*\t*^\t*" TOKEN (list (make-token "*" NULL-INTERPRETATION 3)
-                                                  (make-token "*^" SPINE-SPLIT 3)
-                                                  (make-token "*" NULL-INTERPRETATION 3))
-                                            3))
-(define AFTER-SPLIT (make-record "4A\t4a\t4aa\t4aaa" TOKEN (list (make-token "4A" SPINE-DATA 4)
-                                                                 (make-token "4a" SPINE-DATA 4)
-                                                                 (make-token "4aa" SPINE-DATA 4)
-                                                                 (make-token "4aaa" SPINE-DATA 4))
-                                                            4))
-(define JOIN (make-record "*\t*v\t*v\t*" TOKEN (list (make-token "*" NULL-INTERPRETATION 3)
-                                                     (make-token "*v" SPINE-JOIN 3)
-                                                     (make-token "*v" SPINE-JOIN 3)
-                                                     (make-token "*" NULL-INTERPRETATION 3))
-                                               3))
-(define AFTER-JOIN (make-record "4A\t4a\t4aaa" TOKEN (list (make-token "4A" SPINE-DATA 4)
-                                                                 (make-token "4a" SPINE-DATA 4)
-                                                                 (make-token "4aaa" SPINE-DATA 4))
-                                                            4))
+(define SPLIT (make-record "*\t*^\t*"
+                           TOKEN
+                           (list (make-token "*" NULL-INTERPRETATION 3)
+                                 (make-token "*^" SPINE-SPLIT 3)
+                                 (make-token "*" NULL-INTERPRETATION 3))
+                           3))
+(define AFTER-SPLIT (make-record "4A\t4a\t4aa\t4aaa"
+                                 TOKEN
+                                 (list (make-token "4A" SPINE-DATA 4)
+                                       (make-token "4a" SPINE-DATA 4)
+                                       (make-token "4aa" SPINE-DATA 4)
+                                       (make-token "4aaa" SPINE-DATA 4))
+                                 4))
+(define JOIN (make-record "*\t*v\t*v\t*"
+                          TOKEN
+                          (list (make-token "*" NULL-INTERPRETATION 3)
+                                (make-token "*v" SPINE-JOIN 3)
+                                (make-token "*v" SPINE-JOIN 3)
+                                (make-token "*" NULL-INTERPRETATION 3))
+                          3))
+(define AFTER-JOIN (make-record "4A\t4a\t4aaa"
+                                TOKEN
+                                (list (make-token "4A" SPINE-DATA 4)
+                                      (make-token "4a" SPINE-DATA 4)
+                                      (make-token "4aaa" SPINE-DATA 4))
+                                4))
+(define BERG (filter-type record-type TOKEN (hfile-records (los->hfile "berg" (read-file "data/berg01.pc")))))
 
 ; extract-spine-arity
 
 ; lolon
 (check-expect (lolon (list TEST-RECORD-1)) (list (list 1)))
+(check-expect (lolon BERG) (list (list 1 1)
+                                 (list 1 1)
+                                 (list 1 1)
+                                 (list 1 1)
+                                 (list 1 1)
+                                 (list 1 1)
+                                 (list 1 1)
+                                 (list 1 1)
+                                 (list 1 1)
+                                 (list 1 1)
+                                 (list 1 1)
+                                 (list 1 1)
+                                 (list 1 1)
+                                 (list 1 1)
+                                 (list 1 1)))
 
 ; lon-caller
 (check-expect (lon-caller SPLIT AFTER-SPLIT (list 1 1 1)) (list 1 2 1))
