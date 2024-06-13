@@ -61,6 +61,10 @@
 (check-expect (split-or-join-token TEST-TOKEN-4) #f)
 
 ; split-or-join-record
+(check-expect (split-or-join-record TEST-RECORD-1) #f)
+(check-expect (split-or-join-record TEST-RECORD-2) SPINE-SPLIT)
+(check-expect (split-or-join-record TEST-RECORD-3) SPINE-JOIN)
+(check-expect (split-or-join-record TEST-RECORD-4) #f)
 
 ; struct-lon
 (check-expect (struct-lon SPLIT AFTER-SPLIT (list 1 1 1)) (list 1 2 1)) ; split case

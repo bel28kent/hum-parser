@@ -25,6 +25,10 @@
 (check-expect (type-token "*\t*8va\t*")     #f)
 (check-expect (type-token "=4||")           MEASURE)
 (check-expect (type-token "16.aaLL]")       SPINE-DATA)
+(check-expect (type-token "*^")             SPINE-SPLIT)
+(check-expect (type-token "*v")             SPINE-JOIN)
+(check-expect (type-token "*-")             SPINE-TERMINATOR)
+(check-expect (type-token "*")              NULL-INTERPRETATION)
 
 ; TODO
 ; Should only be called on strings that are tandem tokens.

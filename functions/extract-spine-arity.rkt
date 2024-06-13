@@ -77,8 +77,8 @@
 
           (define (split-or-join tokens)
             (cond [(empty? tokens) #f]
-                  [(string=? (token-type (first tokens))) SPINE-SPLIT]
-                  [(string=? (token-type (first tokens))) SPINE-JOIN]
+                  [(string=? (token-type (first tokens)) SPINE-SPLIT) SPINE-SPLIT]
+                  [(string=? (token-type (first tokens)) SPINE-JOIN) SPINE-JOIN]
                   [else
                     (split-or-join (rest tokens))]))]
     (split-or-join tokens)))
