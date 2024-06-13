@@ -53,16 +53,16 @@
 
           (define (spine-struct? lot)
             (cond [(empty? lot) #f]
-                  [(not (false? (split-or-join (first lot)))) #t]
+                  [(not (false? (split-or-join-token (first lot)))) #t]
                   [else
                     (spine-struct? (rest lot))]))]
     (spine-struct? tokens)))
 
-; split-or-join
+; split-or-join-token
 ; Token -> SpineSplit or SpineJoin or false
 ; produces type if SpineSplit or SpineJoin, else false
 
-(define (split-or-join token)
+(define (split-or-join-token token)
   (cond [(string=? (token-type token) SPINE-SPLIT) SPINE-SPLIT]
         [(string=? (token-type token) SPINE-JOIN) SPINE-JOIN]
         [else

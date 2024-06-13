@@ -54,11 +54,11 @@
 (check-expect (previous-spine-struct? TEST-RECORD-3) #t)
 (check-expect (previous-spine-struct? TEST-RECORD-4) #f)
 
-; split-or-join
-(check-expect (split-or-join TEST-TOKEN-1) #f)
-(check-expect (split-or-join TEST-TOKEN-2) SPINE-SPLIT)
-(check-expect (split-or-join TEST-TOKEN-3) SPINE-JOIN)
-(check-expect (split-or-join TEST-TOKEN-4) #f)
+; split-or-join-token
+(check-expect (split-or-join-token TEST-TOKEN-1) #f)
+(check-expect (split-or-join-token TEST-TOKEN-2) SPINE-SPLIT)
+(check-expect (split-or-join-token TEST-TOKEN-3) SPINE-JOIN)
+(check-expect (split-or-join-token TEST-TOKEN-4) #f)
 
 ; split-or-join-record
 
