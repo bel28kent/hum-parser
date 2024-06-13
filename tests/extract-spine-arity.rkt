@@ -44,6 +44,7 @@
 ; extract-spine-arity
 
 ; lolon
+(check-expect (lolon (list TEST-RECORD-1)) (list (list 1)))
 
 ; lon-caller
 
@@ -64,10 +65,6 @@
 ; struct-lon
 (check-expect (struct-lon SPLIT AFTER-SPLIT (list 1 1 1)) (list 1 2 1)) ; split case
 (check-expect (struct-lon JOIN AFTER-JOIN (list 1 2 1)) (list 1 1 1)) ; join case
-
-; lon
-(check-expect (lon TEST-RECORD-1 empty 1) (list 1))
-(check-expect (lon TEST-RECORD-2 (list (list 1)) 1) (list 1))
 
 ; one-per-spine
 (check-expect (one-per-spine 5) (list 1 1 1 1 1))

@@ -18,16 +18,18 @@
 ; lolon
 ; (listof Record) -> (listof (listof Natural))
 ; produces the lolon field of the spine arity struct
-(define (lolon tokens)
+(define (lolon records)
   (local [(define (iterator records lolon previous)
             (cond [(empty? records) lolon]
                   [else
                     (iterator (rest records)
                               (cons (lon-caller (first records) lolon) lolon)
                               (first records))]))]
-    (iterator (rest tokens)
-              (one-per-spine (length (first tokens)))
-              (first tokens))))
+    (if (= (length records) 1)
+        (list (one-per-spine (length (record-split (first records)))))
+        (iterator (rest records)
+                  (one-per-spine (length (record-split (first records))))
+                  (first records)))))
 
 ; lon-caller
 ; Record Record (listof (listof Natural)) -> (listof Natural)
@@ -35,7 +37,7 @@
 (define (lon-caller previous record lolon)
   (cond [(previous-spine-struct? previous) (struct-lon previous record lolon)]
         [else
-          (lon record lolon)]))
+          (copy-previous record lolon)]))
 
 ; previous-spine-struct?
 ; Record -> Boolean
@@ -128,19 +130,6 @@
                               (join (rest tokens) (add1 num-tokens) num-spine prev current)]))]
               (join prev-tokens 0 1 prev-lon empty)))]
     (caller prev-tokens)))
-
-; lon
-; Record (listof (listof Natural)) Natural -> (listof Natural)
-; produces the lon for this record, which is not after a structure
-
-(define (lon record lolon number-global-spines)
-  (local [(define tokens (record-split record))
-
-          (define (lon lot)
-            (cond [(string=? (token-type (first lot)) EXCLUSIVE-INTERPRETATION) (one-per-spine number-global-spines)]
-                  [else
-                    (copy-previous (sub1 (record-record-number record)) lolon)]))]
-    (lon tokens)))
 
 ; one-per-spine
 ; Natural -> (listof Natural)
