@@ -110,14 +110,14 @@
                             [(string=? (token-type (first tokens)) SPINE-SPLIT)
                              
                              (if (= (add1 num-tokens) (first prev))
-                                 (split (rest tokens) 0  1 (rest prev) (cons (add1 num-spine) current))
-                                 (split (rest tokens) (add1 num-tokens) (add1 num-spine) prev current))]
+                                 (split (rest tokens) 0 0 (rest prev) (cons (+ 2 num-spine) current))
+                                 (split (rest tokens) (add1 num-tokens) (+ 2 num-spine) prev current))]
                             [(= (add1 num-tokens) (first prev))
 
-                             (split (rest tokens) 0 1 (rest prev) (cons num-spine current))]
+                             (split (rest tokens) 0 0 (rest prev) (cons (add1 num-spine) current))]
                             [else
                               (split (rest tokens) (add1 num-tokens) (add1 num-spine) prev current)]))]
-              (split prev-tokens 0  1 prev-lon empty)))
+              (split prev-tokens 0 0 prev-lon empty)))
 
           ; previous should only have one join
           ; TODO: preprocessor
@@ -132,14 +132,14 @@
                             [(string=? (token-type (first tokens)) SPINE-JOIN)
 
                              (if (= (+ 2 num-tokens) (first prev))
-                                 (join (shift (rest tokens)) 0 1 (rest prev) (cons num-spine current))
+                                 (join (shift (rest tokens)) 0 0 (rest prev) (cons (add1 num-spine) current))
                                  (join (shift (rest tokens)) (+ 2 num-tokens) (add1 num-spine) prev current))]
                             [(= (add1 num-tokens) (first prev))
 
-                             (join (rest tokens) 0 1 (rest prev) (cons num-spine current))]
+                             (join (rest tokens) 0 0 (rest prev) (cons (add1 num-spine) current))]
                             [else
                               (join (rest tokens) (add1 num-tokens) (add1 num-spine) prev current)]))]
-              (join prev-tokens 0 1 prev-lon empty)))]
+              (join prev-tokens 0 0 prev-lon empty)))]
     (caller prev-tokens)))
 
 ; one-per-spine
