@@ -138,7 +138,7 @@
 
                              (join (rest tokens) 0 1 (rest prev) (cons num-spine current))]
                             [else
-                              (join (rest tokens) (add1 num-tokens) num-spine prev current)]))]
+                              (join (rest tokens) (add1 num-tokens) (add1 num-spine) prev current)]))]
               (join prev-tokens 0 1 prev-lon empty)))]
     (caller prev-tokens)))
 
