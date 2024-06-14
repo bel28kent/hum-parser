@@ -57,6 +57,20 @@
                                 (make-token "*v" SPINE-JOIN 3)
                                 (make-token "*" NULL-INTERPRETATION 3))
                           3))
+(define JOIN-LEFT (make-record "*v\t*v\t*\t*"
+                               TOKEN
+                               (list (make-token "*v" SPINE-JOIN 3)
+                                     (make-token "*v" SPINE-JOIN 3)
+                                     (make-token "*" NULL-INTERPRETATION 3)
+                                     (make-token "*" NULL-INTERPRETATION 3))
+                               3))
+(define JOIN-RIGHT (make-record "*\t*\t*v\t*v"
+                                TOKEN
+                                (list (make-token "*" NULL-INTERPRETATION 3)
+                                      (make-token "*" NULL-INTERPRETATION 3)
+                                      (make-token "*v" SPINE-JOIN 3)
+                                      (make-token "*v" SPINE-JOIN 3))
+                                3))
 (define AFTER-JOIN (make-record "4A\t4a\t4aaa"
                                 TOKEN
                                 (list (make-token "4A" SPINE-DATA 4)
@@ -127,9 +141,11 @@
 
 ; struct-lon
 (check-expect (struct-lon SPLIT AFTER-SPLIT (list 1 1 1)) (list 1 2 1))
-(check-expect (struct-lon JOIN AFTER-JOIN (list 1 2 1)) (list 1 1 1))
 (check-expect (struct-lon SPLIT-LEFT AFTER-SPLIT (list 1 1 1)) (list 2 1 1))
 (check-expect (struct-lon SPLIT-RIGHT AFTER-SPLIT (list 1 1 1)) (list 1 1 2))
+(check-expect (struct-lon JOIN AFTER-JOIN (list 1 2 1)) (list 1 1 1))
+(check-expect (struct-lon JOIN-LEFT AFTER-JOIN (list 2 1 1)) (list 1 1 1))
+(check-expect (struct-lon JOIN-RIGHT AFTER-JOIN (list 1 1 2)) (list 1 1 1))
 
 ; one-per-spine
 (check-expect (one-per-spine 5) (list 1 1 1 1 1))
