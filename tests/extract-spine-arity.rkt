@@ -31,6 +31,12 @@
                                  (make-token "*^" SPINE-SPLIT 3)
                                  (make-token "*" NULL-INTERPRETATION 3))
                            3))
+(define SPLIT-LEFT (make-record "*^\t*\t*"
+                                TOKEN
+                                (list (make-token "*^" SPINE-SPLIT 3)
+                                      (make-token "*" NULL-INTERPRETATION 3)
+                                      (make-token "*" NULL-INTERPRETATION 3))
+                                3))
 (define AFTER-SPLIT (make-record "4A\t4a\t4aa\t4aaa"
                                  TOKEN
                                  (list (make-token "4A" SPINE-DATA 4)
@@ -116,6 +122,7 @@
 ; struct-lon
 (check-expect (struct-lon SPLIT AFTER-SPLIT (list 1 1 1)) (list 1 2 1))
 (check-expect (struct-lon JOIN AFTER-JOIN (list 1 2 1)) (list 1 1 1))
+(check-expect (struct-lon SPLIT-LEFT AFTER-SPLIT (list 1 1 1)) (list 2 1 1))
 
 ; one-per-spine
 (check-expect (one-per-spine 5) (list 1 1 1 1 1))

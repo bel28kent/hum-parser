@@ -106,7 +106,7 @@
             ; current: (listof Natural). The list to be returned when no tokens left.
             ;
             (local [(define (split tokens num-tokens num-spine prev current)
-                      (cond [(empty? tokens) current]
+                      (cond [(empty? tokens) (reverse current)]
                             [(string=? (token-type (first tokens)) SPINE-SPLIT)
                              
                              (if (= (add1 num-tokens) (first prev))
@@ -128,7 +128,7 @@
             ; current: (list of Natural). The list to be returned when no tokens left.
             ;
             (local [(define (join tokens num-tokens num-spine prev current)
-                      (cond [(empty? tokens) current]
+                      (cond [(empty? tokens) (reverse current)]
                             [(string=? (token-type (first tokens)) SPINE-JOIN)
 
                              (if (= (+ 2 num-tokens) (first prev))
