@@ -24,7 +24,7 @@
 
 (define (lolon records)
   (local [(define (iterator records lolon previous)
-            (cond [(empty? records) lolon]
+            (cond [(empty? records) (reverse lolon)]
                   [else
                     (iterator (rest records)
                               (cons (lon-caller previous (first records) (first lolon)) lolon)
