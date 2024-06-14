@@ -116,7 +116,7 @@
 
                              (split (rest tokens) 0 1 (rest prev) (cons num-spine current))]
                             [else
-                              (split (rest tokens) (add1 num-tokens) num-spine prev current)]))]
+                              (split (rest tokens) (add1 num-tokens) (add1 num-spine) prev current)]))]
               (split prev-tokens 0  1 prev-lon empty)))
 
           ; previous should only have one join
