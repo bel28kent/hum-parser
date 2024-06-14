@@ -126,11 +126,19 @@
 (check-expect (previous-spine-struct? TEST-RECORD-2) #t)
 (check-expect (previous-spine-struct? TEST-RECORD-3) #t)
 (check-expect (previous-spine-struct? TEST-RECORD-4) #f)
+(check-expect (previous-spine-struct? (make-record "*\t*^\t*\t*"
+                                                   TOKEN
+                                                   (list (make-token "*" NULL-INTERPRETATION 20)
+                                                         (make-token "*^" SPINE-SPLIT 20)
+                                                         (make-token "*" NULL-INTERPRETATION 20)
+                                                         (make-token "*" NULL-INTERPRETATION 20))
+                                                   20))
+              #t)
 
 ; split-or-join-token
 (check-expect (split-or-join-token TEST-TOKEN-1) #f)
-(check-expect (split-or-join-token TEST-TOKEN-2) SPINE-SPLIT)
-(check-expect (split-or-join-token TEST-TOKEN-3) SPINE-JOIN)
+(check-expect (split-or-join-token TEST-TOKEN-2) #t)
+(check-expect (split-or-join-token TEST-TOKEN-3) #t)
 (check-expect (split-or-join-token TEST-TOKEN-4) #f)
 
 ; split-or-join-record
@@ -138,6 +146,14 @@
 (check-expect (split-or-join-record TEST-RECORD-2) SPINE-SPLIT)
 (check-expect (split-or-join-record TEST-RECORD-3) SPINE-JOIN)
 (check-expect (split-or-join-record TEST-RECORD-4) #f)
+(check-expect (split-or-join-record (make-record "*\t*^\t*\t*"
+                                                   TOKEN
+                                                   (list (make-token "*" NULL-INTERPRETATION 20)
+                                                         (make-token "*^" SPINE-SPLIT 20)
+                                                         (make-token "*" NULL-INTERPRETATION 20)
+                                                         (make-token "*" NULL-INTERPRETATION 20))
+                                                   20))
+              SPINE-SPLIT)
 
 ; struct-lon
 (check-expect (struct-lon SPLIT AFTER-SPLIT (list 1 1 1)) (list 1 2 1))
