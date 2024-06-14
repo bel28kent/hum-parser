@@ -58,14 +58,14 @@
                     (spine-struct? (rest lot))]))]
     (spine-struct? tokens)))
 
-; split-or-join-token
-; Token -> SpineSplit or SpineJoin or false
-; produces type if SpineSplit or SpineJoin, else false
+; split-or-join-token?
+; Token -> Boolean
+; produces true if type of token is SpineSplit or SpineJoin
 
 (define (split-or-join-token token)
   (cond [(false? (token-type token)) #f]
-        [(string=? (token-type token) SPINE-SPLIT) SPINE-SPLIT]
-        [(string=? (token-type token) SPINE-JOIN) SPINE-JOIN]
+        [(string=? (token-type token) SPINE-SPLIT) #t]
+        [(string=? (token-type token) SPINE-JOIN) #t]
         [else
           #f]))
 
