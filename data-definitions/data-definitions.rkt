@@ -167,73 +167,73 @@
 ;;  FILE
 ;;    FILE is a collection of records.
 
-(define-struct hfile (filename records) #:transparent)
-;  HumdrumFile is (make-hfile String (listof Records))
+(define-struct hfile (records) #:transparent)
+;  HumdrumFile is (make-hfile (listof Records))
 ;    Represents a humdrum file.
-(define GERSH-01-FILE-EX (make-hfile "gersh-01.krn" (list (make-record "!! George Gershwin: (I've Got) Beginner's Luck"
-                                                                       GLOBAL-COMMENT
-                                                                       (list "!! George Gershwin: (I've Got) Beginner's Luck")
-                                                                       0)
-                                                          (make-record "!! Bumper Book of George Gershwin"
-                                                                       GLOBAL-COMMENT
-                                                                       (list "!! Bumper Book of George Gershwin")
-                                                                       1)
-                                                          (make-record "!! London: Chappell Music Ltd., 1987; pp.30-33"
-                                                                       GLOBAL-COMMENT
-                                                                       (list "!! London: Chappell Music Ltd., 1987; pp.30-33")
-                                                                       2)
-                                                          (make-record "**kern"
-                                                                       TOKEN
-                                                                       (list (make-token "**kern" EXCLUSIVE-INTERPRETATION 3))
-                                                                       3)
-                                                          (make-record "*M4/4"
-                                                                       TOKEN
-                                                                       (list (make-token "*M4/4" TIME-SIG 4))
-                                                                       4)
-                                                          (make-record "*MM[Moderato]"
-                                                                       TOKEN
-                                                                       (list (make-token "*MM[Moderato]" #f 5))
-                                                                       5)
-                                                          (make-record "4f#"
-                                                                       TOKEN
-                                                                       (list (make-token "4f#" SPINE-DATA 6))
-                                                                       6)
-                                                          (make-record "=1"
-                                                                       TOKEN
-                                                                       (list (make-token "=1" MEASURE 7))
-                                                                       7)
-                                                          (make-record "4a"
-                                                                       TOKEN
-                                                                       (list (make-token "4a" SPINE-DATA 8))
-                                                                       8)
-                                                          (make-record "8a"
-                                                                       TOKEN
-                                                                       (list (make-token "8a" SPINE-DATA 9))
-                                                                       9)
-                                                          (make-record "[8a"
-                                                                       TOKEN
-                                                                       (list (make-token "[8a" SPINE-DATA 10))
-                                                                       10)
-                                                          (make-record "8a]"
-                                                                       TOKEN
-                                                                       (list (make-token "8a]" SPINE-DATA 11))
-                                                                       11)
-                                                          (make-record "8a"
-                                                                       TOKEN
-                                                                       (list (make-token "8a" SPINE-DATA 12))
-                                                                       12)
-                                                          (make-record "4a"
-                                                                       TOKEN
-                                                                       (list (make-token "4a" SPINE-DATA 13))
-                                                                       13)
-                                                          (make-record "===="
-                                                                       TOKEN
-                                                                       (list (make-token "====" MEASURE 14))
-                                                                       14)
-                                                          (make-record "*-"
-                                                                       TOKEN
-                                                                       (list (make-token "*-" SPINE-TERMINATOR 15))
-                                                                       15))))
+(define GERSH-01-FILE-EX (make-hfile  (list (make-record "!! George Gershwin: (I've Got) Beginner's Luck"
+                                                         GLOBAL-COMMENT
+                                                         (list "!! George Gershwin: (I've Got) Beginner's Luck")
+                                                         0)
+                                            (make-record "!! Bumper Book of George Gershwin"
+                                                         GLOBAL-COMMENT
+                                                         (list "!! Bumper Book of George Gershwin")
+                                                         1)
+                                            (make-record "!! London: Chappell Music Ltd., 1987; pp.30-33"
+                                                         GLOBAL-COMMENT
+                                                         (list "!! London: Chappell Music Ltd., 1987; pp.30-33")
+                                                         2)
+                                            (make-record "**kern"
+                                                         TOKEN
+                                                         (list (make-token "**kern" EXCLUSIVE-INTERPRETATION 3))
+                                                         3)
+                                            (make-record "*M4/4"
+                                                         TOKEN
+                                                         (list (make-token "*M4/4" TIME-SIG 4))
+                                                         4)
+                                            (make-record "*MM[Moderato]"
+                                                         TOKEN
+                                                         (list (make-token "*MM[Moderato]" #f 5))
+                                                         5)
+                                            (make-record "4f#"
+                                                         TOKEN
+                                                         (list (make-token "4f#" SPINE-DATA 6))
+                                                         6)
+                                            (make-record "=1"
+                                                         TOKEN
+                                                         (list (make-token "=1" MEASURE 7))
+                                                         7)
+                                            (make-record "4a"
+                                                         TOKEN
+                                                         (list (make-token "4a" SPINE-DATA 8))
+                                                         8)
+                                            (make-record "8a"
+                                                         TOKEN
+                                                         (list (make-token "8a" SPINE-DATA 9))
+                                                         9)
+                                            (make-record "[8a"
+                                                         TOKEN
+                                                         (list (make-token "[8a" SPINE-DATA 10))
+                                                         10)
+                                            (make-record "8a]"
+                                                         TOKEN
+                                                         (list (make-token "8a]" SPINE-DATA 11))
+                                                         11)
+                                            (make-record "8a"
+                                                         TOKEN
+                                                         (list (make-token "8a" SPINE-DATA 12))
+                                                         12)
+                                            (make-record "4a"
+                                                         TOKEN
+                                                         (list (make-token "4a" SPINE-DATA 13))
+                                                         13)
+                                            (make-record "===="
+                                                         TOKEN
+                                                         (list (make-token "====" MEASURE 14))
+                                                         14)
+                                            (make-record "*-"
+                                                         TOKEN
+                                                         (list (make-token "*-" SPINE-TERMINATOR 15))
+                                                         15))))
 
 (define-struct spine-arity (global lolon) #:transparent)
 ; SpineArity is (make-spine-arity Natural (listof Natural))

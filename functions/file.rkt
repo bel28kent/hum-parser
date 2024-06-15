@@ -26,10 +26,10 @@
                         (λ (in) (read-file empty in)))))
 
 ; los->hfile
-; String (listof String) -> HumdrumFile
-; produces the given lolos as a HumdrumFile
+; (listof String) -> HumdrumFile
+; produces the given los as a HumdrumFile
 
-(define (los->hfile filename los)
+(define (los->hfile los)
   ; TODO: make record-number a local constant
   (local [(define (los->lor los record-number)
             (cond [(empty? los) empty]
@@ -53,7 +53,7 @@
 
           (define (str->token str record-number)
             (make-token str (type-token str) record-number))]
-    (make-hfile filename (los->lor los 0))))
+    (make-hfile (los->lor los 0))))
 
 ; hfile->los
 ; HumdrumFile -> (listof String)

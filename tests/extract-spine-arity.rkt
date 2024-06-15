@@ -77,7 +77,7 @@
                                       (make-token "4a" SPINE-DATA 4)
                                       (make-token "4aaa" SPINE-DATA 4))
                                 4))
-(define BERG (filter-type record-type TOKEN (hfile-records (los->hfile "berg" (read-file "data/berg01.pc")))))
+(define BERG (filter-type record-type TOKEN (hfile-records (los->hfile (read-file "data/berg01.pc")))))
 
 ; extract-spine-arity
 (check-expect (extract-spine-arity BERG) (make-spine-arity 2 (list (list 1 1)

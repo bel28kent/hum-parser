@@ -47,22 +47,22 @@
                         "!!!T35: 0"))
 
 ; los->hfile
-(check-expect (los->hfile "empty-file.krn" empty) (make-hfile "empty-file.krn" empty))
-(check-expect (los->hfile "berg01.pc" (list "!!!COM: Berg, Alban"))
-              (make-hfile "berg01.pc" (list (make-record "!!!COM: Berg, Alban"
-                                                         REFERENCE-RECORD
-                                                         (list "!!!COM: Berg, Alban")
-                                                         0))))
-(check-expect (los->hfile "berg01.pc" (list "!!!COM: Berg, Alban" "**pc\t**kern"))
-              (make-hfile "berg01.pc" (list (make-record "!!!COM: Berg, Alban"
-                                                         REFERENCE-RECORD
-                                                         (list "!!!COM: Berg, Alban")
-                                                         0)
-                                            (make-record "**pc\t**kern"
-                                                         TOKEN
-                                                         (list (make-token "**pc" EXCLUSIVE-INTERPRETATION 1)
-                                                               (make-token "**kern" EXCLUSIVE-INTERPRETATION 1))
-                                                         1))))
+(check-expect (los->hfile empty) (make-hfile empty))
+(check-expect (los->hfile (list "!!!COM: Berg, Alban"))
+              (make-hfile (list (make-record "!!!COM: Berg, Alban"
+                                             REFERENCE-RECORD
+                                             (list "!!!COM: Berg, Alban")
+                                             0))))
+(check-expect (los->hfile (list "!!!COM: Berg, Alban" "**pc\t**kern"))
+              (make-hfile (list (make-record "!!!COM: Berg, Alban"
+                                             REFERENCE-RECORD
+                                             (list "!!!COM: Berg, Alban")
+                                             0)
+                                (make-record "**pc\t**kern"
+                                             TOKEN
+                                             (list (make-token "**pc" EXCLUSIVE-INTERPRETATION 1)
+                                                   (make-token "**kern" EXCLUSIVE-INTERPRETATION 1))
+                                             1))))
 ; TODO
 ; write-file
 
