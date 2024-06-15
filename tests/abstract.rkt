@@ -30,10 +30,10 @@
 
 ; filter-type
 (check-expect (filter-type record-type TOKEN empty) empty)
-(check-expect (map (lambda (r) (record-type r)) (filter-type record-type
-                                                             TOKEN
-                                                             (hfile-records (los->hfile "berg.pc"
-                                                                                        (read-file BERG-PATH)))))
+(check-expect (map (λ (r) (record-type r)) (filter-type record-type
+                                                        TOKEN
+                                                        (hfile-records (los->hfile "berg.pc"
+                                                                                   (read-file BERG-PATH)))))
               (list TOKEN TOKEN TOKEN TOKEN TOKEN
                     TOKEN TOKEN TOKEN TOKEN TOKEN
                     TOKEN TOKEN TOKEN TOKEN TOKEN))
