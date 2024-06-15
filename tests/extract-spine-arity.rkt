@@ -114,10 +114,9 @@
                                  (list 1 1)))
 
 ; lon-caller
-(check-expect (lon-caller SPLIT AFTER-SPLIT (list 1 1 1)) (list 1 2 1))
-(check-expect (lon-caller JOIN AFTER-JOIN (list 1 2 1)) (list 1 1 1))
+(check-expect (lon-caller SPLIT (list 1 1 1)) (list 1 2 1)) ; next record is AFTER-SPLIT
+(check-expect (lon-caller JOIN (list 1 2 1)) (list 1 1 1)) ; next record is AFTER-JOIN
 (check-expect (lon-caller (make-record "4a" TOKEN (list (make-token "4a" SPINE-DATA 9)) 9)
-                          (make-record "4b" TOKEN (list (make-token "4b" SPINE-DATA 10)) 10)
                           (list 1))
               (list 1))
 
@@ -156,12 +155,12 @@
               SPINE-SPLIT)
 
 ; struct-lon
-(check-expect (struct-lon SPLIT AFTER-SPLIT (list 1 1 1)) (list 1 2 1))
-(check-expect (struct-lon SPLIT-LEFT AFTER-SPLIT (list 1 1 1)) (list 2 1 1))
-(check-expect (struct-lon SPLIT-RIGHT AFTER-SPLIT (list 1 1 1)) (list 1 1 2))
-(check-expect (struct-lon JOIN AFTER-JOIN (list 1 2 1)) (list 1 1 1))
-(check-expect (struct-lon JOIN-LEFT AFTER-JOIN (list 2 1 1)) (list 1 1 1))
-(check-expect (struct-lon JOIN-RIGHT AFTER-JOIN (list 1 1 2)) (list 1 1 1))
+(check-expect (struct-lon SPLIT (list 1 1 1)) (list 1 2 1)) ; next record is AFTER-SPLIT
+(check-expect (struct-lon SPLIT-LEFT (list 1 1 1)) (list 2 1 1))
+(check-expect (struct-lon SPLIT-RIGHT (list 1 1 1)) (list 1 1 2))
+(check-expect (struct-lon JOIN (list 1 2 1)) (list 1 1 1)) ; next record is AFTER-JOIN
+(check-expect (struct-lon JOIN-LEFT (list 2 1 1)) (list 1 1 1))
+(check-expect (struct-lon JOIN-RIGHT (list 1 1 2)) (list 1 1 1))
 
 ; one-per-spine
 (check-expect (one-per-spine 5) (list 1 1 1 1 1))

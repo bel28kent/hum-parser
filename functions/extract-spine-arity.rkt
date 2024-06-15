@@ -27,7 +27,7 @@
             (cond [(empty? records) (reverse lolon)]
                   [else
                     (iterator (rest records)
-                              (cons (lon-caller previous (first records) (first lolon)) lolon)
+                              (cons (lon-caller previous (first lolon)) lolon)
                               (first records))]))]
     (if (= (length records) 1)
         (list (one-per-spine (length (record-split (first records)))))
@@ -36,11 +36,11 @@
                   (first records)))))
 
 ; lon-caller
-; Record Record (listof Natural) -> (listof Natural)
-; if first record is spine structure, call struct-lon helper, just return previous lon
+; Record (listof Natural) -> (listof Natural)
+; if record is spine structure, call struct-lon helper, else return previous lon
 
-(define (lon-caller previous record prev-lon)
-  (cond [(previous-spine-struct? previous) (struct-lon previous record prev-lon)]
+(define (lon-caller previous prev-lon)
+  (cond [(previous-spine-struct? previous) (struct-lon previous prev-lon)]
         [else
           prev-lon]))
 
@@ -86,11 +86,10 @@
     (split-or-join tokens)))
 
 ; struct-lon
-; Record Record (listof Natural) -> (listof Natural)
-; produces the lon for the second record, which follows a spine structure record
-; TODO: should be this record, which is AFTER structure
+; Record (listof Natural) -> (listof Natural)
+; produces the lon for the next record, which follows the given record
 
-(define (struct-lon previous record prev-lon)
+(define (struct-lon previous prev-lon)
   (local [(define prev-tokens (record-split previous))
 
           (define (caller tokens)
