@@ -55,6 +55,14 @@
             (make-token str (type-token str) record-number))]
     (make-hfile filename (los->lor los 0))))
 
+; hfile->los
+; HumdrumFile -> (listof String)
+; produces the unwrapped list of records (strings) from the humdrumfile
+
+(define (hfile->los hfile)
+  (local [(define records (hfile-records hfile))]
+    (foldr (lambda (f r) (cons (record-record f) r)) empty records)))
+
 ; TODO
 ; write-file
 ; (listof (listof String)) String -> #<void>
