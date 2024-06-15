@@ -23,7 +23,7 @@
                   (reverse lolos)
                   (read-file (cons next-line lolos) in))))]
   (call-with-input-file path
-                        (lambda (in) (read-file empty in)))))
+                        (λ (in) (read-file empty in)))))
 
 ; los->hfile
 ; String (listof String) -> HumdrumFile
@@ -61,11 +61,14 @@
 
 (define (hfile->los hfile)
   (local [(define records (hfile-records hfile))]
-    (foldr (lambda (f r) (cons (record-record f) r)) empty records)))
+    (foldr (λ (f r) (cons (record-record f) r)) empty records)))
 
 ; TODO
 ; write-file
-; (listof (listof String)) String -> #<void>
+; (listof String) String -> #<void>
 ; writes list to file at given path
 
-(define (write-file lolos path) (void))
+(define (write-file los path)
+  (local [(define (write-file los out)
+            (foldl (λ (f r) (displayln f out)) (void) los))]
+    (call-with-output-file path (λ (out) (write-file los out)))))
