@@ -154,13 +154,13 @@
 (define RECORD-LC-EX (list "! Adagio\t!\t! Adagio\t!\t! Adagio\t!\t! Adagio\t!")) ; mozart/quartet/k080-01.krn
 
 (define-struct global-spine (tokens spine-number) #:transparent)
-; GlobalSpine is (make-spine (listof Token) Natural)
+; GlobalSpine is (make-spine (listof (listof Token)) Natural)
 ;  Represents a singe global column of a Humdrum file.
 ;  CONSTRAINT: spine-number >= 0
 
-(define GLOBAL-SPINE-EX (make-global-spine (list (make-token "**kern"  EXCLUSIVE-INTERPRETATION 0)
-                                                 (make-token "*clefG2" CLEF                     1)
-                                                 (make-token "4a"      SPINE-DATA               2))
+(define GLOBAL-SPINE-EX (make-global-spine (list (list (make-token "**kern"  EXCLUSIVE-INTERPRETATION 0))
+                                                 (list (make-token "*clefG2" CLEF                     1))
+                                                 (list (make-token "4a"      SPINE-DATA               2)))
                                            0))
 
 ;;;;;;;;;;;;;;;;;;;;
