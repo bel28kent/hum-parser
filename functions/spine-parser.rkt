@@ -74,21 +74,21 @@
     (spine-iterator (spine-arity-lolon spine-arity))))
 
 ; tokens-by-spine
-; (listof (listof Token)) (listof (listof Natural)) -> (listof (listof Token))
+; (listof (listof Token)) (listof (listof Natural)) -> (listof (listof (listof Token)))
 ; produces the list of lot, separated by spine.
 
 (define (tokens-by-spine unwrapped byspine)
   (local [(define-struct acc (spine-list remaining))
 
-          ; (listof (listof Token)) (listof (listof Natural)) -> (listof (listof Token))
+          ; (listof (listof Token)) (listof (listof Natural)) -> (listof (listof (listof Token)))
           (define (lolo-iterator lolot lolon)
             ; spine-list: (listof (listof Token)). Accumulates the output of lon-iterator calls.
             ;
             (local [(define (lolo-iterator lolot lolon spine-list)
-                      (cond [(empty? lolot) (reverse spine-list)]
+                      (cond [(andmap empty? lolot) (reverse spine-list)]
                             [else
                               (local [(define output (lon-iterator lolot (first lolon)))]
-                                (lolo iterator (acc-remaining output)
+                                (lolo-iterator (acc-remaining output)
                                                (rest lolon)
                                                (cons (acc-spine-list output) spine-list)))]))]
               (lolo-iterator lolot lolon empty)))
@@ -117,7 +117,7 @@
                       (cond [(= number-tokens counter) (make-acc (reverse spine-list) lot)]
                             [else
                               (lot-iterator (rest lot) (add1 counter) (cons (first lot) spine-list))]))]
-              (lot-iterator (rest lot) 1 (cons (first lot) spine-list))))]
+              (lot-iterator (rest lot) 1 (list (first lot)))))]
     (lolo-iterator unwrapped byspine)))
 
 
