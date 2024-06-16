@@ -120,7 +120,20 @@
               (lot-iterator (rest lot) 1 (list (first lot)))))]
     (lolo-iterator unwrapped byspine)))
 
+; lololot->logs
+; (listof (listof (listof Token))) -> (listof GlobalSpine)
+; produces a list of global spines
 
+(define (lololot->logs lololot)
+  ; logs: (listof GlobalSpine). list of accumulated global spines
+  ;
+  (local [(define (lololot->logs lololot logs counter)
+            (cond [(empty? lololot) (reverse logs)]
+                  [else
+                    (lololot->logs (rest lololot)
+                                   (cons (make-global-spine (first lololot) counter) logs)
+                                   (add1 counter))]))]
+    (lololot->logs lololot empty 0)))
 
 
 
