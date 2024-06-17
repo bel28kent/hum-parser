@@ -60,6 +60,7 @@
 
 (define (tandem-interpretation? token)
   (and (tag=? token 1 TANDEM-TAG)
+       (> (string-length token) 1)
        (not (exclusive-interpretation? token))))
 
 ; null-interpretation?
@@ -75,7 +76,9 @@
 ; produce true if string is exclusive or tandem interpretation
 
 (define (interpretation? token)
-  (ormap true? (valmap token (list exclusive-interpretation? tandem-interpretation?))))
+  (ormap true? (valmap token (list exclusive-interpretation?
+                                   tandem-interpretation?
+                                   null-interpretation?))))
 
 ; spine-split?
 ; String -> Boolean

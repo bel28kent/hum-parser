@@ -66,17 +66,29 @@
 (check-expect (exclusive-interpretation? (token-token MUSIC-TOKEN-EX))      #f)
 
 ; tandem-interpretation?
-(check-expect (tandem-interpretation? TANDEM-TAG)                        #t)
 (check-expect (tandem-interpretation? "*Ipiano")                         #t)
 (check-expect (tandem-interpretation? "*clefC3")                         #t)
 (check-expect (tandem-interpretation? "*M3/4")                           #t)
 (check-expect (tandem-interpretation? "*k[f#c#g#]")                      #t)
+(check-expect (tandem-interpretation? TANDEM-TAG)                        #f)
 (check-expect (tandem-interpretation? EXCLUSIVE-TAG)                     #f)
 (check-expect (tandem-interpretation? REFERENCE-RECORD-EX)               #f)
 (check-expect (tandem-interpretation? GLOBAL-COMMENT-EX)                 #f)
 (check-expect (tandem-interpretation? LOCAL-COMMENT-EX)                  #f)
 (check-expect (tandem-interpretation? MEASURE-TAG)                       #f)
 (check-expect (tandem-interpretation? (token-token MUSIC-TOKEN-EX))      #f)
+
+; null-interpretation?
+(check-expect (null-interpretation? TANDEM-TAG)                        #t)
+(check-expect (null-interpretation? "*Ipiano")                         #f)
+(check-expect (null-interpretation? "*clefC3")                         #f)
+(check-expect (null-interpretation? "*M3/4")                           #f)
+(check-expect (null-interpretation? "*k[f#c#g#]")                      #f)
+(check-expect (null-interpretation? REFERENCE-RECORD-EX)               #f)
+(check-expect (null-interpretation? GLOBAL-COMMENT-EX)                 #f)
+(check-expect (null-interpretation? LOCAL-COMMENT-EX)                  #f)
+(check-expect (null-interpretation? MEASURE-TAG)                       #f)
+(check-expect (null-interpretation? (token-token MUSIC-TOKEN-EX))      #f)
 
 ; interpretation?
 (check-expect (interpretation? TANDEM-TAG)                        #t)
