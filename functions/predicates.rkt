@@ -47,7 +47,6 @@
 (define (is-token? string)
   (string-contains? string SEPARATOR))
 
-
 ; exclusive-interpretation?
 ; String -> Boolean
 ; produce true if string starts with EXCLUSIVE-TAG
@@ -62,6 +61,14 @@
 (define (tandem-interpretation? token)
   (and (tag=? token 1 TANDEM-TAG)
        (not (exclusive-interpretation? token))))
+
+; null-interpretation?
+; String -> Boolean
+; produce true if string exactly matches TANDEM-TAG
+
+(define (null-interpretation? token)
+  (and (tag=? token 1 TANDEM-TAG)
+       (= 1 (string-length token))))
 
 ; interpretation?
 ; String -> Boolean
@@ -90,14 +97,6 @@
 
 (define (spine-terminator? token)
   (string=? token TERMINATOR))
-
-; null-interpretation?
-; String -> Boolean
-; produce true if string exactly matches TANDEM-TAG
-
-(define (null-interpretation? token)
-  (and (tag=? token 1 TANDEM-TAG)
-       (= 1 (string-length token))))
 
 ; spine-structure?
 ; String -> Boolean
