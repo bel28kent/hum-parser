@@ -63,6 +63,25 @@
                                              (list (make-token "**pc" EXCLUSIVE-INTERPRETATION 1)
                                                    (make-token "**kern" EXCLUSIVE-INTERPRETATION 1))
                                              1))))
+
+; hfile->los
+(check-expect (hfile->los (make-hfile empty)) empty)
+(check-expect (hfile->los (make-hfile (list (make-record "!!!COM: Berg, Alban"
+                                                         REFERENCE-RECORD
+                                                         (list "!!!COM: Berg, Alban")
+                                                         0))))
+                          (list "!!!COM: Berg, Alban"))
+(check-expect (hfile->los (make-hfile (list (make-record "!!!COM: Berg, Alban"
+                                                         REFERENCE-RECORD
+                                                         (list "!!!COM: Berg, Alban")
+                                                         0)
+                                            (make-record "**pc\t**kern"
+                                                         TOKEN
+                                                         (list (make-token "**pc" EXCLUSIVE-INTERPRETATION 1)
+                                                               (make-token "**kern" EXCLUSIVE-INTERPRETATION 1))
+                                                         1))))
+                          (list "!!!COM: Berg, Alban" "**pc\t**kern"))
+
 ; TODO
 ; write-file
 
