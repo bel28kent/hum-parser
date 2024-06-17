@@ -1,5 +1,10 @@
 #lang racket
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; hum-parser: tests for spine-parser
+;;    also tested in spine-parser-scriabin-test
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (require "../data-definitions/data-definitions.rkt"
          "../functions/spine-parser.rkt"
          test-engine/racket-tests)
@@ -23,4 +28,12 @@
                                               (list (list 1) (list 1))))
               (list (make-global-spine (list (list KERN-TOKEN)) 0)
                     (make-global-spine (list (list KERN-TOKEN)) 1)))
+
+; logs->lolos
+(check-expect (logs->lolos (list (make-global-spine (list (list KERN-TOKEN)) 0)))
+              (list (list "**kern")))
+(check-expect (logs->lolos (list (make-global-spine (list (list KERN-TOKEN)) 0)
+                                 (make-global-spine (list (list KERN-TOKEN)) 1)))
+              (list (list "**kern") (list "**kern")))
+
 (test)
