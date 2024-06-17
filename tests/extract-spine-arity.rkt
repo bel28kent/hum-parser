@@ -134,11 +134,11 @@
                                                    20))
               #t)
 
-; split-or-join-token
-(check-expect (split-or-join-token TEST-TOKEN-1) #f)
-(check-expect (split-or-join-token TEST-TOKEN-2) #t)
-(check-expect (split-or-join-token TEST-TOKEN-3) #t)
-(check-expect (split-or-join-token TEST-TOKEN-4) #f)
+; split-or-join-token?
+(check-expect (split-or-join-token? TEST-TOKEN-1) #f)
+(check-expect (split-or-join-token? TEST-TOKEN-2) #t)
+(check-expect (split-or-join-token? TEST-TOKEN-3) #t)
+(check-expect (split-or-join-token? TEST-TOKEN-4) #f)
 
 ; split-or-join-record
 (check-expect (split-or-join-record TEST-RECORD-1) #f)

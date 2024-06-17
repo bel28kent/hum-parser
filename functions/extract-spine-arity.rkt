@@ -9,7 +9,6 @@
 ; ASSUMPTION: the first record must be the exclusive interpretation record,
 ;             otherwise is humdrum syntax error
 
-; TODO: test
 ; extract-spine-arity
 ; (listof Record) -> SpineArity
 ; produces the spine arity from a list of token records
@@ -53,7 +52,7 @@
 
           (define (spine-struct? lot)
             (cond [(empty? lot) #f]
-                  [(not (false? (split-or-join-token (first lot)))) #t]
+                  [(not (false? (split-or-join-token? (first lot)))) #t]
                   [else
                     (spine-struct? (rest lot))]))]
     (spine-struct? tokens)))
@@ -62,7 +61,7 @@
 ; Token -> Boolean
 ; produces true if type of token is SpineSplit or SpineJoin
 
-(define (split-or-join-token token)
+(define (split-or-join-token? token)
   (cond [(false? (token-type token)) #f]
         [(string=? (token-type token) SPINE-SPLIT) #t]
         [(string=? (token-type token) SPINE-JOIN) #t]
