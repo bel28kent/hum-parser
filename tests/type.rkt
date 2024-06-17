@@ -17,6 +17,12 @@
 (check-expect (type-metadata "!! See pg. 5 of print edition") GLOBAL-COMMENT)
 (check-expect (type-metadata "!\t! In some editions A#")      LOCAL-COMMENT)
 
+; type-record
+(check-expect (type-record "!!!COM: Scriabin, Alexander")   REFERENCE-RECORD)
+(check-expect (type-record "!! See pg. 5 of print edition") GLOBAL-COMMENT)
+(check-expect (type-record "!\t! In some editions A#")      LOCAL-COMMENT)
+(check-expect (type-record "4a\t4aa\tf")                    TOKEN)
+
 ; Should only be called on strings that are tokens.
 ; #f indicates only that the token type is not known,
 ;   and does not indicate that string is not a token.
@@ -38,15 +44,9 @@
 (check-expect (type-tandem "*^")     SPINE-SPLIT)
 (check-expect (type-tandem "*v")     SPINE-JOIN)
 (check-expect (type-tandem "*-")     SPINE-TERMINATOR)
-(check-expect (type-tandem "*")      NULL-INTERPRETATION)
+(check-expect (type-tandem "*")      #f)
 (check-expect (type-tandem "*X8va")  #f)
 (check-expect (type-tandem "*M3/4")  #f)
 (check-expect (type-tandem "*k[]")   #f)
-
-; type-record
-(check-expect (type-record "!!!COM: Scriabin, Alexander")   REFERENCE-RECORD)
-(check-expect (type-record "!! See pg. 5 of print edition") GLOBAL-COMMENT)
-(check-expect (type-record "!\t! In some editions A#")      LOCAL-COMMENT)
-(check-expect (type-record "4a\t4aa\tf")                    TOKEN)
 
 (test)

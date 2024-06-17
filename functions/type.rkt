@@ -52,6 +52,7 @@
 (define (type-token token)
   (cond [(exclusive-interpretation? token) EXCLUSIVE-INTERPRETATION]
         [(tandem-interpretation? token) (type-tandem token)]
+        [(null-interpretation? token) NULL-INTERPRETATION]
         [(measure? token) MEASURE]
         [(spine-data? token) SPINE-DATA]
         [else
@@ -65,6 +66,5 @@
   (cond [(spine-split? token) SPINE-SPLIT]
         [(spine-join? token) SPINE-JOIN]
         [(spine-terminator? token) SPINE-TERMINATOR]
-        [(null-interpretation? token) NULL-INTERPRETATION]
         [else
           #f]))
