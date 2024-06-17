@@ -1,5 +1,9 @@
 #lang racket
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; hum-parser: FUNCTIONS: EXTRACT-SPINE-ARITY
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (require "../data-definitions/data-definitions.rkt"
          "../../abstract-fns/functions/functions.rkt")
 

@@ -43,9 +43,13 @@
                        (string-append (substring string 0 1) (next-field (substring string 1))))]))]
     (splitter string empty)))
 
-; TODO
 ; gather
 ; (listof String) -> String
 ; concatenates each of los together, separated by SEPARATOR
 
-(define (gather los) empty)
+(define (gather los)
+  (cond [(empty? los) ""]
+        [else
+          (if (empty? (rest los))
+              (string-append (first los) (gather (rest los)))
+              (string-append (first los) "\t" (gather (rest los))))]))

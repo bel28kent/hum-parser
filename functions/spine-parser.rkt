@@ -1,7 +1,12 @@
 #lang racket
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; hum-parser: FUNCTIONS: SPINE-PARSER
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (require "../data-definitions/data-definitions.rkt"
          "../functions/abstract.rkt"
+         "../functions/split-and-gather.rkt"
          test-engine/racket-tests)
 
 (provide (all-defined-out))
@@ -147,14 +152,9 @@
                                 (cond [(empty? lolot) (reverse los)]
                                       [else
                                         (lolot-iterator (rest lolot)
-                                                        (cons (lot->s (first lolot)) los))]))]
-                        (lolot-iterator lolot empty)))
-
-                    (define (lot->s lot)
-                      (cond [(empty? lot) ""]
-                            [else
-                              (if (empty? (rest lot))
-                                  (string-append (token-token (first lot)) (lot->s (rest lot)))
-                                  (string-append (token-token (first lot)) "\t" (lot->s (rest lot))))]))]
+                                                        (cons (gather (foldr (λ (f r) (cons (token-token f) r))
+                                                                             empty
+                                                                             (first lolot))) los))]))]
+                        (lolot-iterator lolot empty)))]
               (lolot-iterator lolot)))]
     (logs-iterator logs)))
