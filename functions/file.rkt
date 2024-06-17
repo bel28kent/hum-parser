@@ -63,7 +63,6 @@
   (local [(define records (hfile-records hfile))]
     (foldr (λ (f r) (cons (record-record f) r)) empty records)))
 
-; TODO
 ; write-file
 ; (listof String) String -> #<void>
 ; writes list to file at given path
