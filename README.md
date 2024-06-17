@@ -8,7 +8,8 @@ language.
 
 hum-parser is able to parse a humdrum file into records and spines,
 allowing the user to write these data into new files for use with
-other programs, or for use with other parts of the hum-parser.
+other programs, or for use directly (i.e. without writing)
+with other parts of the hum-parser.
 
 The ultimate goal of hum-parser is to map spines on to tree structures. Such
 structures would enable the user to write new functions that traverse humdrum
@@ -26,7 +27,7 @@ There are two primary ways of using Racket. One is through DrRacket, the languag
 IDE. An executable for the IDE will be installed when following the Getting Started
 page above. The second and preferred way for hum-parser is on the command-line
 by running the `racket` command. It is recommended that the user add the path to
-the bin directory after installing Racket to make it easier to run the command from anywhere.
+the bin directory after installing Racket to make it easier to run on the command from anywhere.
 
 ### Using hum-parser in the REPL
 
