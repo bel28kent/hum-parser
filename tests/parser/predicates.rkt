@@ -4,8 +4,8 @@
 ;;  hum-parser: tests for predicates
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../data-definitions/data-definitions.rkt"
-         "../functions/predicates.rkt"
+(require "../../parser/data-definitions/data-definitions.rkt"
+         "../../parser/functions/predicates.rkt"
          test-engine/racket-tests)
 
 ; TODO

@@ -5,8 +5,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "../data-definitions/data-definitions.rkt"
-         "../functions/abstract.rkt"
-         "../functions/split-and-gather.rkt"
+         "abstract.rkt"
+         "split-and-gather.rkt"
          test-engine/racket-tests)
 
 (provide (all-defined-out))

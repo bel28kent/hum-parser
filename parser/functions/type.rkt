@@ -4,9 +4,9 @@
 ;;  hum-parser: functions: type
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "predicates.rkt"
-         "../data-definitions/data-definitions.rkt"
-         "../../abstract-fns/functions/functions.rkt")
+(require "../data-definitions/data-definitions.rkt"
+         "predicates.rkt"
+         "../../../abstract-fns/functions/functions.rkt")
 
 (provide (all-defined-out))
 

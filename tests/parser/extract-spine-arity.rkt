@@ -4,10 +4,10 @@
 ;;  hum-parser: tests for extract-spine-arity
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../data-definitions/data-definitions.rkt"
-         "../functions/abstract.rkt"
-         "../functions/extract-spine-arity.rkt"
-         "../functions/file.rkt"
+(require "../../parser/data-definitions/data-definitions.rkt"
+         "../../parser/functions/abstract.rkt"
+         "../../parser/functions/extract-spine-arity.rkt"
+         "../../parser/functions/file.rkt"
          test-engine/racket-tests)
 
 (provide BERG)
@@ -77,7 +77,7 @@
                                       (make-token "4a" SPINE-DATA 4)
                                       (make-token "4aaa" SPINE-DATA 4))
                                 4))
-(define BERG (filter-type record-type TOKEN (hfile-records (los->hfile (read-file "data/berg01.pc")))))
+(define BERG (filter-type record-type TOKEN (hfile-records (los->hfile (read-file "tests/parser/data/berg01.pc")))))
 
 ; extract-spine-arity
 (check-expect (extract-spine-arity BERG) (make-spine-arity 2 (list (list 1 1)

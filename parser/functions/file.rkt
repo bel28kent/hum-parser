@@ -4,11 +4,11 @@
 ;;  hum-parser: functions: file
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "predicates.rkt"
+(require "../data-definitions/data-definitions.rkt"
+         "predicates.rkt"
          "split-and-gather.rkt"
          "type.rkt"
-         "../data-definitions/data-definitions.rkt"
-         "../../abstract-fns/functions/functions.rkt")
+         "../../../abstract-fns/functions/functions.rkt")
 
 (provide (all-defined-out))
 

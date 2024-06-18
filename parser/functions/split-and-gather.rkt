@@ -5,7 +5,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "../data-definitions/data-definitions.rkt"
-         "../../abstract-fns/functions/functions.rkt")
+         "../../../abstract-fns/functions/functions.rkt")
 
 (provide (all-defined-out))
 

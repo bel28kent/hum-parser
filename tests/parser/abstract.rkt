@@ -4,14 +4,14 @@
 ;;  hum-parser: tests for abstract functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../data-definitions/data-definitions.rkt"
-         "../functions/abstract.rkt"
-         "../functions/file.rkt"
+(require "../../parser/data-definitions/data-definitions.rkt"
+         "../../parser/functions/abstract.rkt"
+         "../../parser/functions/file.rkt"
          test-engine/racket-tests)
 
 (provide BERG-PATH)
 
-(define BERG-PATH "data/berg01.pc")
+(define BERG-PATH "tests/parser/data/berg01.pc")
 
 ; TODO
 ;  More robust tests would use real examples that contain each tag.

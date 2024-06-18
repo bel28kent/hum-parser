@@ -4,13 +4,13 @@
 ;;  hum-parser: tests for file functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../data-definitions/data-definitions.rkt"
-         "../functions/file.rkt"
+(require "../../parser/data-definitions/data-definitions.rkt"
+         "../../parser/functions/file.rkt"
          test-engine/racket-tests)
 
 (provide BERG-PATH)
 
-(define BERG-PATH "data/berg01.pc")
+(define BERG-PATH "tests/parser/data/berg01.pc")
 
 ; read-file
 (check-expect (read-file BERG-PATH)
@@ -107,9 +107,9 @@
 ;                        "!!!RKY: 0.55"
 ;                        "!!!T33: 1"
 ;                        "!!!T35: 0")
-;                          "data/berg01-write-file-test.krn")
+;                          "tests/parser/data/berg01-write-file-test.krn")
 ;              (void))
-;(check-expect (read-file "data/berg01-write-file-test.krn")
+;(check-expect (read-file "tests/parser/data/berg01-write-file-test.krn")
 ;              (list "!!!COM: Berg, Alban"
 ;              "!!!OTL: Chamber Concerto"
 ;              "!!!OMV: Movements 1 and 3"

@@ -1,6 +1,6 @@
 #lang racket
 
-(require "../../data-definitions/data-definitions.rkt"
+(require "../../../parser/data-definitions/data-definitions.rkt"
          test-engine/racket-tests)
 
 (define (tokens-by-spine unwrapped byspine)

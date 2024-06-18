@@ -5,8 +5,8 @@
 ;;    also tested in spine-parser-scriabin-test
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../data-definitions/data-definitions.rkt"
-         "../functions/spine-parser.rkt"
+(require "../../parser/data-definitions/data-definitions.rkt"
+         "../../parser/functions/spine-parser.rkt"
          test-engine/racket-tests)
 
 (define KERN-TOKEN (make-token "**kern" "ExclusiveInterpretation" 0))
