@@ -1,7 +1,7 @@
 #lang racket
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: FUNCTIONS: SPINE-PARSER
+;; hum-parser: functions: spine-parser
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "../data-definitions/data-definitions.rkt"

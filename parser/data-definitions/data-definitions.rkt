@@ -1,7 +1,7 @@
 #lang racket
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  hum-parser: DATA DEFINITIONS
+;;  hum-parser: data definitions
 ;;
 ;;    NB: All example constants must end with -EX
 ;;        All type constants are at the top of file

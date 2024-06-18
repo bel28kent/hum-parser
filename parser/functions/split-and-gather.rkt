@@ -1,7 +1,7 @@
 #lang racket
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  hum-parser: FUNCTIONS: SPLIT & GATHER
+;;  hum-parser: functions: split & gather
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "../data-definitions/data-definitions.rkt"

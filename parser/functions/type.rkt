@@ -1,7 +1,7 @@
 #lang racket
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  hum-parser: FUNCTIONS: TYPE
+;;  hum-parser: functions: type
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "predicates.rkt"

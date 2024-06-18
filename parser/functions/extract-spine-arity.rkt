@@ -1,7 +1,7 @@
 #lang racket
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: FUNCTIONS: EXTRACT-SPINE-ARITY
+;; hum-parser: functions: extract-spine-arity
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "../data-definitions/data-definitions.rkt"
