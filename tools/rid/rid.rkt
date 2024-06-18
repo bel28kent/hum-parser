@@ -15,3 +15,8 @@
 ;                                                       empty global or local comments,
 ;                                                       empty interpretations,
 ;                                                       or any combination of these record types.
+
+(require "../../parser/data-definitions/data-definitions.rkt"
+         "../../parser/functions/abstract.rkt"
+         racket/cmdline
+         test-engine/racket-tests)
