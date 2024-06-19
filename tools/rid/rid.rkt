@@ -4,24 +4,48 @@
 ;; hum-parser: tools: rid
 ;;    eliminate specified humdrum record types
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;The rid command allows the user to eliminate specified types of Humdrum records (lines) from the input stream.
-;Depending on the options selected, rid will eliminate: global comments, DONE
-;                                                       local comments, DONE
-;                                                       interpretations, DONE
-;                                                       duplicate exclusive interpretations, DONE
-;                                                       tandem interpretations, DONE
-;                                                       data records, DONE
-;                                                       data records consisting of just null tokens (null data records), DONE
-;                                                       empty global or local comments, DONE
-;                                                       empty interpretations, DONE
-;                                                       or any combination of these record types.
 
 (require "../../parser/data-definitions/data-definitions.rkt"
          "../../parser/functions/abstract.rkt"
+         "../../parser/functions/file.rkt"
          "../../parser/functions/predicates.rkt"
          racket/cmdline)
 
-(provide (all-defined-out))
+(define global          (make-parameter #f))
+(define Global          (make-parameter #f))
+(define l               (make-parameter #f))
+(define Local           (make-parameter #f))
+(define interpretations (make-parameter #f))
+(define duplicates      (make-parameter #f))
+(define tandem          (make-parameter #f))
+(define e               (make-parameter #f))
+(define spine           (make-parameter #f))
+(define n               (make-parameter #f))
+
+; composition
+; String -> (listof Record)
+; executes command
+
+(define (composition filename)
+          (output (rid-global-comments
+                    (rid-empty-global-comments
+                      (rid-local-comments
+                        (rid-empty-local-comments
+                          (rid-interpretations
+                            (rid-duplicate-exclusive-interpretations
+                              (rid-tandem-interpretations
+                                (rid-empty-interpretations
+                                  (rid-data-records
+                                    (rid-null-data-records (hfile-records
+                                                             (los->hfile
+                                                               (read-file filename)))))))))))))))
+
+; output
+; (listof Record) -> (void)
+; displays output
+
+(define (output lor)
+  (foldl (λ (f r) (displayln (record-record f))) (void) lor))
 
 ; rid-global-comments
 ; (listof Record) -> (listof Record)
@@ -30,7 +54,9 @@
 (define (rid-global-comments lor)
   (local [(define (not-global-comment? r)
             (not (string=? (record-type r) GLOBAL-COMMENT)))]
-    (filter not-global-comment? lor)))
+    (if (global)
+        (filter not-global-comment? lor)
+        lor)))
 
 ; rid-local-comments
 ; (listof Record) -> (listof Record)
@@ -39,7 +65,9 @@
 (define (rid-local-comments lor)
   (local [(define (not-local-comment? r)
             (not (string=? (record-type r) LOCAL-COMMENT)))]
-    (filter not-local-comment? lor)))
+    (if (l)
+        (filter not-local-comment? lor)
+        lor)))
 
 ; rid-empty-global-comments
 ; (listof Record) -> (listof Record)
@@ -48,7 +76,9 @@
 (define (rid-empty-global-comments lor)
   (local [(define (not-empty-global-comment? r)
             (not (regexp-match #rx"!!\\s*" (record-record r))))]
-    (filter not-empty-global-comment? lor)))
+    (if (Global)
+        (filter not-empty-global-comment? lor)
+        lor)))
 
 ; rid-empty-local-comments
 ; (listof Record) -> (listof Record)
@@ -58,7 +88,9 @@
   (local [(define (not-empty-local-comment? r)
             (not (and (string=? LOCAL-COMMENT (record-type r))
                       (not (regexp-match #rx"[a-gA-G0-9]+" (record-record r))))))]
-    (filter not-empty-local-comment? lor)))
+    (if (Local)
+        (filter not-empty-local-comment? lor)
+        lor)))
 
 ; rid-interpretations
 ; (listof Record) -> (listof Record)
@@ -68,7 +100,9 @@
   (local [(define (not-interpretation? r)
             (not (and (string=? TOKEN (record-type r))
                       (interpretation? (token-token (first (record-split r)))))))]
-    (filter not-interpretation? lor)))
+    (if (interpretations)
+        (filter not-interpretation? lor)
+        lor)))
 
 ; rid-tandem-interpretations
 ; (listof Record) -> (listof Record)
@@ -78,7 +112,9 @@
   (local [(define (not-tandem-interpretation? r)
             (not (and (string=? TOKEN (record-type r))
                       (tandem-interpretation? (token-token (first (record-split r)))))))]
-    (filter not-tandem-interpretation? lor)))
+    (if (tandem)
+        (filter not-tandem-interpretation? lor)
+        lor)))
 
 ; rid-empty-interpretations
 ; (listof Record) -> (listof Record)
@@ -94,8 +130,11 @@
                   [(not (string=? NULL-INTERPRETATION (token-type (first split)))) #f]
                   [else
                     (empty-interpretation? (rest split))]))]
-    (filter not-empty-interpretation? lor)))
+    (if (e)
+        (filter not-empty-interpretation? lor)
+        lor)))
 
+; TODO: Review
 ; rid-data-records
 ; (listof Record) -> (listof Record)
 ; filters records that are not comments, references, or interpretations
@@ -107,7 +146,9 @@
                 (string=? LOCAL-COMMENT (record-type r))
                 (and (string=? TOKEN (record-type r))
                      (interpretation? (token-token (first (record-split r)))))))]
-    (filter not-data-record? lor)))
+    (if (spine)
+        (filter not-data-record lor)
+        lor)))
 
 ; rid-null-data-records
 ; (listof Record) -> (listof Record)
@@ -123,7 +164,9 @@
                   [(not (string=? NULL-SPINE-DATA (token-type (first split)))) #f]
                   [else
                     (null-data-record? (rest split))]))]
-    (filter not-null-data-record? lor)))
+    (if (n)
+        (filter not-null-data-record? lor)
+        lor)))
 
 ; rid-duplicate-exclusive-interpretations
 ; (listof Record) -> (listof Record)
@@ -144,6 +187,24 @@
             (not (and (string=? TOKEN (record-type r))
                       (ormap exclusive-interpretation? (map (λ (t) (token-token t)) (record-split r)))
                       (> (record-record-number r) first-exclusive-record-number))))]
-      (if (= -1 first-exclusive-record-number)
-          lor
-          (filter not-duplicate-exclusive-interpretation? lor))))
+      (if (duplicates)
+          (if (= -1 first-exclusive-record-number)
+              lor
+              (filter not-duplicate-exclusive-interpretation? lor))
+          lor)))
+
+(define rid
+  (command-line
+    #:once-each
+    [("-g" "--global")          "Filter all global comments"                    (global #t)]
+    [("-G" "--Global")          "Filter only empty global commments"            (Global #t)]
+    [("-l" "--local")           "Filter all local comments"                     (l #t)]
+    [("-L" "--Local")           "Filter only empty local comments"              (Local #t)]
+    [("-i" "--interpretations") "Filter all interpretations"                    (interpretations #t)]
+    [("-d" "--duplicates")      "Filter duplicate exclusive interpretations"    (duplicates #t)]
+    [("-t" "--tandem")          "Filter tandem interpretations"                 (tandem #t)]
+    [("-e" "--empty")           "Filter empty interpretations"                  (e #t)]
+    [("-s" "--spine")           "Filter spine data, except for interpretations" (spine #t)]
+    [("-n" "--null")            "Filter null data records"                      (n #t)]
+    #:args (filename)
+    (composition filename)))
