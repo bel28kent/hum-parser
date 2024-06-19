@@ -31,6 +31,7 @@
 (define EXCLUSIVE-INTERPRETATION "ExclusiveInterpretation")
 (define MEASURE                  "Measure")
 (define SPINE-DATA               "SpineData")
+(define NULL-SPINE-DATA          "NullSpineData")
 
 (define SPINE-SPLIT              "SpineSplit")
 (define SPINE-JOIN               "SpineJoin")
@@ -93,6 +94,7 @@
 ;  - TandemInterpretation
 ;  - Measure
 ;  - SpineData
+;  - NullSpineData
 ;  Represents the type of a Token
 
 ; ExclusiveInterpretation is "ExclusiveInterpretation"
@@ -131,7 +133,10 @@
 ;  Represents a token starting with MEASURE-TAG
 
 ; SpineData is "SpineData"
-;  Represents a token that is not one of above
+;  Represents a token that is not one of above and not "."
+
+; NullSpineData is "NullSpineData"
+;  Represents a token that equals "."
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  RECORDS AND SPINES

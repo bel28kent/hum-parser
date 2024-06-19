@@ -55,9 +55,11 @@
         [(null-interpretation? token) NULL-INTERPRETATION]
         [(measure? token) MEASURE]
         [(spine-data? token) SPINE-DATA]
+        [(null-spine-data? token) NULL-SPINE-DATA]
         [else
           #f]))
 
+; TODO: test clef case
 ; type-tandem
 ; String -> TandemInterpretation or false
 ; produce the type of the tandem interpretation or false if unknown
@@ -66,5 +68,6 @@
   (cond [(spine-split? token) SPINE-SPLIT]
         [(spine-join? token) SPINE-JOIN]
         [(spine-terminator? token) SPINE-TERMINATOR]
+        [(clef? token) CLEF]
         [else
           #f]))

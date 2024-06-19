@@ -115,9 +115,25 @@
 (define (measure? token)
   (tag=? token 1 MEASURE-TAG))
 
+; TODO: test
+; clef?
+; String -> Boolean
+; produce true if string starts with "*clef"
+
+(define (clef? token)
+  (not (false? (regexp-match #rx"\\*clef" token))))
+
 ; spine-data?
 ; String -> Boolean
 ; produce true if string is not METADATA and is not another TOKEN type
 
 (define (spine-data? token)
-  (andmap not (valmap token (list metadata? interpretation? spine-structure? measure?))))
+  (andmap not (valmap token (list metadata? interpretation? spine-structure? measure? null-spine-data?))))
+
+; TODO: test
+; null-spine-data?
+; String -> Boolean
+; produce true if string equals "."
+
+(define (null-spine-data? token)
+  (string=? "." token))

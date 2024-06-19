@@ -11,11 +11,14 @@
 
 (provide (all-defined-out))
 
-; TODO: spine-parser
+; TODO: test
 ; HumdrumFile SpineArity -> (listof GlobalSpine)
 ; produces a list of global spines from the HumdrumFile
 
-(define (spine-parser hfile spine-arity) (void))
+(define (spine-parser hfile spine-arity)
+  (lololot->logs
+    (tokens-by-spine (unwrap hfile)
+                     (byrecord->byspine spine-arity))))
 
 ; unwrap
 ; HumdrumFile -> (listof (listof Token))
