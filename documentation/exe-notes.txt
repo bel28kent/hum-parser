@@ -1,0 +1,7 @@
+## Large files problem
+
+Do not store executables on repo.
+Only have src.
+Makefile to make executables locally.
+
+Distribution file with only exe.
