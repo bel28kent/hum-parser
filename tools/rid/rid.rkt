@@ -11,6 +11,7 @@
          "../../parser/functions/predicates.rkt"
          racket/cmdline)
 
+(define references      (make-parameter #f))
 (define global          (make-parameter #f))
 (define Global          (make-parameter #f))
 (define l               (make-parameter #f))
@@ -27,18 +28,19 @@
 ; executes command
 
 (define (composition filename)
-          (output (rid-global-comments
-                    (rid-empty-global-comments
-                      (rid-local-comments
-                        (rid-empty-local-comments
-                          (rid-interpretations
-                            (rid-duplicate-exclusive-interpretations
-                              (rid-tandem-interpretations
-                                (rid-empty-interpretations
-                                  (rid-data-records
-                                    (rid-null-data-records (hfile-records
-                                                             (los->hfile
-                                                               (read-file filename)))))))))))))))
+          (output (rid-reference-records
+                    (rid-global-comments
+                      (rid-empty-global-comments
+                        (rid-local-comments
+                          (rid-empty-local-comments
+                            (rid-interpretations
+                              (rid-duplicate-exclusive-interpretations
+                                (rid-tandem-interpretations
+                                  (rid-empty-interpretations
+                                    (rid-data-records
+                                      (rid-null-data-records (hfile-records
+                                                               (los->hfile
+                                                                 (read-file filename))))))))))))))))
 
 ; output
 ; (listof Record) -> (void)
@@ -46,6 +48,17 @@
 
 (define (output lor)
   (foldl (λ (f r) (displayln (record-record f))) (void) lor))
+
+; rid-reference-records
+; (listof Record) -> (listof Record)
+; filters all reference records from list of records
+
+(define (rid-reference-records lor)
+  (local [(define (not-reference-record? r)
+            (not (string=? (record-type r) REFERENCE-RECORD)))]
+    (if (references)
+        (filter not-reference-record? lor)
+        lor)))
 
 ; rid-global-comments
 ; (listof Record) -> (listof Record)
@@ -147,7 +160,7 @@
                 (and (string=? TOKEN (record-type r))
                      (interpretation? (token-token (first (record-split r)))))))]
     (if (spine)
-        (filter not-data-record lor)
+        (filter not-data-record? lor)
         lor)))
 
 ; rid-null-data-records
@@ -196,6 +209,7 @@
 (define rid
   (command-line
     #:once-each
+    [("-r" "--references")      "Filter all reference records"                  (references #t)]
     [("-g" "--global")          "Filter all global comments"                    (global #t)]
     [("-G" "--Global")          "Filter only empty global commments"            (Global #t)]
     [("-l" "--local")           "Filter all local comments"                     (l #t)]
