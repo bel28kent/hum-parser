@@ -100,7 +100,7 @@
 (define (rid-empty-local-comments lor)
   (local [(define (not-empty-local-comment? r)
             (not (and (string=? LOCAL-COMMENT (record-type r))
-                      (not (regexp-match #rx"[a-gA-G0-9]+" (record-record r))))))]
+                      (not (regexp-match #rx"^!(\t!)*$" (record-record r))))))]
     (if (Local)
         (filter not-empty-local-comment? lor)
         lor)))
