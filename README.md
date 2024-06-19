@@ -26,8 +26,9 @@ page of the documentation.
 There are two primary ways of using Racket. One is through DrRacket, the language's
 IDE. An executable for the IDE will be installed when following the Getting Started
 page above. The second and preferred way for hum-parser is on the command-line
-by running the `racket` command. It is recommended that the user add the path to
-the bin directory after installing Racket to make it easier to run on the command from anywhere.
+by running the `racket` command. After installing Racket, it is recommended that the
+user add the path to the bin directory to their `~/.bshenv` or `~/.zshenv` file to make it
+easier to run `racket` from anywhere.
 
 ### Using hum-parser in the REPL
 
