@@ -88,7 +88,8 @@
 
 (define (rid-empty-global-comments lor)
   (local [(define (not-empty-global-comment? r)
-            (not (regexp-match #rx"!!\\s*" (record-record r))))]
+            ; TODO: possibly regexp-match* to search globally
+            (not (regexp-match #rx"^!!\\s*" (record-record r))))]
     (if (Global)
         (filter not-empty-global-comment? lor)
         lor)))
@@ -100,6 +101,7 @@
 (define (rid-empty-local-comments lor)
   (local [(define (not-empty-local-comment? r)
             (not (and (string=? LOCAL-COMMENT (record-type r))
+                      ; TODO: possibly should by regexp-match* to seach globally
                       (not (regexp-match #rx"^!(\t!)*$" (record-record r))))))]
     (if (Local)
         (filter not-empty-local-comment? lor)
