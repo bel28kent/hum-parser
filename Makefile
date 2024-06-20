@@ -16,6 +16,8 @@ help:
 	@echo "make clean   Uninstall bin directory and executables"
 	@echo ""
 	@echo "Tools can also be targeted individually: make rid"
+	@echo "             (Only if bin doesn't exist) make bin"
+	@echo "                                         make rid-move"
 
 ####################
 ##  all
