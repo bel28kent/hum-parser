@@ -11,7 +11,8 @@
 help:
 	@echo "Makefile provides the following options:"
 	@echo "make all     Create tool executables"
-	@echo "make install Create bin directory and copy tool executables"
+	@echo "make install Create bin directory and move tool executables"
+	@echo "make update  Clean, pull repository, make all, make install"
 	@echo "make clean   Uninstall bin directory and executables"
 	@echo ""
 	@echo "Tools can also be targeted individually: make rid"
@@ -25,8 +26,17 @@ all: tools
 ####################
 ##  install
 
-install: bin copy
+install: bin move
 
+
+####################
+## update
+
+update: clean pull \
+        all install
+
+pull:
+	@git pull
 
 ####################
 ## clean
@@ -55,11 +65,11 @@ rid:
 
 
 ####################
-##  copy
+##  move
 
-copy: rid-copy
+move: rid-move
 
-rid-copy:
+rid-move:
 	@echo "Moving rid executable to hum-parser/bin"
 	@mv tools/rid/rid $(BINDIR)
 
