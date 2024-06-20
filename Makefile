@@ -53,6 +53,10 @@ BINDIR = bin
 
 bin:
 	@echo "Making hum-parser/bin"
+	@echo ""
+	@echo "NOTE:"
+	@echo "Add path to hum-parser/bin to your environment file to run executables anywhere"
+	@echo "" 
 	@mkdir $(BINDIR)
 
 
