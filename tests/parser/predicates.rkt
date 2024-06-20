@@ -148,6 +148,24 @@
 (check-expect (measure? TANDEM-TAG)                          #f)
 (check-expect (measure? (token-token MUSIC-TOKEN-EX))        #f)
 
+; clef?
+(check-expect (clef? "*Ipiano")    #f)
+(check-expect (clef? "*clefC3")    #t)
+(check-expect (clef? "*clefF4")    #t)
+(check-expect (clef? "*clefG2")    #t)
+(check-expect (clef? "*M3/4")      #f)
+(check-expect (clef? "*k[f#c#g#]") #f)
+(check-expect (clef? TANDEM-TAG)   #f)
+
+; time-sig?
+(check-expect (time-sig? "*Ipiano")    #f)
+(check-expect (time-sig? "*clefC3")    #f)
+(check-expect (time-sig? "*M3/4")      #t)
+(check-expect (time-sig? "*M4/4")      #t)
+(check-expect (time-sig? "*met(c)")    #t)
+(check-expect (time-sig? "*k[f#c#g#]") #f)
+(check-expect (time-sig? TANDEM-TAG)   #f)
+
 ; spine-data?
 (check-expect (spine-data? (token-token MUSIC-TOKEN-EX))        #t)
 (check-expect (spine-data? MEASURE-TAG)                         #f)

@@ -27,8 +27,8 @@
 ; #f indicates only that the token type is not known,
 ;   and does not indicate that string is not a token.
 ; type-token
-(check-expect (type-token "**kern\t**kern") EXCLUSIVE-INTERPRETATION)
-(check-expect (type-token "*\t*8va\t*")     #f)
+(check-expect (type-token "**kern") EXCLUSIVE-INTERPRETATION)
+(check-expect (type-token "*8va")     #f)
 (check-expect (type-token "=4||")           MEASURE)
 (check-expect (type-token "16.aaLL]")       SPINE-DATA)
 (check-expect (type-token "*^")             SPINE-SPLIT)
@@ -41,12 +41,14 @@
 ; #f indicates only that the tandem type is not known,
 ;   and does not indicate that string is not a tandem token.
 ; type-tandem
-(check-expect (type-tandem "*^")     SPINE-SPLIT)
-(check-expect (type-tandem "*v")     SPINE-JOIN)
-(check-expect (type-tandem "*-")     SPINE-TERMINATOR)
-(check-expect (type-tandem "*")      #f)
-(check-expect (type-tandem "*X8va")  #f)
-(check-expect (type-tandem "*M3/4")  #f)
+(check-expect (type-tandem "*^")      SPINE-SPLIT)
+(check-expect (type-tandem "*v")      SPINE-JOIN)
+(check-expect (type-tandem "*-")      SPINE-TERMINATOR)
+(check-expect (type-tandem "*")       #f)
+(check-expect (type-tandem "*clefG2") CLEF)
+(check-expect (type-tandem "*M3/4")   TIME-SIG)
+(check-expect (type-tandem "*met(c)") TIME-SIG)
 (check-expect (type-tandem "*k[]")   #f)
+(check-expect (type-tandem "*X8va")  #f)
 
 (test)

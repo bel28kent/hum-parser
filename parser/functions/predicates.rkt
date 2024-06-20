@@ -115,13 +115,19 @@
 (define (measure? token)
   (tag=? token 1 MEASURE-TAG))
 
-; TODO: test
 ; clef?
 ; String -> Boolean
 ; produce true if string starts with "*clef"
 
 (define (clef? token)
-  (not (false? (regexp-match #rx"\\*clef" token))))
+  (not (false? (regexp-match #px"^\\*clef" token))))
+
+; time-sig?
+; String -> Boolean
+; produce true if string starts with "*M" or *met"
+
+(define (time-sig? token)
+  (not (false? (regexp-match #px"^\\*(M|met)" token))))
 
 ; spine-data?
 ; String -> Boolean
