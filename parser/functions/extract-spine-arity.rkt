@@ -5,6 +5,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "../data-definitions/data-definitions.rkt"
+         "../functions/abstract.rkt"
          "../../../abstract-fns/functions/functions.rkt")
 
 (provide (all-defined-out))
@@ -14,12 +15,13 @@
 ;             otherwise is humdrum syntax error
 
 ; extract-spine-arity
-; (listof Record) -> SpineArity
+; HumdrumFile -> SpineArity
 ; produces the spine arity from a list of token records
 
-(define (extract-spine-arity records)
-  (make-spine-arity (length (record-split (first records)))
-                    (lolon records)))
+(define (extract-spine-arity hfile)
+  (local [(define token-records (filter-type record-type TOKEN (hfile-records hfile)))]
+    (make-spine-arity (length (record-split (first token-records)))
+                      (lolon token-records))))
 
 ; lolon
 ; (listof Record) -> (listof (listof Natural))
