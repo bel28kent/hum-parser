@@ -15,6 +15,12 @@ The ultimate goal of hum-parser is to map spines on to tree structures. Such
 structures would enable the user to write new functions that traverse humdrum
 data without having to worry about parsing records or spines.
 
+### Dependencies
+
+This repository relies on [abstract-fns](https://github.com/bel28kent/abstract-fns). It is
+recommended to create a directory such as `my-racket` and place both `abstract-fns` and
+`hum-parser` in there.
+
 ### Installing and Using Racket
 
 Racket is a LISP-dialect. Read more on the language [here](https://en.wikipedia.org/wiki/Racket_(programming_language)).
