@@ -144,6 +144,13 @@
   (local [(define matches (regexp-match* #px"\\*([a-gA-G]|X)(-|#)?:" token))]
     (not (empty? matches))))
 
+; staff-number?
+; String -> Boolean
+; produce true if string matches "\\*staff[0-9]+"
+
+(define (staff-number? token)
+  (not (false? (regexp-match #px"\\*staff[0-9]+" token))))
+
 ; spine-data?
 ; String -> Boolean
 ; produce true if string is not METADATA and is not another TOKEN type

@@ -196,6 +196,16 @@
 (check-expect (key-label? "*b-:")        #t)
 (check-expect (key-label? TANDEM-TAG)    #f)
 
+; staff-number?
+(check-expect (staff-number? "*Ipiano")   #f)
+(check-expect (staff-number? "*clefC3")   #f)
+(check-expect (staff-number? "*M3/4")     #f)
+(check-expect (staff-number? "*k[]")      #f)
+(check-expect (staff-number? "*C:")       #f)
+(check-expect (staff-number? "*staff1")   #t)
+(check-expect (staff-number? "*staff1/2") #t)
+
+
 ; spine-data?
 (check-expect (spine-data? (token-token MUSIC-TOKEN-EX))        #t)
 (check-expect (spine-data? MEASURE-TAG)                         #f)

@@ -41,6 +41,7 @@
 (define TIME-SIG                 "TimeSignature")
 (define KEY-SIG                  "KeySignature")
 (define KEY-LABEL                "KeyLabel")
+(define STAFF-NUMBER             "StaffNumber")
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  METADATA
@@ -111,6 +112,7 @@
 ;  - TimeSignature
 ;  - KeySignature
 ;  - KeyLabel
+;  - StaffNumber
 ;  Represents a token starting with TANDEM-TAG
 
 ; SpineSplit is "SpineSplit"
@@ -136,6 +138,9 @@
 
 ; KeyLabel is "KeyLabel"
 ;  Represents a token that matches "\\*([a-gA-G]|X)(-|#)?:"
+
+; StaffNumber is "StaffNumber"
+;  Represents a token that matches "\\*staff[0-9]+"
 
 ; Measure is "Measure"
 ;  Represents a token starting with MEASURE-TAG

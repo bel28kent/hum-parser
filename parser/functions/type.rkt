@@ -19,9 +19,9 @@
 ; produce the type of the metadata or false if unknown
 
 (define (type-metadata string)
-  (cond [(reference? string) REFERENCE-RECORD]
+  (cond [(reference? string)      REFERENCE-RECORD]
         [(global-comment? string) GLOBAL-COMMENT]
-        [(local-comment? string) LOCAL-COMMENT]
+        [(local-comment? string)  LOCAL-COMMENT]
         [else
           #f]))
 
@@ -51,11 +51,11 @@
 
 (define (type-token token)
   (cond [(exclusive-interpretation? token) EXCLUSIVE-INTERPRETATION]
-        [(tandem-interpretation? token) (type-tandem token)]
-        [(null-interpretation? token) NULL-INTERPRETATION]
-        [(measure? token) MEASURE]
-        [(spine-data? token) SPINE-DATA]
-        [(null-spine-data? token) NULL-SPINE-DATA]
+        [(tandem-interpretation? token)    (type-tandem token)]
+        [(null-interpretation? token)      NULL-INTERPRETATION]
+        [(measure? token)                  MEASURE]
+        [(spine-data? token)               SPINE-DATA]
+        [(null-spine-data? token)          NULL-SPINE-DATA]
         [else
           #f]))
 
@@ -64,12 +64,13 @@
 ; produce the type of the tandem interpretation or false if unknown
 
 (define (type-tandem token)
-  (cond [(spine-split? token) SPINE-SPLIT]
-        [(spine-join? token) SPINE-JOIN]
+  (cond [(spine-split? token)      SPINE-SPLIT]
+        [(spine-join? token)       SPINE-JOIN]
         [(spine-terminator? token) SPINE-TERMINATOR]
-        [(clef? token) CLEF]
-        [(time-sig? token) TIME-SIG]
-        [(key-sig? token) KEY-SIG]
-        [(key-label? token) KEY-LABEL]
+        [(clef? token)             CLEF]
+        [(time-sig? token)         TIME-SIG]
+        [(key-sig? token)          KEY-SIG]
+        [(key-label? token)        KEY-LABEL]
+        [(staff-number? token)     STAFF-NUMBER]
         [else
           #f]))
