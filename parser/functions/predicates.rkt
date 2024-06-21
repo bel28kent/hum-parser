@@ -151,7 +151,6 @@
 (define (spine-data? token)
   (andmap not (valmap token (list metadata? interpretation? spine-structure? measure? null-spine-data?))))
 
-; TODO: test
 ; null-spine-data?
 ; String -> Boolean
 ; produce true if string equals "."

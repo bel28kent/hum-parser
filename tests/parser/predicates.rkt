@@ -205,4 +205,10 @@
 (check-expect (spine-data? EXCLUSIVE-TAG)                       #f)
 (check-expect (spine-data? TANDEM-TAG)                          #f)
 
+; null-spine-data?
+(check-expect (null-spine-data? ".")  #t)
+(check-expect (null-spine-data? "4a") #f)
+(check-expect (null-spine-data? "ff") #f)
+(check-expect (null-spine-data? "a-") #f)
+
 (test)
