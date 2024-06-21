@@ -42,6 +42,7 @@
 (define KEY-SIG                  "KeySignature")
 (define KEY-LABEL                "KeyLabel")
 (define STAFF-NUMBER             "StaffNumber")
+(define INSTRUMENT-CLASS         "InstrumentClass")
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  METADATA
@@ -113,6 +114,7 @@
 ;  - KeySignature
 ;  - KeyLabel
 ;  - StaffNumber
+;  - InstrumentClass
 ;  Represents a token starting with TANDEM-TAG
 
 ; SpineSplit is "SpineSplit"
@@ -141,6 +143,9 @@
 
 ; StaffNumber is "StaffNumber"
 ;  Represents a token that matches "\\*staff[0-9]+"
+
+; InstrumentClass is "InstrumentClass"
+;  Represents a token that matches "\\*I[[:alpha:]]+"
 
 ; Measure is "Measure"
 ;  Represents a token starting with MEASURE-TAG

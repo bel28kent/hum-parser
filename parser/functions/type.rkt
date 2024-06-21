@@ -72,5 +72,6 @@
         [(key-sig? token)          KEY-SIG]
         [(key-label? token)        KEY-LABEL]
         [(staff-number? token)     STAFF-NUMBER]
+        [(instrument-class? token) INSTRUMENT-CLASS]
         [else
           #f]))

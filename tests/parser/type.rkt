@@ -47,6 +47,7 @@
 (check-expect (type-token "*B-:")      KEY-LABEL)
 (check-expect (type-token "*staff1")   STAFF-NUMBER)
 (check-expect (type-token "*staff1/2") STAFF-NUMBER)
+(check-expect (type-token "*Ipiano")   INSTRUMENT-CLASS)
 (check-expect (type-token "*X8va")     #f)
 (check-expect (type-token "*8va")      #f)
 
@@ -71,6 +72,7 @@
 (check-expect (type-tandem "*B-:")      KEY-LABEL)
 (check-expect (type-tandem "*staff1")   STAFF-NUMBER)
 (check-expect (type-tandem "*staff1/2") STAFF-NUMBER)
+(check-expect (type-tandem "*Ipiano")   INSTRUMENT-CLASS)
 (check-expect (type-tandem "*")         #f)
 (check-expect (type-tandem "*X8va")     #f)
 

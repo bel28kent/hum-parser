@@ -205,6 +205,14 @@
 (check-expect (staff-number? "*staff1")   #t)
 (check-expect (staff-number? "*staff1/2") #t)
 
+; instrument-class?
+(check-expect (instrument-class? "*Ipiano")   #t)
+(check-expect (instrument-class? "*Icello")   #t)
+(check-expect (instrument-class? "*clefC3")   #f)
+(check-expect (instrument-class? "*M3/4")     #f)
+(check-expect (instrument-class? "*k[]")      #f)
+(check-expect (instrument-class? "*C:")       #f)
+(check-expect (instrument-class? "*staff1")   #f)
 
 ; spine-data?
 (check-expect (spine-data? (token-token MUSIC-TOKEN-EX))        #t)

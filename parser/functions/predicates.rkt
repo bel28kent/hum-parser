@@ -151,6 +151,13 @@
 (define (staff-number? token)
   (not (false? (regexp-match #px"\\*staff[0-9]+" token))))
 
+; instrument-class?
+; String -> Boolean
+; produce true if string matches "\\*I[[:alpha:]]+"
+
+(define (instrument-class? token)
+  (not (false? (regexp-match #px"\\*I[[:alpha:]]+" token))))
+
 ; spine-data?
 ; String -> Boolean
 ; produce true if string is not METADATA and is not another TOKEN type
