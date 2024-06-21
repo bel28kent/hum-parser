@@ -59,8 +59,6 @@
         [else
           #f]))
 
-; TODO: test clef case
-; TODO: test time-sig case
 ; type-tandem
 ; String -> TandemInterpretation or false
 ; produce the type of the tandem interpretation or false if unknown
@@ -71,5 +69,7 @@
         [(spine-terminator? token) SPINE-TERMINATOR]
         [(clef? token) CLEF]
         [(time-sig? token) TIME-SIG]
+        [(key-sig? token) KEY-SIG]
+        [(key-label? token) KEY-LABEL]
         [else
           #f]))

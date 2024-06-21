@@ -166,6 +166,36 @@
 (check-expect (time-sig? "*k[f#c#g#]") #f)
 (check-expect (time-sig? TANDEM-TAG)   #f)
 
+; key-sig?
+(check-expect (key-sig? "*Ipiano")    #f)
+(check-expect (key-sig? "*clefC3")    #f)
+(check-expect (key-sig? "*M3/4")      #f)
+(check-expect (key-sig? "*M4/4")      #f)
+(check-expect (key-sig? "*met(c)")    #f)
+(check-expect (key-sig? "*k[]")       #t)
+(check-expect (key-sig? "*k[b-]")     #t)
+(check-expect (key-sig? "*k[f#c#g#]") #t)
+(check-expect (key-sig? TANDEM-TAG)   #f)
+
+; key-label?
+(check-expect (key-label? "*Ipiano")     #f)
+(check-expect (key-label? "*clefC3")     #f)
+(check-expect (key-label? "*M3/4")       #f)
+(check-expect (key-label? "*M4/4")       #f)
+(check-expect (key-label? "*met(c)")     #f)
+(check-expect (key-label? "*k[]")        #f)
+(check-expect (key-label? "*C:")         #t)
+(check-expect (key-label? "*a:")         #t)
+(check-expect (key-label? "*X:")         #t)
+(check-expect (key-label? "*k[b-]")      #f)
+(check-expect (key-label? "*F:")         #t)
+(check-expect (key-label? "*d:")         #t)
+(check-expect (key-label? "*k[f#c#g#]")  #f)
+(check-expect (key-label? "*A:")         #t)
+(check-expect (key-label? "*f#:")        #t)
+(check-expect (key-label? "*b-:")        #t)
+(check-expect (key-label? TANDEM-TAG)    #f)
+
 ; spine-data?
 (check-expect (spine-data? (token-token MUSIC-TOKEN-EX))        #t)
 (check-expect (spine-data? MEASURE-TAG)                         #f)

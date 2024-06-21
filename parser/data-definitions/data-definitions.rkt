@@ -39,6 +39,8 @@
 (define NULL-INTERPRETATION      "NullInterpretation")
 (define CLEF                     "Clef")
 (define TIME-SIG                 "TimeSignature")
+(define KEY-SIG                  "KeySignature")
+(define KEY-LABEL                "KeyLabel")
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  METADATA
@@ -107,6 +109,8 @@
 ;  - NullInterpretation
 ;  - Clef
 ;  - TimeSignature
+;  - KeySignature
+;  - KeyLabel
 ;  Represents a token starting with TANDEM-TAG
 
 ; SpineSplit is "SpineSplit"
@@ -121,13 +125,17 @@
 ; NullInterpretation is "NullInterpretation"
 ;  Represents a token that equals TANDEM-TAG
 
-; TODO
 ; Clef is "Clef"
 ;  Represents a token that begins with "*clef"
 
-; TODO
 ; TimeSignature is "TimeSignature"
 ;  Represents a token that begins with "*M"
+
+; KeySignature is "KeySignature"
+;  Represents a token that matches "\\*k\\[.*\\]"
+
+; KeyLabel is "KeyLabel"
+;  Represents a token that matches "\\*([a-gA-G]|X)(-|#)?:"
 
 ; Measure is "Measure"
 ;  Represents a token starting with MEASURE-TAG

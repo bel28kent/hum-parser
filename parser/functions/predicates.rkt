@@ -120,14 +120,29 @@
 ; produce true if string starts with "*clef"
 
 (define (clef? token)
-  (not (false? (regexp-match #px"^\\*clef" token))))
+  (not (false? (regexp-match #px"\\*clef" token))))
 
 ; time-sig?
 ; String -> Boolean
 ; produce true if string starts with "*M" or *met"
 
 (define (time-sig? token)
-  (not (false? (regexp-match #px"^\\*(M|met)" token))))
+  (not (false? (regexp-match #px"\\*(M|met)" token))))
+
+; key-sig?
+; String -> Boolean
+; produce true if string matches "\\*k\\[.*\\]"
+
+(define (key-sig? token)
+  (not (false? (regexp-match #px"\\*k\\[.*\\]" token))))
+
+; key-label?
+; String -> Boolean
+; produce true if string matches "\\*[a-gA-G](-|#)?:"
+
+(define (key-label? token)
+  (local [(define matches (regexp-match* #px"\\*([a-gA-G]|X)(-|#)?:" token))]
+    (not (empty? matches))))
 
 ; spine-data?
 ; String -> Boolean
