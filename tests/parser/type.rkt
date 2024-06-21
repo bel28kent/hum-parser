@@ -8,10 +8,6 @@
          "../../parser/functions/type.rkt"
          test-engine/racket-tests)
 
-; TODO
-;  More robust tests would use real examples that contain each tag.
-;  Could use constants.
-
 ; type-metadata
 (check-expect (type-metadata "!!!COM: Scriabin, Alexander")   REFERENCE-RECORD)
 (check-expect (type-metadata "!! See pg. 5 of print edition") GLOBAL-COMMENT)

@@ -7,10 +7,6 @@
 (require "../../parser/functions/split-and-gather.rkt"
          test-engine/racket-tests)
 
-; TODO
-;  More robust tests would use real examples that contain each tag.
-;  Could use constants.
-
 ; split
 (check-expect (split "") empty)
 (check-expect (split "**kern") (list "**kern"))

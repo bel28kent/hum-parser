@@ -147,7 +147,6 @@
         (filter not-empty-interpretation? lor)
         lor)))
 
-; TODO: Review
 ; rid-data-records
 ; (listof Record) -> (listof Record)
 ; filters records that are not comments, references, or interpretations

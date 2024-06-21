@@ -30,7 +30,6 @@
 ; produces the given los as a HumdrumFile
 
 (define (los->hfile los)
-  ; TODO: make record-number a local constant
   (local [(define (los->lor los record-number)
             (cond [(empty? los) empty]
                   [else

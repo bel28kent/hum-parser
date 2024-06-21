@@ -124,7 +124,6 @@
               (split prev-tokens 0 0 prev-lon empty)))
 
           ; previous should only have one join
-          ; TODO: preprocessor
           (define (join previous)
             ; num-tokens: Natural. Number of tokens w/in a spine processed so far.
             ; num-spine: Natural. Number of tokens in this spine.

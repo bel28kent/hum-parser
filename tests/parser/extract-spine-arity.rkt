@@ -11,9 +11,6 @@
          test-engine/racket-tests)
 
 (provide BERG)
-; TODO
-;  More robust tests would use real examples that contain each tag.
-;  Could use constants.
 
 (define TEST-TOKEN-1 (make-token "**kern" EXCLUSIVE-INTERPRETATION 3))
 (define TEST-TOKEN-2 (make-token "*^"     SPINE-SPLIT 3))

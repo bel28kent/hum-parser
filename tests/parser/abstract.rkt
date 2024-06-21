@@ -13,10 +13,6 @@
 
 (define BERG-PATH "tests/parser/data/berg01.pc")
 
-; TODO
-;  More robust tests would use real examples that contain each tag.
-;  Could use constants.
-
 ; tag=?
 (check-expect (tag=? "!!!COM: Scriabin, Alexander" 3 REFERENCE-TAG) #t)
 (check-expect (tag=? "*\t*8va\t*" 3 REFERENCE-TAG)                  #f)

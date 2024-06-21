@@ -7,7 +7,6 @@
 ;;        All type constants are at the top of file
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; TODO: refactor record-number fields to just be number
 (provide (all-defined-out))
 
 (define SEPARATOR "\t")

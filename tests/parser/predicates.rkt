@@ -8,10 +8,6 @@
          "../../parser/functions/predicates.rkt"
          test-engine/racket-tests)
 
-; TODO
-;  More robust tests would use real examples that contain each tag.
-;  Could use constants.
-
 ; reference?
 (check-expect (reference? REFERENCE-RECORD-EX)               #t)
 (check-expect (reference? GLOBAL-COMMENT-EX)                 #f)
