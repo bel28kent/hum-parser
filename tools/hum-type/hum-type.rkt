@@ -10,16 +10,18 @@
          racket/cmdline)
 
 (define record (make-parameter #f))
+(define SPACES 20)
 
-; printf
 (define (type filename)
   (local [(define hum-file (los->hfile (read-file filename)))
 
           (define records (hfile-records hum-file))]
     (if (record)
         (foldl (λ (f rnr) (displayln (string-append (record-type f)
-                                                    "\t\t"
-                                                    (record-record f)))) (void) records)
+                                                    (make-string (- 20 (string-length (record-type f))) #\space)
+                                                    (record-record f))))
+               (void)
+               records)
         (foldl (λ (f rnr) (displayln (record-type f))) (void) records))))
 
 (define hum-type
