@@ -1,8 +1,9 @@
 #lang racket
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: tools: rid
+;; hum-parser: tools: ridkt
 ;;    eliminate specified humdrum record types
+;;    emulates humdrum-tools rid
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "../../parser/data-definitions/data-definitions.rkt"
@@ -205,7 +206,7 @@
               (filter not-duplicate-exclusive-interpretation? lor))
           lor)))
 
-(define rid
+(define ridkt
   (command-line
     #:once-each
     [("-r" "--references")      "Filter all reference records"                  (references #t)]
