@@ -36,7 +36,7 @@
 
           (define (display-type-only records type-getter)
             (foldl (λ (f rnr) (displayln (if (false? (type-getter f))
-                                             "Unkown"
+                                             "Unknown"
                                              (type-getter f)))) (void) records))]
 
     (cond [(record) (display-with-record records (if (token)
