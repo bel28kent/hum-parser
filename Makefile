@@ -63,31 +63,42 @@ bin:
 ####################
 ##  tools
 
-tools: rid
+tools: rid hum-type
 
 rid:
 	@echo "Making rid executable"
 	@raco exe tools/rid/rid.rkt
 
+hum-type:
+	@echo "Making hum-type executable"
+	@raco exe tools/hum-type/hum-type.rkt
 
 ####################
 ##  move
 
-move: rid-move
+move: rid-move hum-type-move
 
 rid-move:
 	@echo "Moving rid executable to hum-parser/bin"
 	@mv tools/rid/rid $(BINDIR)
 
+hum-type-move:
+	@echo "Moving hum-type executable to hum-parser/bin"
+	@mv tools/hum-type/hum-type $(BINDIR)
 
 ####################
 ##  uninstall
 
-uninstall: un-rid un-bin
+uninstall: un-rid un-hum-type \
+		un-bin
 
 un-rid:
 	@echo "Uninstalling rid executable"
 	@rm bin/rid
+
+un-hum-type:
+	@echo "Uninstalling hum-type executable"
+	@rm bin/hum-type
 
 un-bin:
 	@echo "Uninstalling hum-parser/bin"
