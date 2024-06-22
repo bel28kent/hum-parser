@@ -15,9 +15,9 @@ help:
 	@echo "make update  Clean, pull repository, make all, make install"
 	@echo "make clean   Uninstall bin directory and executables"
 	@echo ""
-	@echo "Tools can also be targeted individually: make rid"
+	@echo "Tools can also be targeted individually: make ridkt"
 	@echo "             (Only if bin doesn't exist) make bin"
-	@echo "                                         make rid-move"
+	@echo "                                         make ridkt-move"
 
 ####################
 ##  all
@@ -63,11 +63,11 @@ bin:
 ####################
 ##  tools
 
-tools: rid hum-type
+tools: ridkt hum-type
 
-rid:
-	@echo "Making rid executable"
-	@raco exe tools/rid/rid.rkt
+ridkt:
+	@echo "Making ridkt executable"
+	@raco exe tools/ridkt/ridkt.rkt
 
 hum-type:
 	@echo "Making hum-type executable"
@@ -76,11 +76,11 @@ hum-type:
 ####################
 ##  move
 
-move: rid-move hum-type-move
+move: ridkt-move hum-type-move
 
-rid-move:
-	@echo "Moving rid executable to hum-parser/bin"
-	@mv tools/rid/rid $(BINDIR)
+ridkt-move:
+	@echo "Moving ridkt executable to hum-parser/bin"
+	@mv tools/ridkt/ridkt $(BINDIR)
 
 hum-type-move:
 	@echo "Moving hum-type executable to hum-parser/bin"
@@ -89,12 +89,12 @@ hum-type-move:
 ####################
 ##  uninstall
 
-uninstall: un-rid un-hum-type \
+uninstall: un-ridkt un-hum-type \
 		un-bin
 
-un-rid:
-	@echo "Uninstalling rid executable"
-	@rm bin/rid
+un-ridkt:
+	@echo "Uninstalling ridkt executable"
+	@rm bin/ridkt
 
 un-hum-type:
 	@echo "Uninstalling hum-type executable"
