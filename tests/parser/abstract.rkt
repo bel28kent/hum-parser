@@ -9,9 +9,7 @@
          "../../parser/functions/file.rkt"
          test-engine/racket-tests)
 
-(provide BERG-PATH)
-
-(define BERG-PATH "tests/parser/data/berg01.pc")
+(define BERG-PATH "data/berg01.pc")
 
 ; tag=?
 (check-expect (tag=? "!!!COM: Scriabin, Alexander" 3 REFERENCE-TAG) #t)

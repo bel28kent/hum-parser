@@ -8,9 +8,7 @@
          "../../parser/functions/file.rkt"
          test-engine/racket-tests)
 
-(provide BERG-PATH)
-
-(define BERG-PATH "tests/parser/data/berg01.pc")
+(define BERG-PATH "data/berg01.pc")
 
 ; read-file
 (check-expect (read-file BERG-PATH)

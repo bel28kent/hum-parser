@@ -38,7 +38,7 @@
           (define (str->record str record-number)
             (make-record str
                          (type-record str)
-                         (if (metadata? str)
+                         (if (or (reference? str) (global-comment? str))
                              (list str)
                              (los->lot (split str) record-number))
                          record-number))

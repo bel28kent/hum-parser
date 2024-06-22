@@ -164,15 +164,16 @@
 
 (define-struct record (record type split record-number) #:transparent)
 ; Record is one of:
-;  - (make-record String (listof Reference)     Natural)
-;  - (make-record String (listof GlobalComment) Natural)
-;  - (make-record String (listof LocalComment)  Natural)
-;  - (make-record String (listof Token)         Natural)
+;  - (make-record REFERENCE-RECORD (listof Reference)     Natural)
+;  - (make-record GLOBAL-COMMENT   (listof GlobalComment) Natural)
+;  - (make-record LOCAL-COMMENT    (listof Token)         Natural)
+;  - (make-record TOKEN            (listof Token)         Natural)
 ;  Represents a single line of a Humdrum file.
 ;  CONSTRAINT: record-number >= 0
 
 (define RECORD-REF-EX (list "!!!AGN: Etude"))  ; scriabin-op08_no07.krn
 (define RECORD-GC-EX (list "!! First ending")) ; gershwin30.krn
+; TODO
 (define RECORD-LC-EX (list "! Adagio\t!\t! Adagio\t!\t! Adagio\t!\t! Adagio\t!")) ; mozart/quartet/k080-01.krn
 
 (define-struct global-spine (tokens spine-number) #:transparent)

@@ -10,8 +10,6 @@
          "../../parser/functions/file.rkt"
          test-engine/racket-tests)
 
-(provide BERG)
-
 (define TEST-TOKEN-1 (make-token "**kern" EXCLUSIVE-INTERPRETATION 3))
 (define TEST-TOKEN-2 (make-token "*^"     SPINE-SPLIT 3))
 (define TEST-TOKEN-3 (make-token "*v"     SPINE-JOIN 3))
@@ -74,7 +72,7 @@
                                       (make-token "4a" SPINE-DATA 4)
                                       (make-token "4aaa" SPINE-DATA 4))
                                 4))
-(define BERG (filter-type record-type TOKEN (hfile-records (los->hfile (read-file "tests/parser/data/berg01.pc")))))
+(define BERG (los->hfile (read-file "data/berg01.pc")))
 
 ; extract-spine-arity
 (check-expect (extract-spine-arity BERG) (make-spine-arity 2 (list (list 1 1)
@@ -94,21 +92,21 @@
                                                                    (list 1 1))))
 ; lolon
 (check-expect (lolon (list TEST-RECORD-1)) (list (list 1)))
-(check-expect (lolon BERG) (list (list 1 1)
-                                 (list 1 1)
-                                 (list 1 1)
-                                 (list 1 1)
-                                 (list 1 1)
-                                 (list 1 1)
-                                 (list 1 1)
-                                 (list 1 1)
-                                 (list 1 1)
-                                 (list 1 1)
-                                 (list 1 1)
-                                 (list 1 1)
-                                 (list 1 1)
-                                 (list 1 1)
-                                 (list 1 1)))
+(check-expect (lolon (filter-type record-type TOKEN (hfile-records BERG))) (list (list 1 1)
+                                                                                 (list 1 1)
+                                                                                 (list 1 1)
+                                                                                 (list 1 1)
+                                                                                 (list 1 1)
+                                                                                 (list 1 1)
+                                                                                 (list 1 1)
+                                                                                 (list 1 1)
+                                                                                 (list 1 1)
+                                                                                 (list 1 1)
+                                                                                 (list 1 1)
+                                                                                 (list 1 1)
+                                                                                 (list 1 1)
+                                                                                 (list 1 1)
+                                                                                 (list 1 1)))
 
 ; lon-caller
 (check-expect (lon-caller SPLIT (list 1 1 1)) (list 1 2 1)) ; next record is AFTER-SPLIT
