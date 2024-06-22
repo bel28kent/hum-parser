@@ -10,23 +10,41 @@
          racket/cmdline)
 
 (define record (make-parameter #f))
-(define SPACES 20)
+(define token  (make-parameter #f))
+(define SPACES 25)
 
 (define (type filename)
-  (local [(define hum-file (los->hfile (read-file filename)))
+  (local [(define records (hfile-records (los->hfile (read-file filename))))
 
-          (define records (hfile-records hum-file))]
-    (if (record)
-        (foldl (λ (f rnr) (displayln (string-append (record-type f)
-                                                    (make-string (- 20 (string-length (record-type f))) #\space)
-                                                    (record-record f))))
-               (void)
-               records)
-        (foldl (λ (f rnr) (displayln (record-type f))) (void) records))))
+          (define (get-type record)
+            (local [(define f (first (record-split record)))]
+              (cond [(token? f) (token-type f)]
+                    [else
+                      (record-type record)])))
+
+          (define (display-with-record records type-getter)
+              (local [(define (display-proc f)
+                        (local [(define type (type-getter f))]
+                          (displayln (string-append type
+                                                    (make-string (- SPACES (string-length type)) #\space)
+                                                    (record-record f)))))]
+                (foldl (λ (f rnr) (display-proc f)) (void) records)))
+
+          (define (display-type-only records type-getter)
+            (foldl (λ (f rnr) (displayln (type-getter f))) (void) records))]
+
+    (cond [(record) (display-with-record records (if (token)
+                                                     get-type
+                                                     record-type))]
+          [else
+            (display-type-only records (if (token)
+                                           get-type
+                                           record-type))])))
 
 (define hum-type
   (command-line
     #:once-each
-    [("-r" "--record") "Print record along with type" (record #t)]
+    [("-r" "--record") "Print type followed by record" (record #t)]
+    [("-t" "--token")  "For token records, print type of first token" (token #t)]
     #:args (filename)
     (type filename)))
