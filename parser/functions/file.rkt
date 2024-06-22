@@ -7,8 +7,7 @@
 (require "../data-definitions/data-definitions.rkt"
          "predicates.rkt"
          "split-and-gather.rkt"
-         "type.rkt"
-         "../../../abstract-fns/functions/functions.rkt")
+         "type.rkt")
 
 (provide (all-defined-out))
 

@@ -4,8 +4,7 @@
 ;;  hum-parser: functions: abstract
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../data-definitions/data-definitions.rkt"
-         "../../../abstract-fns/functions/functions.rkt")
+(require "../data-definitions/data-definitions.rkt")
 
 (provide (all-defined-out))
 
@@ -26,3 +25,31 @@
   (local [(define (is-type x)
             (string=? (proc x) str))]
     (filter is-type lox)))
+
+; shift
+; (listof X) -> (listof X)
+; Removes the first element and produces the resultant list
+
+(define (shift lox)
+  (cond [(empty? lox) empty]
+        [else
+          (rest lox)]))
+
+; valmap
+; X (listof proc) -> (listof Y)
+; produce the list of results of calling each procedure on X
+; CONSTRAINT: X is a valid parameter type to each procedure
+
+(define (valmap val lop)
+  (local [(define (valmap lop)
+            (cond [(empty? lop) empty]
+                  [else
+                    (cons ((first lop) val) (valmap (rest lop)))]))]
+    (valmap lop)))
+
+; true?
+; Boolean -> Boolean
+; produce true if true
+
+(define (true? bool)
+  (not (false? bool)))

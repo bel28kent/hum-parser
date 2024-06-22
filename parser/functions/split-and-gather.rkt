@@ -4,8 +4,7 @@
 ;;  hum-parser: functions: split & gather
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../data-definitions/data-definitions.rkt"
-         "../../../abstract-fns/functions/functions.rkt")
+(require "../data-definitions/data-definitions.rkt")
 
 (provide (all-defined-out))
 
