@@ -25,13 +25,19 @@
           (define (display-with-record records type-getter)
               (local [(define (display-proc f)
                         (local [(define type (type-getter f))]
-                          (displayln (string-append type
-                                                    (make-string (- SPACES (string-length type)) #\space)
-                                                    (record-record f)))))]
+                          (displayln (if (false? type)
+                                         (string-append "Unknown"
+                                                        (make-string (- SPACES (string-length "Unknown")) #\space)
+                                                        (record-record f))
+                                         (string-append type
+                                                        (make-string (- SPACES (string-length type)) #\space)
+                                                        (record-record f))))))]
                 (foldl (λ (f rnr) (display-proc f)) (void) records)))
 
           (define (display-type-only records type-getter)
-            (foldl (λ (f rnr) (displayln (type-getter f))) (void) records))]
+            (foldl (λ (f rnr) (displayln (if (false? (type-getter f))
+                                             "Unkown"
+                                             (type-getter f)))) (void) records))]
 
     (cond [(record) (display-with-record records (if (token)
                                                      get-type
