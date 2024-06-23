@@ -98,6 +98,7 @@
 ;  - Measure
 ;  - SpineData
 ;  - NullSpineData
+;  - LocalComment
 ;  Represents the type of a Token
 
 ; ExclusiveInterpretation is "ExclusiveInterpretation"
@@ -154,6 +155,9 @@
 
 ; NullSpineData is "NullSpineData"
 ;  Represents a token that equals "."
+
+; LocalComment (TokenType) is "LocalComment"
+;  Represents a token that begins with "!"
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  RECORDS AND SPINES

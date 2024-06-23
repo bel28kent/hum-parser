@@ -55,6 +55,7 @@
         [(measure? token)                  MEASURE]
         [(spine-data? token)               SPINE-DATA]
         [(null-spine-data? token)          NULL-SPINE-DATA]
+        [(local-comment-token? token)      LOCAL-COMMENT]
         [else
           #f]))
 

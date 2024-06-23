@@ -170,3 +170,10 @@
 
 (define (null-spine-data? token)
   (string=? "." token))
+
+; local-comment-token?
+; String -> Boolean
+; produce true if string starts with "!"
+
+(define (local-comment-token? token)
+  (not (false? (regexp-match #px"!.*" token))))
