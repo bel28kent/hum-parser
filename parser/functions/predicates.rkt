@@ -171,6 +171,7 @@
 (define (null-spine-data? token)
   (string=? "." token))
 
+; TODO: type
 ; local-comment-token?
 ; String -> Boolean
 ; produce true if string starts with "!"

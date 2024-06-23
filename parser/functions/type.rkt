@@ -44,6 +44,7 @@
 ;;  TOKEN FUNCTIONS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+; TODO
 ; type-token
 ; String -> TokenType or false
 ; produce the type of the token or false if unknown
