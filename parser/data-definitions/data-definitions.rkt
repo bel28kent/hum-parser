@@ -263,7 +263,7 @@
                                               (list (token "*-" SPINE-TERMINATOR 15))
                                               15))))
 
-(define-struct spine-arity (global lolon) #:transparent)
+(struct spine-arity (global lolon) #:transparent)
 ; SpineArity is (spine-arity Natural (listof (listof Natural)))
 ;  Represents the structure of a file's spines, with the number of
 ;    global spines and a list of number of subspines for each global
