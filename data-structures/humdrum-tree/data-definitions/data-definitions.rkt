@@ -4,60 +4,63 @@
 ;; hum-parser: data structures: HumdrumTree
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(provide (all-defined-out))
+(require "../../../parser/data-definitions/data-definitions.rkt")
 
-(define-struct htree (top) #:transparent)
-; HumdrumTree is a tree of arbitrary arity. It is a composite of Leaf
-;  subclasses as given below. Every HumdrumTree has at least a Top leaf.
-;  The branches of the top leaf correspond to spines in a Humdrum file.
-;  The first token leaf in each branch should thus be an exclusive
-;  interpretation. Each branch ends with a false leaf; this allows spine
-;  terminators to be treated simply as tokens. The last leaf in each
-;  branch should thus be false, and the last token in each branch should
-;  be a spine terminator.
-;    Spine splits, represented by the TreeSplit type, are contained within
-;    the TreeToken that corresponds to the split token. Every TreeToken
-;    has the option to contain a split. If the TreeToken is not a split token,
-;    then the split field should be false. The split field should always be false,
-;    unless the token field is the string "*^". A TreeSplit then contains within it
-;    two lists of TreeTokens, one for the lefthand side of the split, and one for
-;    the right hand side of the split. Note that for multiple splits, this means
-;    the righthand data of some splits will be duplicated as the lefthand data of
-;    others. To handle this, each TreeSplit also contains a boolean field called
-;    has-left. If has-left is true, there is at least one subspine to the left of
-;    this pair of subspines; consequently, the lefthand of this subspine is also
-;    contained in the righthand of the previous TreeSplit. It is up to the user
-;    whether they want to traverse the duplicate data. For harmonic analysis, the
-;    user will probably want to traverse the duplicate data to make pairwise
-;    comparisons between notes. For melodic analysis, the user will probably not
-;    want to travese the duplicate data because they will have traversed it in
-;    the previous TreeSplit; in this case, skip the left field and take the right
-;    field.
+(struct htree (root) #:transparent)
+; HumdrumTree is a tree of arbitrary arity. Its Root
+;  can have any number of branches; this corresponds
+;  to a Humdrum file having any number of spines.
+;
+;  The branches are composites of three Nodes:
+;    false  - representing the end of the branch;
+;    Leaf   - representing a node that points to its next;
+;    Parent - representing a node that points to a left and right next.
+;  A false node corresponds to a spine terminator.
+;  A Leaf node corresponds to a token in a Humdrum file, which is always
+;    followed by one token.
+;  A Parent node corresponds to a spine split in a Humdrum file, which is
+;    always followed by a lefthand token and a righthand token.
+;
 
-; Leaf is one of:
+(struct root (branches) #:transparent)
+; Root is (root (listof Node))
+;  Represents the top of the tree.
+
+; Node is one of:
+;  - Parent
+;  - Leaf
 ;  - false
-;  - Top
-;  - TreeToken
-;  Represents a leaf of the tree. False indicates that this
-;    is the last leaf in a branch.
+;    Represents a node of the tree, either a parent
+;    with two children or a leaf with 0 or 1 next nodes.
+;    0 next nodes is represented by false.
 
-(define-struct top (branches) #:transparent)
-; Top is (make-top (listof (listof Leaf)))
-; Represents the top leaf of the tree.
-; CONSTRAINT: branches cannot contain Top leaf (only one top of tree)
-; CONSTRAINT: each branch must end with a false leaf
-; CONSTRAINT: a false leaf can only occur once in a branch
+(struct parent (token left right) #:transparent)
+; Parent is (parent Token Node Node)
+;  Represents a node with two children.
 
-(define-struct tree-token (token type record-number split) #:transparent)
-; TreeToken is (make-tree-token String TokenType Natural TreeSplit)
-; Represents a leaf that contains a piece of spine data. If that piece
-;  is a spine split, then this token also contains all left- and right-
-;  hand tokens of the split until the spine join happens.
+(struct leaf (token next) #:transparent)
+; Leaf is (leaf Token Node)
+;  Represents a node with no children.
 
-(define-struct tree-split (left right has-left) #:transparent)
-; TreeSplit is one of:
-;  - false
-;  - (make-split (listof TreeToken) (listof TreeToken) Boolean)
-; Represents either the absence of a spine split (false), or the presence
-;  of one, in which case is two lists of the left and right branch.
-; CONSTRAINT: left and right end with a spine join token
+;; Examples
+
+; Empty humdrum tree
+(define EMPTY-HTREE (htree (root empty))
+
+; Humdrum tree with one spine, no splits
+; NB: Spine terminator is substituted with false
+(define SIMPLE-HTREE (htree (root (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0)
+                                              (leaf (token "4a" SPINE-DATA 1)
+                                                    (leaf (token "4b" SPINE-DATA 2)
+                                                          false)))))))
+
+; Humdrum tree with two spines, no splits
+(define HTREE-TWO-SPINES (htree (root (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0)
+                                                  (leaf (token "4a" SPINE-DATA 1)
+                                                        (leaf (token "4b" SPINE-DATA 2)
+                                                              false)))
+                                            (leaf (token "**dynam" EXCLUSIVE-INTEPRETATION 0)
+                                                  (leaf (token "f" #f 1)
+                                                        (leaf (token "p" #f 2)
+                                                              false)))))))
+; Humdrum tree with one spine, splits
