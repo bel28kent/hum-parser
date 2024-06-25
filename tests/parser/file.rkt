@@ -41,39 +41,39 @@
                         "!!!T35: 0"))
 
 ; los->hfile
-(check-expect (los->hfile empty) (make-hfile empty))
+(check-expect (los->hfile empty) (hfile empty))
 (check-expect (los->hfile (list "!!!COM: Berg, Alban"))
-              (make-hfile (list (make-record "!!!COM: Berg, Alban"
-                                             REFERENCE-RECORD
-                                             (list "!!!COM: Berg, Alban")
-                                             0))))
+              (hfile (list (record "!!!COM: Berg, Alban"
+                                   REFERENCE-RECORD
+                                   (list "!!!COM: Berg, Alban")
+                                   0))))
 (check-expect (los->hfile (list "!!!COM: Berg, Alban" "**pc\t**kern"))
-              (make-hfile (list (make-record "!!!COM: Berg, Alban"
-                                             REFERENCE-RECORD
-                                             (list "!!!COM: Berg, Alban")
-                                             0)
-                                (make-record "**pc\t**kern"
-                                             TOKEN
-                                             (list (make-token "**pc" EXCLUSIVE-INTERPRETATION 1)
-                                                   (make-token "**kern" EXCLUSIVE-INTERPRETATION 1))
-                                             1))))
+              (hfile (list (record "!!!COM: Berg, Alban"
+                                   REFERENCE-RECORD
+                                   (list "!!!COM: Berg, Alban")
+                                   0)
+                           (record "**pc\t**kern"
+                                   TOKEN
+                                   (list (token "**pc" EXCLUSIVE-INTERPRETATION 1)
+                                         (token "**kern" EXCLUSIVE-INTERPRETATION 1))
+                                   1))))
 
 ; hfile->los
-(check-expect (hfile->los (make-hfile empty)) empty)
-(check-expect (hfile->los (make-hfile (list (make-record "!!!COM: Berg, Alban"
-                                                         REFERENCE-RECORD
-                                                         (list "!!!COM: Berg, Alban")
-                                                         0))))
+(check-expect (hfile->los (hfile empty)) empty)
+(check-expect (hfile->los (hfile (list (record "!!!COM: Berg, Alban"
+                                               REFERENCE-RECORD
+                                               (list "!!!COM: Berg, Alban")
+                                               0))))
                           (list "!!!COM: Berg, Alban"))
-(check-expect (hfile->los (make-hfile (list (make-record "!!!COM: Berg, Alban"
-                                                         REFERENCE-RECORD
-                                                         (list "!!!COM: Berg, Alban")
-                                                         0)
-                                            (make-record "**pc\t**kern"
-                                                         TOKEN
-                                                         (list (make-token "**pc" EXCLUSIVE-INTERPRETATION 1)
-                                                               (make-token "**kern" EXCLUSIVE-INTERPRETATION 1))
-                                                         1))))
+(check-expect (hfile->los (hfile (list (record "!!!COM: Berg, Alban"
+                                               REFERENCE-RECORD
+                                               (list "!!!COM: Berg, Alban")
+                                               0)
+                                       (record "**pc\t**kern"
+                                               TOKEN
+                                               (list (token "**pc" EXCLUSIVE-INTERPRETATION 1)
+                                                     (token "**kern" EXCLUSIVE-INTERPRETATION 1))
+                                               1))))
                           (list "!!!COM: Berg, Alban" "**pc\t**kern"))
 
 ; write-file

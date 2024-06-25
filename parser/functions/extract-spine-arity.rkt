@@ -19,8 +19,8 @@
 
 (define (extract-spine-arity hfile)
   (local [(define token-records (filter-type record-type TOKEN (hfile-records hfile)))]
-    (make-spine-arity (length (record-split (first token-records)))
-                      (lolon token-records))))
+    (spine-arity (length (record-split (first token-records)))
+                 (lolon token-records))))
 
 ; lolon
 ; (listof Record) -> (listof (listof Natural))

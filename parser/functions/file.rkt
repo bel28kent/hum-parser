@@ -36,12 +36,12 @@
                           (los->lor (rest los) (add1 record-number)))]))
 
           (define (str->record str record-number)
-            (make-record str
-                         (type-record str)
-                         (if (or (reference? str) (global-comment? str))
-                             (list str)
-                             (los->lot (split str) record-number))
-                         record-number))
+            (record str
+                    (type-record str)
+                    (if (or (reference? str) (global-comment? str))
+                            (list str)
+                            (los->lot (split str) record-number))
+                    record-number))
 
           (define (los->lot los record-number)
             (cond [(empty? los) empty]
@@ -50,8 +50,8 @@
                           (los->lot (rest los) record-number))]))
 
           (define (str->token str record-number)
-            (make-token str (type-token str) record-number))]
-    (make-hfile (los->lor los 0))))
+            (token str (type-token str) record-number))]
+    (hfile (los->lor los 0))))
 
 ; hfile->los
 ; HumdrumFile -> (listof String)

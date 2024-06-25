@@ -10,86 +10,86 @@
          "../../parser/functions/file.rkt"
          test-engine/racket-tests)
 
-(define TEST-TOKEN-1 (make-token "**kern" EXCLUSIVE-INTERPRETATION 3))
-(define TEST-TOKEN-2 (make-token "*^"     SPINE-SPLIT 3))
-(define TEST-TOKEN-3 (make-token "*v"     SPINE-JOIN 3))
-(define TEST-TOKEN-4 (make-token "4a"     SPINE-DATA 3))
+(define TEST-TOKEN-1 (token "**kern" EXCLUSIVE-INTERPRETATION 3))
+(define TEST-TOKEN-2 (token "*^"     SPINE-SPLIT 3))
+(define TEST-TOKEN-3 (token "*v"     SPINE-JOIN 3))
+(define TEST-TOKEN-4 (token "4a"     SPINE-DATA 3))
 
-(define TEST-RECORD-1 (make-record "**kern" TOKEN (list TEST-TOKEN-1) 3))
-(define TEST-RECORD-2 (make-record "*^"     TOKEN (list TEST-TOKEN-2) 3))
-(define TEST-RECORD-3 (make-record "*v"     TOKEN (list TEST-TOKEN-3) 3))
-(define TEST-RECORD-4 (make-record "4a"     TOKEN (list TEST-TOKEN-4) 3))
+(define TEST-RECORD-1 (record "**kern" TOKEN (list TEST-TOKEN-1) 3))
+(define TEST-RECORD-2 (record "*^"     TOKEN (list TEST-TOKEN-2) 3))
+(define TEST-RECORD-3 (record "*v"     TOKEN (list TEST-TOKEN-3) 3))
+(define TEST-RECORD-4 (record "4a"     TOKEN (list TEST-TOKEN-4) 3))
 
-(define SPLIT (make-record "*\t*^\t*"
+(define SPLIT (record "*\t*^\t*"
+                      TOKEN
+                      (list (token "*" NULL-INTERPRETATION 3)
+                            (token "*^" SPINE-SPLIT 3)
+                            (token "*" NULL-INTERPRETATION 3))
+                      3))
+(define SPLIT-LEFT (record "*^\t*\t*"
                            TOKEN
-                           (list (make-token "*" NULL-INTERPRETATION 3)
-                                 (make-token "*^" SPINE-SPLIT 3)
-                                 (make-token "*" NULL-INTERPRETATION 3))
+                           (list (token "*^" SPINE-SPLIT 3)
+                                 (token "*" NULL-INTERPRETATION 3)
+                                 (token "*" NULL-INTERPRETATION 3))
                            3))
-(define SPLIT-LEFT (make-record "*^\t*\t*"
-                                TOKEN
-                                (list (make-token "*^" SPINE-SPLIT 3)
-                                      (make-token "*" NULL-INTERPRETATION 3)
-                                      (make-token "*" NULL-INTERPRETATION 3))
-                                3))
-(define SPLIT-RIGHT (make-record "*\t*\t*^"
-                                 TOKEN
-                                 (list (make-token "*" NULL-INTERPRETATION 3)
-                                       (make-token "*" NULL-INTERPRETATION 3)
-                                       (make-token "*^" SPINE-SPLIT 3))
-                                 3))
-(define AFTER-SPLIT (make-record "4A\t4a\t4aa\t4aaa"
-                                 TOKEN
-                                 (list (make-token "4A" SPINE-DATA 4)
-                                       (make-token "4a" SPINE-DATA 4)
-                                       (make-token "4aa" SPINE-DATA 4)
-                                       (make-token "4aaa" SPINE-DATA 4))
-                                 4))
-(define JOIN (make-record "*\t*v\t*v\t*"
+(define SPLIT-RIGHT (record "*\t*\t*^"
+                            TOKEN
+                            (list (token "*" NULL-INTERPRETATION 3)
+                                  (token "*" NULL-INTERPRETATION 3)
+                                  (token "*^" SPINE-SPLIT 3))
+                            3))
+(define AFTER-SPLIT (record "4A\t4a\t4aa\t4aaa"
+                            TOKEN
+                            (list (token "4A" SPINE-DATA 4)
+                                  (token "4a" SPINE-DATA 4)
+                                  (token "4aa" SPINE-DATA 4)
+                                  (token "4aaa" SPINE-DATA 4))
+                            4))
+(define JOIN (record "*\t*v\t*v\t*"
+                     TOKEN
+                     (list (token "*" NULL-INTERPRETATION 3)
+                           (token "*v" SPINE-JOIN 3)
+                           (token "*v" SPINE-JOIN 3)
+                           (token "*" NULL-INTERPRETATION 3))
+                     3))
+(define JOIN-LEFT (record "*v\t*v\t*\t*"
                           TOKEN
-                          (list (make-token "*" NULL-INTERPRETATION 3)
-                                (make-token "*v" SPINE-JOIN 3)
-                                (make-token "*v" SPINE-JOIN 3)
-                                (make-token "*" NULL-INTERPRETATION 3))
+                          (list (token "*v" SPINE-JOIN 3)
+                                (token "*v" SPINE-JOIN 3)
+                                (token "*" NULL-INTERPRETATION 3)
+                                (token "*" NULL-INTERPRETATION 3))
                           3))
-(define JOIN-LEFT (make-record "*v\t*v\t*\t*"
-                               TOKEN
-                               (list (make-token "*v" SPINE-JOIN 3)
-                                     (make-token "*v" SPINE-JOIN 3)
-                                     (make-token "*" NULL-INTERPRETATION 3)
-                                     (make-token "*" NULL-INTERPRETATION 3))
-                               3))
-(define JOIN-RIGHT (make-record "*\t*\t*v\t*v"
-                                TOKEN
-                                (list (make-token "*" NULL-INTERPRETATION 3)
-                                      (make-token "*" NULL-INTERPRETATION 3)
-                                      (make-token "*v" SPINE-JOIN 3)
-                                      (make-token "*v" SPINE-JOIN 3))
-                                3))
-(define AFTER-JOIN (make-record "4A\t4a\t4aaa"
-                                TOKEN
-                                (list (make-token "4A" SPINE-DATA 4)
-                                      (make-token "4a" SPINE-DATA 4)
-                                      (make-token "4aaa" SPINE-DATA 4))
-                                4))
+(define JOIN-RIGHT (record "*\t*\t*v\t*v"
+                           TOKEN
+                           (list (token "*" NULL-INTERPRETATION 3)
+                                 (token "*" NULL-INTERPRETATION 3)
+                                 (token "*v" SPINE-JOIN 3)
+                                 (token "*v" SPINE-JOIN 3))
+                           3))
+(define AFTER-JOIN (record "4A\t4a\t4aaa"
+                           TOKEN
+                           (list (token "4A" SPINE-DATA 4)
+                                 (token "4a" SPINE-DATA 4)
+                                 (token "4aaa" SPINE-DATA 4))
+                           4))
 (define BERG (los->hfile (read-file "data/berg01.pc")))
 
 ; extract-spine-arity
-(check-expect (extract-spine-arity BERG) (make-spine-arity 2 (list (list 1 1)
-                                                                   (list 1 1)
-                                                                   (list 1 1)
-                                                                   (list 1 1)
-                                                                   (list 1 1)
-                                                                   (list 1 1)
-                                                                   (list 1 1)
-                                                                   (list 1 1)
-                                                                   (list 1 1)
-                                                                   (list 1 1)
-                                                                   (list 1 1)
-                                                                   (list 1 1)
-                                                                   (list 1 1)
-                                                                   (list 1 1)
-                                                                   (list 1 1))))
+(check-expect (extract-spine-arity BERG) (spine-arity 2 (list (list 1 1)
+                                                              (list 1 1)
+                                                              (list 1 1)
+                                                              (list 1 1)
+                                                              (list 1 1)
+                                                              (list 1 1)
+                                                              (list 1 1)
+                                                              (list 1 1)
+                                                              (list 1 1)
+                                                              (list 1 1)
+                                                              (list 1 1)
+                                                              (list 1 1)
+                                                              (list 1 1)
+                                                              (list 1 1)
+                                                              (list 1 1))))
 ; lolon
 (check-expect (lolon (list TEST-RECORD-1)) (list (list 1)))
 (check-expect (lolon (filter-type record-type TOKEN (hfile-records BERG))) (list (list 1 1)
@@ -111,7 +111,7 @@
 ; lon-caller
 (check-expect (lon-caller SPLIT (list 1 1 1)) (list 1 2 1)) ; next record is AFTER-SPLIT
 (check-expect (lon-caller JOIN (list 1 2 1)) (list 1 1 1)) ; next record is AFTER-JOIN
-(check-expect (lon-caller (make-record "4a" TOKEN (list (make-token "4a" SPINE-DATA 9)) 9)
+(check-expect (lon-caller (record "4a" TOKEN (list (token "4a" SPINE-DATA 9)) 9)
                           (list 1))
               (list 1))
 
@@ -120,13 +120,13 @@
 (check-expect (previous-spine-struct? TEST-RECORD-2) #t)
 (check-expect (previous-spine-struct? TEST-RECORD-3) #t)
 (check-expect (previous-spine-struct? TEST-RECORD-4) #f)
-(check-expect (previous-spine-struct? (make-record "*\t*^\t*\t*"
-                                                   TOKEN
-                                                   (list (make-token "*" NULL-INTERPRETATION 20)
-                                                         (make-token "*^" SPINE-SPLIT 20)
-                                                         (make-token "*" NULL-INTERPRETATION 20)
-                                                         (make-token "*" NULL-INTERPRETATION 20))
-                                                   20))
+(check-expect (previous-spine-struct? (record "*\t*^\t*\t*"
+                                              TOKEN
+                                              (list (token "*" NULL-INTERPRETATION 20)
+                                                    (token "*^" SPINE-SPLIT 20)
+                                                    (token "*" NULL-INTERPRETATION 20)
+                                                    (token "*" NULL-INTERPRETATION 20))
+                                              20))
               #t)
 
 ; split-or-join-token?
@@ -140,13 +140,13 @@
 (check-expect (split-or-join-record TEST-RECORD-2) SPINE-SPLIT)
 (check-expect (split-or-join-record TEST-RECORD-3) SPINE-JOIN)
 (check-expect (split-or-join-record TEST-RECORD-4) #f)
-(check-expect (split-or-join-record (make-record "*\t*^\t*\t*"
-                                                   TOKEN
-                                                   (list (make-token "*" NULL-INTERPRETATION 20)
-                                                         (make-token "*^" SPINE-SPLIT 20)
-                                                         (make-token "*" NULL-INTERPRETATION 20)
-                                                         (make-token "*" NULL-INTERPRETATION 20))
-                                                   20))
+(check-expect (split-or-join-record (record "*\t*^\t*\t*"
+                                              TOKEN
+                                              (list (token "*" NULL-INTERPRETATION 20)
+                                                    (token "*^" SPINE-SPLIT 20)
+                                                    (token "*" NULL-INTERPRETATION 20)
+                                                    (token "*" NULL-INTERPRETATION 20))
+                                              20))
               SPINE-SPLIT)
 
 ; struct-lon
