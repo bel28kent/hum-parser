@@ -21,10 +21,12 @@
 
 (define (fn-for-htree htree)
   (local [(define (fn-for-root root)
-            (cond [(empty? (root-branches root)) ...]
-                  [else
-                    (... (fn-for-node (first (root-branches root)))
-                         (fn-for-root (rest (root-branches root))))]))
+            (local [(define (iterator branches)
+                      (cond [(empty? branches) ...]
+                            [else
+                              (... (fn-for-node (first branches))
+                                   (iterator (rest branches)))]))]
+              (iterator (root-branches root))))
 
           (define (fn-for-node node)
             (cond [(false? node) ...]
@@ -34,7 +36,7 @@
 
           (define (fn-for-leaf leaf)
             (... (fn-for-token (leaf-token leaf))
-                 (fn-for-node (leaf-node leaf))))
+                 (fn-for-node (leaf-next leaf))))
 
           (define (fn-for-parent parent)
             (... (fn-for-token (parent-token parent))
