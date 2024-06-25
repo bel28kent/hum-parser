@@ -21,11 +21,20 @@
 ;  A Leaf node corresponds to a token in a Humdrum file, which is always
 ;    followed by one token.
 ;  A Parent node corresponds to a spine split in a Humdrum file, which is
-;    always followed by a lefthand token and a righthand token. Spine joins
+;    always followed by a left-hand token and a right-hand token. Spine joins
 ;    are assumed to merge the right subspine with the left subspine. After
 ;    a spine join, therefore, the next node should continue in the left
 ;    child of the parent.
 ;
+;  A HumdrumTree is well-formed if:
+;    - root-branches is an ordered list, such that each Node from first to last
+;      corresponds exactly to the spines in a Humdrum file from left to right.
+;    - each Node in root-branches leads to a false case that terminates the branch,
+;      and no spine terminators are present at any node.
+;    - parent-left and parent-right are both false if parent-token is not "*^".
+;    - if "*^" is parent-token, parent-left and parent-right both lead to Nodes
+;      whose tokens are "*v", and the same number of steps from the beginning of
+;      parent-left and parent-right lead to "*v".
 
 (struct root (branches) #:transparent)
 ; Root is (root (listof Node))
