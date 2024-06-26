@@ -13,7 +13,7 @@
 
 (provide (all-defined-out))
 
-(define FACTOR 8)
+(define FACTOR 10)
 
 ; visualize-htree
 ; HumdrumTree -> Image
@@ -23,12 +23,12 @@
   (local [(define diameter (get-diameter htree))
 
           (define (fn-for-root root)
-            (local [(define (iterator branches)
-                      (cond [(empty? branches) #f]
+            (local [(define (iterator branches acc)
+                      (cond [(empty? branches) (reverse acc)]
                             [else
-                              (tree-layout (fn-for-node (first branches))
-                                           (iterator (rest branches)))]))]
-              (naive-layered (iterator (root-branches root)))))
+                              (iterator (rest branches)
+                                        (cons (fn-for-node (first branches)) acc))]))]
+              (naive-layered (apply tree-layout (iterator (root-branches root) empty)))))
 
           (define (fn-for-node node)
             (cond [(false? node) #f]
@@ -37,21 +37,22 @@
                     (fn-for-parent node)]))
 
           (define (fn-for-leaf leaf)
-            (tree-layout (fn-for-token (leaf-token leaf))
+            (tree-layout #:pict
+                         (fn-for-token (leaf-token leaf))
                          (fn-for-node (leaf-next leaf))))
 
           (define (fn-for-parent parent)
-            (tree-layout (fn-for-token (parent-token parent))
+            (tree-layout #:pict
+                         (fn-for-token (parent-token parent))
                          (fn-for-node (parent-left parent))
                          (fn-for-node (parent-right parent))))
 
           (define (fn-for-token token)
-            (tree-edge  #:edge-color "black"
-                        #:edge-style 'solid
-	                (tree-layout #:pict
-                                     (cc-superimpose (circle diameter)
-                                                     (text (token-token token))))))]
-    (show-pict (fn-for-root (htree-root htree)))))
+            (cc-superimpose (disk diameter
+                                  #:color "white"
+                                  #:border-color "black")
+                            (text (token-token token))))]
+    (fn-for-root (htree-root htree))))
 
 ; get-diameter
 ; HumdrumTree -> Natural
