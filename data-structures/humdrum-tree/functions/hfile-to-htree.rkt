@@ -49,4 +49,4 @@
                               (leaf (first (first lolot))
                                     (fn-for-lolot (rest lolot) #f #f))]))]
               (fn-for-lolot lolot #f #f)))]
-    (htree (fn-for-logs spines))))
+    (htree (root (fn-for-logs spines)))))
