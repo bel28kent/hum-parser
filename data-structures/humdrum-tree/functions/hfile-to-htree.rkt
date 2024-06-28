@@ -6,8 +6,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "../../../parser/data-definitions/data-definitions.rkt"
-         (only-in "../../../parser/functions/extract-spine-arity.rkt"
-                  extract-spine-arity)
          (only-in "../../../parser/functions/spine-parser.rkt"
                   spine-parser)
          "../data-definitions/data-definitions.rkt")
@@ -19,9 +17,7 @@
 ; maps a HumdrumFile's spines on to a HumdrumTree
 
 (define (hfile->htree hfile)
-  (local [(define spine-arity (extract-spine-arity hfile))
-
-          (define spines (spine-parser hfile spine-arity))
+  (local [(define spines (spine-parser hfile))
 
           (struct parent-result (result after-join))
 

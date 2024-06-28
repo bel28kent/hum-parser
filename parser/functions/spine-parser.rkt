@@ -7,18 +7,19 @@
 (require "../data-definitions/data-definitions.rkt"
          "abstract.rkt"
          "split-and-gather.rkt"
+         (only-in "extract-spine-arity.rkt" extract-spine-arity)
          test-engine/racket-tests)
 
 (provide (all-defined-out))
 
 ; TODO: test
-; HumdrumFile SpineArity -> (listof GlobalSpine)
+; HumdrumFile -> (listof GlobalSpine)
 ; produces a list of global spines from the HumdrumFile
 
-(define (spine-parser hfile spine-arity)
-  (lololot->logs
-    (tokens-by-spine (unwrap hfile)
-                     (byrecord->byspine spine-arity))))
+(define (spine-parser hfile)
+  (local [(define spine-arity (extract-spine-arity hfile))]
+    (lololot->logs (tokens-by-spine (unwrap hfile)
+                                    (byrecord->byspine spine-arity)))))
 
 ; unwrap
 ; HumdrumFile -> (listof (listof Token))
