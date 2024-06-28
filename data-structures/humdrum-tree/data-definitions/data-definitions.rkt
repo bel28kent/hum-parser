@@ -30,8 +30,7 @@
 ;    - root-branches is an ordered list, such that each Node from first to last
 ;      corresponds exactly to the spines in a Humdrum file from left to right.
 ;    - each Node in root-branches leads to a false case that terminates the branch,
-;      and no spine terminators are present at any node.
-;    - parent-left and parent-right are both false if parent-token is not "*^".
+;      and this false case immediately follows a spine terminator.
 ;    - if "*^" is parent-token, parent-left and parent-right both lead to Nodes
 ;      whose tokens are "*v", and the same number of steps from the beginning of
 ;      parent-left and parent-right lead to "*v".
