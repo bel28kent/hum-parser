@@ -19,8 +19,6 @@
 (define (hfile->htree hfile)
   (local [(define spines (spine-parser hfile))
 
-          (struct parent-result (result after-join))
-
           (define (fn-for-logs logs)
             (foldr (λ (f rnr) (cons (fn-for-global-spine f) rnr)) empty logs))
 
