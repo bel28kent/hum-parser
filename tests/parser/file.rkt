@@ -41,22 +41,130 @@
                         "!!!T35: 0"))
 
 ; los->hfile
-(check-expect (los->hfile empty) (hfile empty))
-(check-expect (los->hfile (list "!!!COM: Berg, Alban"))
-              (hfile (list (record "!!!COM: Berg, Alban"
-                                   REFERENCE-RECORD
-                                   (list "!!!COM: Berg, Alban")
-                                   0))))
-(check-expect (los->hfile (list "!!!COM: Berg, Alban" "**pc\t**kern"))
+(check-expect (los->hfile BERG-PATH)
               (hfile (list (record "!!!COM: Berg, Alban"
                                    REFERENCE-RECORD
                                    (list "!!!COM: Berg, Alban")
                                    0)
+                           (record "!!!OTL: Chamber Concerto"
+                                   REFERENCE-RECORD
+                                   (list "!!!OTL: Chamber Concerto")
+                                   1)
+                           (record "!!!OMV: Movements 1 and 3"
+                                   REFERENCE-RECORD
+                                   (list "!!!OMV: Movements 1 and 3")
+                                   2)
+                           (record "!!!ODT: 1925"
+                                   REFERENCE-RECORD
+                                   (list "!!!ODT: 1925")
+                                   3)
+                           (record "!!!ONB: In German, the last 8 notes are the capitalized letters in ArnolD SCHoenBErG."
+                                   REFERENCE-RECORD
+                                   (list "!!!ONB: In German, the last 8 notes are the capitalized letters in ArnolD SCHoenBErG.")
+                                   4)
                            (record "**pc\t**kern"
                                    TOKEN
-                                   (list (token "**pc" EXCLUSIVE-INTERPRETATION 1)
-                                         (token "**kern" EXCLUSIVE-INTERPRETATION 1))
-                                   1))))
+                                   (list (token "**pc" EXCLUSIVE-INTERPRETATION 5)
+                                         (token "**kern" EXCLUSIVE-INTERPRETATION 5))
+                                   5)
+                           (record "*X:\t*X:"
+                                   TOKEN
+                                   (list (token "*X:" KEY-LABEL 6)
+                                         (token "*X:" KEY-LABEL 6))
+                                   6)
+                           (record "0\tF"
+                                   TOKEN
+                                   (list (token "0" SPINE-DATA 7)
+                                         (token "F" SPINE-DATA 7))
+                                   7)
+                           (record "1\tF#"
+                                   TOKEN
+                                   (list (token "1" SPINE-DATA 8)
+                                         (token "F#" SPINE-DATA 8))
+                                   8)
+                           (record "3\tG#"
+                                   TOKEN
+                                   (list (token "3" SPINE-DATA 9)
+                                         (token "G#" SPINE-DATA 9))
+                                   9)
+                           (record "8\tC#"
+                                   TOKEN
+                                   (list (token "8" SPINE-DATA 10)
+                                         (token "C#" SPINE-DATA 10))
+                                   10)
+                           (record "4\tA"
+                                   TOKEN
+                                   (list (token "4" SPINE-DATA 11)
+                                         (token "A" SPINE-DATA 11))
+                                   11)
+                           (record "9\tD"
+                                   TOKEN
+                                   (list (token "9" SPINE-DATA 12)
+                                         (token "D" SPINE-DATA 12))
+                                   12)
+                           (record "10\tE-"
+                                   TOKEN
+                                   (list (token "10" SPINE-DATA 13)
+                                         (token "E-" SPINE-DATA 13))
+                                   13)
+                           (record "7\tC"
+                                   TOKEN
+                                   (list (token "7" SPINE-DATA 14)
+                                         (token "C" SPINE-DATA 14))
+                                   14)
+                           (record "6\tB"
+                                   TOKEN
+                                   (list (token "6" SPINE-DATA 15)
+                                         (token "B" SPINE-DATA 15))
+                                   15)
+                           (record "5\tB-"
+                                   TOKEN
+                                   (list (token "5" SPINE-DATA 16)
+                                         (token "B-" SPINE-DATA 16))
+                                   16)
+                           (record "11\tE"
+                                   TOKEN
+                                   (list (token "11" SPINE-DATA 17)
+                                         (token "E" SPINE-DATA 17))
+                                   17)
+                           (record "2\tG"
+                                   TOKEN
+                                   (list (token "2" SPINE-DATA 18)
+                                         (token "G" SPINE-DATA 18))
+                                   18)
+                           (record "*-\t*-"
+                                   TOKEN
+                                   (list (token "*-" SPINE-TERMINATOR 19)
+                                         (token "*-" SPINE-TERMINATOR 19))
+                                   19)
+                           (record "!!!YOR: Dave Headlam, The Music of Alban Berg (New Haven, CT: Yale University Press, 1996), p. 391"
+                                   REFERENCE-RECORD
+                                   (list "!!!YOR: Dave Headlam, The Music of Alban Berg (New Haven, CT: Yale University Press, 1996), p. 391")
+                                   20)
+                           (record "!!!ref: @{COM}: <i>@{OTL}</i> (@{ODT}), @{OMV} <br>@{ONB}"
+                                   REFERENCE-RECORD
+                                   (list "!!!ref: @{COM}: <i>@{OTL}</i> (@{ODT}), @{OMV} <br>@{ONB}")
+                                   21)
+                           (record "!!!SEM: This row contains 4 instances of the semitone interval class."
+                                   REFERENCE-RECORD
+                                   (list "!!!SEM: This row contains 4 instances of the semitone interval class.")
+                                   22)
+                           (record "!!!AIR: This is an all-interval row."
+                                   REFERENCE-RECORD
+                                   (list "!!!AIR: This is an all-interval row.")
+                                   23)
+                           (record "!!!RKY: 0.55"
+                                   REFERENCE-RECORD
+                                   (list "!!!RKY: 0.55")
+                                   24)
+                           (record "!!!T33: 1"
+                                   REFERENCE-RECORD
+                                   (list "!!!T33: 1")
+                                   25)
+                           (record "!!!T35: 0"
+                                   REFERENCE-RECORD
+                                   (list "!!!T35: 0")
+                                   26))))
 
 ; hfile->los
 (check-expect (hfile->los (hfile empty)) empty)

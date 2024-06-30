@@ -72,7 +72,7 @@
                                  (token "4a" SPINE-DATA 4)
                                  (token "4aaa" SPINE-DATA 4))
                            4))
-(define BERG (los->hfile (read-file "data/berg01.pc")))
+(define BERG (los->hfile "data/berg01.pc"))
 
 ; extract-spine-arity
 (check-expect (extract-spine-arity BERG) (spine-arity 2 (list (list 1 1)
