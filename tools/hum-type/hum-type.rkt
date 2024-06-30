@@ -6,7 +6,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "../../parser/data-definitions/data-definitions.rkt"
-         (only-in "../../parser/functions/file.rkt" read-file los->hfile)
+         (only-in "../../parser/functions/file.rkt" read-file path->hfile)
          racket/cmdline)
 
 (define record (make-parameter #f))
@@ -14,7 +14,7 @@
 (define SPACES 25)
 
 (define (type filename)
-  (local [(define records (hfile-records (los->hfile (read-file filename))))
+  (local [(define records (hfile-records (path->hfile (read-file filename))))
 
           (define (get-type record)
             (local [(define f (first (record-split record)))]

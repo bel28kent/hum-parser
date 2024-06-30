@@ -40,7 +40,7 @@
                                   (rid-empty-interpretations
                                     (rid-data-records
                                       (rid-null-data-records (hfile-records
-                                                               (los->hfile
+                                                               (path->hfile
                                                                  (read-file filename))))))))))))))))
 
 ; output

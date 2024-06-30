@@ -40,8 +40,8 @@
                         "!!!T33: 1"
                         "!!!T35: 0"))
 
-; los->hfile
-(check-expect (los->hfile BERG-PATH)
+; path->hfile
+(check-expect (path->hfile BERG-PATH)
               (hfile (list (record "!!!COM: Berg, Alban"
                                    REFERENCE-RECORD
                                    (list "!!!COM: Berg, Alban")

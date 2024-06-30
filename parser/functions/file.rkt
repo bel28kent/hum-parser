@@ -24,11 +24,11 @@
   (call-with-input-file path
                         (λ (in) (read-file empty in)))))
 
-; los->hfile
+; path->hfile
 ; String -> HumdrumFile
 ; produces the HumdrumFile at the given path
 
-(define (los->hfile path)
+(define (path->hfile path)
   (local [(define los (read-file path))
 
           (define (los->lor los record-number)
