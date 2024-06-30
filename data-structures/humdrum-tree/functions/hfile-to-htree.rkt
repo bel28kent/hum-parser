@@ -26,25 +26,35 @@
             (fn-for-lolot (global-spine-tokens gspine)))
 
           (define (fn-for-lolot lolot)
-            ; parent?: boolean True if this recursive call is in a parent.
-            ; left?: boolean. True if this recursive call is in the left child
-            ;                of a parent.
+            ; parent?: Boolean. True if recursive call is in a parent.
+            ; left?: Boolean. True if recursive call is left child of a parent.
+            ; spine-num: Natural.
             ;
-            (local [(define (fn-for-lolot lolot parent? left?)
+            (local [(define (fn-for-lolot lolot parent? left? spine-num)
                       (cond [(empty? lolot) #f]
                             [(string=? "*^" (token-token (first (first lolot))))
-                             (parent (first (first lolot))
-                                     (fn-for-lolot (rest lolot) #t #t)
-                                     (fn-for-lolot (rest lolot) #t #f))]
-                            [left? (leaf (first (first lolot))
-                                         (fn-for-lolot (rest lolot) #t #t))]
+                             (parent (get-token (first lolot) spine-num)
+                                     (fn-for-lolot (rest lolot) #t #t spine-num)
+                                     (fn-for-lolot (rest lolot) #t #f (add1 spine-num)))]
+                            [left? (leaf (get-token (first lolot) spine-num)
+                                         (fn-for-lolot (rest lolot) #t #t spine-num))]
                             [(and parent? (not left?)) (if (string=? "*v" (token-token (second (first lolot))))
-                                                           (leaf (second (first lolot))
+                                                           (leaf (get-token (first lolot) spine-num)
                                                                  #f)
-                                                           (leaf (second (first lolot))
-                                                                 (fn-for-lolot (rest lolot) #t #f)))]
+                                                           (leaf (get-token (first lolot) spine-num)
+                                                                 (fn-for-lolot (rest lolot) #t #f spine-num)))]
                             [else
-                              (leaf (first (first lolot))
-                                    (fn-for-lolot (rest lolot) #f #f))]))]
-              (fn-for-lolot lolot #f #f)))]
+                              (leaf (get-token (first lolot) spine-num)
+                                    (fn-for-lolot (rest lolot) #f #f spine-num))]))]
+              (fn-for-lolot lolot #f #f 1)))
+
+          ; TODO: time complexity
+          (define (get-token lot index)
+            (local [(define (get-token lot index counter)
+                      (cond [(empty? lot) (error "Reached an empty list before finding token.")]
+                            [else
+                              (if (= index counter)
+                                  (first lot)
+                                  (get-token (rest lot) index (add1 counter)))]))]
+              (get-token lot index 1)))]
     (htree (root (fn-for-logs spines)))))
