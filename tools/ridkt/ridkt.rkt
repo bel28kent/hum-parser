@@ -8,7 +8,8 @@
 
 (require "../../parser/data-definitions/data-definitions.rkt"
          "../../parser/functions/abstract.rkt"
-         "../../parser/functions/file.rkt"
+         (only-in "../../parser/functions/file.rkt"
+                  path->hfile)
          "../../parser/functions/predicates.rkt"
          racket/cmdline)
 
@@ -40,8 +41,7 @@
                                   (rid-empty-interpretations
                                     (rid-data-records
                                       (rid-null-data-records (hfile-records
-                                                               (path->hfile
-                                                                 (read-file filename))))))))))))))))
+                                                               (path->hfile filename)))))))))))))))
 
 ; output
 ; (listof Record) -> (void)
