@@ -41,10 +41,11 @@
 
 ; is-token?
 ; String -> Boolean
-; produce true if string contains SEPARATOR
+; produce true if string contains SEPARATOR or can be typed as a token
 
 (define (is-token? string)
-  (string-contains? string SEPARATOR))
+  (or (string-contains? string SEPARATOR)
+      (not (false? (type-token string)))))
 
 ; exclusive-interpretation?
 ; String -> Boolean
@@ -178,3 +179,36 @@
 
 (define (local-comment-token? token)
   (not (false? (regexp-match #px"!.*" token))))
+
+; TODO: reference to type in require creates cycle
+; type-token
+; String -> TokenType or false
+; produce the type of the token or false if unknown
+
+(define (type-token token)
+  (cond [(exclusive-interpretation? token) EXCLUSIVE-INTERPRETATION]
+        [(tandem-interpretation? token)    (type-tandem token)]
+        [(null-interpretation? token)      NULL-INTERPRETATION]
+        [(measure? token)                  MEASURE]
+        [(spine-data? token)               SPINE-DATA]
+        [(null-spine-data? token)          NULL-SPINE-DATA]
+        [(local-comment-token? token)      LOCAL-COMMENT]
+        [else
+          #f]))
+
+; type-tandem
+; String -> TandemInterpretation or false
+; produce the type of the tandem interpretation or false if unknown
+
+(define (type-tandem token)
+  (cond [(spine-split? token)      SPINE-SPLIT]
+        [(spine-join? token)       SPINE-JOIN]
+        [(spine-terminator? token) SPINE-TERMINATOR]
+        [(clef? token)             CLEF]
+        [(time-sig? token)         TIME-SIG]
+        [(key-sig? token)          KEY-SIG]
+        [(key-label? token)        KEY-LABEL]
+        [(staff-number? token)     STAFF-NUMBER]
+        [(instrument-class? token) INSTRUMENT-CLASS]
+        [else
+          #f]))
