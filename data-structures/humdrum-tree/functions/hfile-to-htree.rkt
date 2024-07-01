@@ -10,7 +10,7 @@
                   spine-parser)
          "../data-definitions/data-definitions.rkt")
 
-(provide (all-defined-out))
+(provide hfile->htree)
 
 ; hfile->htree
 ; HumdrumFile -> HumdrumTree
@@ -28,30 +28,49 @@
           (define (fn-for-lolot lolot)
             ; parent?: Boolean. True if recursive call is in a parent.
             ; left?: Boolean. True if recursive call is left child of a parent.
-            ; spine-num: Natural.
+            ; spine-num: Natural. The index of this (sub)spine.
             ;
             (local [(define (fn-for-lolot lolot parent? left? spine-num)
-                      (cond [(empty? lolot) #f]
-                            [(string=? "*^" (token-token (first (first lolot))))
-                             (parent (get-token (first lolot) spine-num)
-                                     (fn-for-lolot (rest lolot) #t #t spine-num)
-                                     (fn-for-lolot (rest lolot) #t #f (add1 spine-num)))]
-                            [left? (leaf (get-token (first lolot) spine-num)
-                                         (fn-for-lolot (rest lolot) #t #t spine-num))]
-                            [(and parent? (not left?)) (if (string=? "*v" (token-token (second (first lolot))))
-                                                           (leaf (get-token (first lolot) spine-num)
-                                                                 #f)
-                                                           (leaf (get-token (first lolot) spine-num)
-                                                                 (fn-for-lolot (rest lolot) #t #f spine-num)))]
-                            [else
-                              (leaf (get-token (first lolot) spine-num)
-                                    (fn-for-lolot (rest lolot) #f #f spine-num))]))]
+                      (local [(define first-token (if (not (empty? lolot))
+                                                      (get-token (first lolot) spine-num)
+                                                      empty))
+
+                              (define first-token-str (if (not (empty? first-token))
+                                                          (token-token first-token)
+                                                          empty))]
+                        (cond [(empty? first-token) #f]
+                              [(string=? "*^" first-token-str)
+                               (parent first-token
+                                       (fn-for-lolot (rest lolot) #t #t spine-num)
+                                       (fn-for-lolot (rest lolot) #t #f (add1 spine-num)))]
+                              [(if (and left?
+                                        (string=? "*v" first-token-str)
+                                        (>= spine-num 2))
+                                   (leaf first-token
+                                     (fn-for-lolot (rest lolot) #t #t 1))
+                                   (leaf first-token
+                                     (fn-for-lolot (rest lolot) #t #t spine-num)))]
+                              [(and parent? (not left?)) (if (string=? "*v" first-token-str)
+                                                             (leaf first-token
+                                                                   #f)
+                                                             (leaf first-token
+                                                                   (fn-for-lolot (rest lolot)
+                                                                                 #t #f
+                                                                                 spine-num)))]
+                              [else
+                                (leaf first-token
+                                      (fn-for-lolot (rest lolot) #f #f spine-num))])))]
               (fn-for-lolot lolot #f #f 1)))
 
           ; TODO: time complexity
           (define (get-token lot index)
-            (local [(define (get-token lot index counter)
-                      (cond [(empty? lot) (error "Reached an empty list before finding token.")]
+            (local [(define original lot)
+
+                    (define (get-token lot index counter)
+                      (cond [(empty? lot) (error "Reached an empty list before finding token."
+                                                 original
+                                                 index
+                                                 counter)]
                             [else
                               (if (= index counter)
                                   (first lot)

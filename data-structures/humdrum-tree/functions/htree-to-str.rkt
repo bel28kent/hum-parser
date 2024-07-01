@@ -29,6 +29,7 @@
                   [else
                     (fn-for-parent node num-spines)]))
 
+          ; TODO: refactor recomputation
           (define (fn-for-leaf leaf num-spines)
             (string-append "leaf:\t" (fn-for-token (leaf-token leaf))
                            "\n"
