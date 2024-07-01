@@ -6,9 +6,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "../../../parser/data-definitions/data-definitions.rkt"
+         (only-in "../../../parser/functions/predicates.rkt" spine-join?)
          "../data-definitions/data-definitions.rkt")
 
-(provide (all-defined-out))
+(provide htree->str)
 
 (define (htree->str htree)
   (local [(define (fn-for-root root)
@@ -31,7 +32,14 @@
           (define (fn-for-leaf leaf num-spines)
             (string-append "leaf:\t" (fn-for-token (leaf-token leaf))
                            "\n"
-                           (make-string num-spines #\tab) (fn-for-node (leaf-next leaf) num-spines)))
+                           (make-string (if (is-join? (leaf-token leaf))
+                                            (- num-spines 2)
+                                            num-spines)
+                                        #\tab)
+                           (fn-for-node (leaf-next leaf)
+                                        (if (is-join? (leaf-token leaf))
+                                            (- num-spines 2)
+                                            num-spines))))
 
           (define (fn-for-parent parent num-spines)
             (local [(define current-indent (make-string (add1 num-spines) #\tab))
@@ -48,5 +56,8 @@
                              next-indent (fn-for-node (parent-right parent) (+ num-spines 2)))))
 
           (define (fn-for-token token)
-            (token-token token))]
+            (token-token token))
+
+          (define (is-join? token)
+            (spine-join? (token-token token)))]
     (fn-for-root (htree-root htree))))
