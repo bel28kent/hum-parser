@@ -63,7 +63,7 @@ bin:
 ####################
 ##  tools
 
-tools: ridkt hum-type
+tools: ridkt hum-type spine-arity
 
 ridkt:
 	@echo "Making ridkt executable"
@@ -73,10 +73,14 @@ hum-type:
 	@echo "Making hum-type executable"
 	@raco exe tools/hum-type/hum-type.rkt
 
+spine-arity:
+	@echo "Making spine-arity executable"
+	@raco exe tools/spine-arity/spine-arity.rkt
+
 ####################
 ##  move
 
-move: ridkt-move hum-type-move
+move: ridkt-move hum-type-move spine-arity-move
 
 ridkt-move:
 	@echo "Moving ridkt executable to hum-parser/bin"
@@ -86,11 +90,15 @@ hum-type-move:
 	@echo "Moving hum-type executable to hum-parser/bin"
 	@mv tools/hum-type/hum-type $(BINDIR)
 
+spine-arity-move:
+	@echo "Moving spine-arity executable to hum-parser/bin"
+	@mv tools/spine-arity/spine-arity $(BINDIR)
+
 ####################
 ##  uninstall
 
 uninstall: un-ridkt un-hum-type \
-		un-bin
+		un-spine-arity un-bin
 
 un-ridkt:
 	@echo "Uninstalling ridkt executable"
@@ -99,6 +107,10 @@ un-ridkt:
 un-hum-type:
 	@echo "Uninstalling hum-type executable"
 	@rm bin/hum-type
+
+un-spine-arity:
+	@echo "Uninstalling spine-arity executable"
+	@rm bin/spine-arity
 
 un-bin:
 	@echo "Uninstalling hum-parser/bin"
