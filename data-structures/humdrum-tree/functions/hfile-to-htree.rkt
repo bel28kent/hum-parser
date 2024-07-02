@@ -45,7 +45,7 @@
                                        (fn-for-lolot (rest lolot) #t #f (add1 spine-num)))]
                               [left? (if (and (string=? "*v" first-token-str) (>= spine-num 2))
                                          (leaf first-token
-                                           (fn-for-lolot (rest lolot) #t #t (sub1 spine-num)))
+                                               #f)
                                          (leaf first-token
                                            (fn-for-lolot (rest lolot) #t #t spine-num)))]
                               [(and parent? (not left?)) (if (string=? "*v" first-token-str)

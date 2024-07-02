@@ -24,7 +24,9 @@
 ;    always followed by a left-hand token and a right-hand token. Spine joins
 ;    are assumed to merge the right subspine with the left subspine. After
 ;    a spine join, therefore, the next node should continue in the left
-;    child of the parent.
+;    child of the parent. If a spine has been split more than once, the next
+;    node should continue in the left child of the leftmost pair after a spine
+;    join.
 ;
 ;  A HumdrumTree is well-formed if:
 ;    - root-branches is an ordered list, such that each Node from first to last
