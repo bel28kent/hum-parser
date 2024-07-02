@@ -10,8 +10,8 @@
 
 (struct htree (root) #:transparent)
 ; HumdrumTree is a tree of arbitrary arity. Its Root
-;  can have any number of branches; this corresponds
-;  to a Humdrum file having any number of spines.
+;  can have any number of branches, as a Humdrum file
+;  can have any number of spines.
 ;
 ;  The branches are composites of three Nodes:
 ;    false  - representing the end of the branch;
