@@ -1,6 +1,6 @@
 # Programmer:  Bryan Jacob Bell
 # Begun:       19 June 2024
-# Modified:    19 June 2024
+# Modified:    01 July 2024
 # File:        Makefile
 # Syntax:      GNU make
 # Description: makes executables
@@ -98,7 +98,7 @@ spine-arity-move:
 ##  uninstall
 
 uninstall: un-ridkt un-hum-type \
-		un-spine-arity un-bin
+           un-spine-arity un-bin
 
 un-ridkt:
 	@echo "Uninstalling ridkt executable"
