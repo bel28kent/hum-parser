@@ -1,0 +1,35 @@
+**kern
+!! Splits and joins are together
+*^
+*	*^
+4a	4aa	4aaa
+*	*v	*v
+*v	*v
+4a
+!! Splits are together, not joins
+*^
+*	*^
+4a	4aa	4aaa
+*	*v	*v
+4a	4aa
+*v	*v
+4a
+!! Splits and joins are not together
+*^
+4a	4aa
+*	*^
+4a	4aa	4aaa
+*	*v	*v
+4a	4aa
+*v	*v
+4a
+!! Splits are not together, joins are
+*^
+4a	4aa
+*	*^
+4a	4aa	4aaa
+*	*v	*v
+*v	*v
+4a
+==
+*-

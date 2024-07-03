@@ -1,0 +1,54 @@
+**kern	**kern	**dynam
+*staff2	*staff1	*staff1/2
+*Ipiano	*Ipiano	*
+*clefF4	*clefG2	*
+*k[]	*k[]	*
+*a:	*a:	*
+*M3/4	*M3/4	*
+=33	=33	=33
+*^	*	*
+4E	[2.B	8r	.
+.	.	8f#XL	.
+4D	.	8a	<
+.	.	8g	(
+[4C#X	.	8b	(
+.	.	8eeJ	[
+=34	=34	=34	=34
+2.C#] 2.B]	4g	8ccc#XL	>
+.	.	8bbJ	)
+.	4e	8r	]
+.	.	8ff#X	<
+.	4r	8aaL	(
+.	.	8ggJ	[
+=35	=35	=35	=35
+*	*	*^	*
+4E	4r	2.g	2ff#X	>
+4D	8r	.	.	)
+.	8G	.	.	)
+[4C#X	8A#XL	.	4ee	)
+.	[8BJ	.	.	]
+=36	=36	=36	=36	=36
+2.C#] 2.B]	4.g	2.b	4dd#X	.
+.	.	.	4ee	.
+.	8f#X	.	.	.
+.	8f#L	.	4gg	.
+.	8eJ	.	.	.
+*	*	*v	*v	*
+=37	=37	=37	=37
+*^	*	*	*
+2.D\	2B	4d	8ff#XL	.
+.	.	.	8aa	.
+.	.	[2g	8gg	.
+.	.	.	8ddJ	.
+.	4B-X	.	[4dd#X	.
+=38	=38	=38	=38	=38
+2.D\	4A	4g]	8dd#L]	.
+.	.	.	8ff#X	.
+.	2c	4g	8ee	.
+.	.	.	8aJ	.
+.	.	4f#X	[4b	.
+*	*v	*v	*	*
+*v	*v	*	*
+==	==	==
+*-	*-	*-
+!! Scriabin Op11 No2
