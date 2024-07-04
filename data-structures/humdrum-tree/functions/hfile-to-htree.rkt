@@ -12,7 +12,8 @@
                   spine-parser)
          "../data-definitions/data-definitions.rkt")
 
-(provide hfile->htree)
+(provide hfile->htree
+         file->tree)
 
 ; hfile->htree
 ; HumdrumFile -> HumdrumTree
@@ -116,5 +117,36 @@
     (htree (root (fn-for-logs spines)))))
 
 ; prune-htree
-; HumdrumTree -> HumdrumTree
+; HumdrumTree SpineArity -> HumdrumTree
 ; prunes duplicated data in lefthand spines 
+
+(define (prune-htree htree)
+  (htree (root empty)))
+
+#|
+    Duplicate data is the result of the file->tree converter,
+        which allows data after spine joins to always continue
+        in the left branch.
+    Duplicate data exists only in the left branch of a parent.
+    In the case in which a spine has only been split once,
+        there is no duplication.
+    In the case in which a spine splits mutliple times, and the
+        the spine join is not the last (i.e., it does not reduce
+        the number of subspines to one), there is no duplication.
+    In the case in which a spine splits multiple times, and the
+        the spine join is the last (i.e., it reduces the number
+        of subspines to one), there is duplication because the
+        lefthand spine in the nested parent will repeat data that
+        should only be in the lefthand spine of the topmost
+        parent.
+
+    (byrecord->byspine SpineArity)
+
+    If no previous SpineArity has been greater than or equal to
+        three, do nothing.
+    If a previous SpineArity has been greater than or equal to
+        three, and this SpineArity is not three, do nothing.
+    If a previous SpineArity has been greater than or equal to
+        three, and this SpineArity is one, substitute false for
+        the rest of parent-left.
+|#
