@@ -6,10 +6,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "../../../parser/data-definitions/data-definitions.rkt"
+         (only-in "../../../parser/functions/extract-spine-arity.rkt"
+                  extract-spine-arity)
          (only-in "../../../parser/functions/predicates.rkt"
                   spine-split? spine-join? null-interpretation?)
          (only-in "../../../parser/functions/spine-parser.rkt"
-                  spine-parser)
+                  byrecord->byspine spine-parser)
          "../data-definitions/data-definitions.rkt")
 
 (provide hfile->htree
@@ -20,7 +22,7 @@
 ; converts the HumdrumFile to a HumdrumTree
 
 (define (hfile->htree hfile)
-  (prune-htree (file->tree hfile)))
+  (htree (root (prune-htree hfile))))
 
 ; file->tree
 ; HumdrumFile -> HumdrumTree
@@ -117,11 +119,8 @@
     (htree (root (fn-for-logs spines)))))
 
 ; prune-htree
-; HumdrumTree SpineArity -> HumdrumTree
+; HumdrumFile -> (listof Node)
 ; prunes duplicated data in lefthand spines 
-
-(define (prune-htree htree)
-  (htree (root empty)))
 
 #|
     Duplicate data is the result of the file->tree converter,
@@ -140,8 +139,6 @@
         should only be in the lefthand spine of the topmost
         parent.
 
-    (byrecord->byspine SpineArity)
-
     If no previous SpineArity has been greater than or equal to
         three, do nothing.
     If a previous SpineArity has been greater than or equal to
@@ -150,3 +147,66 @@
         three, and this SpineArity is one, substitute false for
         the rest of parent-left.
 |#
+
+(define (prune-htree hfile)
+  (local [(define htree (file->tree hfile))
+
+          (define byspine (byrecord->byspine (extract-spine-arity hfile)))
+
+          (define (fn-for-htree htree byspine)
+            (local [(define (fn-for-root root byspine)
+                      (local [(define (iterator branches byspine)
+                                (cond [(empty? branches) empty]
+                                      [else
+                                        (cons (fn-for-node (first branches)
+                                                           (first byspine)
+                                                           (first (first byspine))
+                                                           #f
+                                                           1
+                                                           "")
+                                              (iterator (rest branches) byspine))]))]
+                        (iterator (root-branches root) byspine)))
+
+                    (define (fn-for-node node byspine largest-prev left? num-sub prev-token)
+                      (cond [(false? node) #f]
+                            [(leaf? node) (fn-for-leaf node byspine largest-prev left? num-sub prev-token)]
+                            [else
+                              (fn-for-parent node byspine largest-prev left? num-sub prev-token)]))
+
+                    (define (fn-for-leaf leaf1 byspine largest-prev left? num-sub prev-token)
+                      (if (and left?
+                               (> num-sub 1)
+                               (= 1 (first byspine))
+                               (>= largest-prev 3)
+                               (string=? "*v" (token-token prev-token)))
+                          #f
+                          (leaf (leaf-token leaf1)
+                                (fn-for-node (leaf-next leaf1)
+                                             (rest byspine)
+                                             (if (> (first byspine) largest-prev)
+                                                 (first byspine)
+                                                 largest-prev)
+                                             left?
+                                             num-sub
+                                             (leaf-token leaf1)))))
+
+                    (define (fn-for-parent parent1 byspine largest-prev left? num-sub prev-token)
+                      (parent (parent-token parent1)
+                              (fn-for-node (parent-left parent1)
+                                           (rest byspine)
+                                           (if (> (first byspine) largest-prev)
+                                               (first byspine)
+                                               largest-prev)
+                                           #t
+                                           num-sub
+                                           (parent-token parent1))
+                              (fn-for-node (parent-right parent1)
+                                           (rest byspine)
+                                           (if (> (first byspine) largest-prev)
+                                               (first byspine)
+                                               largest-prev)
+                                           #f
+                                           (add1 num-sub)
+                                           (parent-token parent1))))]
+              (fn-for-root (htree-root htree) byspine)))]
+    (fn-for-htree htree byspine)))
