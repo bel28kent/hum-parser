@@ -5,7 +5,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "../data-definitions/data-definitions.rkt"
-         (except-in "predicates.rkt" type-token type-tandem)
+         "predicates.rkt"
          "split-and-gather.rkt"
          "type.rkt")
 
