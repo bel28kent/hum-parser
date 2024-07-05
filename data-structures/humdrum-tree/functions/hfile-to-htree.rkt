@@ -14,8 +14,7 @@
                   byrecord->byspine spine-parser)
          "../data-definitions/data-definitions.rkt")
 
-(provide hfile->htree
-         file->tree)
+(provide hfile->htree)
 
 ; hfile->htree
 ; HumdrumFile -> HumdrumTree
