@@ -7,7 +7,7 @@
 (require "../../../parser/data-definitions/data-definitions.rkt"
          (only-in "../../../parser/functions/file.rkt" path->hfile)
          "../../../data-structures/humdrum-tree/data-definitions/data-definitions.rkt"
-         (only-in "../../../data-structures/humdrum-tree/functions/hfile-to-htree.rkt" hfile->htree)
+         "../../../data-structures/humdrum-tree/functions/hfile-to-htree.rkt"
          test-engine/racket-tests)
 
 (define one-spine-no-splits    "../data/one-spine-no-splits.krn")
@@ -748,7 +748,7 @@
                         (parent (token "*^" SPINE-SPLIT 8)
                                 (leaf (token "4aa" SPINE-DATA 9)
                                   (leaf (token "*v" SPINE-JOIN 10)
-                                    (leaf (token "4aa" SPINE-JOIN 11)
+                                    (leaf (token "4aa" SPINE-DATA 11)
                                       (leaf (token "*v" SPINE-JOIN 12)
                                             #f))))
                                 (leaf (token "4aaa" SPINE-DATA 9)

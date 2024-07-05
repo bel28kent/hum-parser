@@ -41,8 +41,9 @@
             ; parent?: Boolean. True if recursive call is in a parent.
             ; left?: Boolean. True if recursive call is left child of a parent.
             ; spine-num: Natural. The index of this (sub)spine.
+            ; prev-token: #f or Token. The previous token; initially false.
             ;
-            (local [(define (fn-for-lolot lolot parent? left? spine-num)
+            (local [(define (fn-for-lolot lolot parent? left? spine-num prev-token)
                       (local [(define first-token (if (not (empty? lolot))
                                                       (get-token (first lolot) spine-num)
                                                       empty))
@@ -53,13 +54,17 @@
                         (cond [(empty? first-token) #f]
                               [(string=? "*^" first-token-str)
                                (parent first-token
-                                       (fn-for-lolot (rest lolot) #t #t spine-num)
-                                       (fn-for-lolot (rest lolot) #t #f (add1 spine-num)))]
-                              [left? (if (and (string=? "*v" first-token-str) (>= spine-num 2))
-                                         (leaf first-token
-                                           (fn-for-lolot (rest lolot) #t #t (sub1 spine-num)))
-                                         (leaf first-token
-                                           (fn-for-lolot (rest lolot) #t #t spine-num)))]
+                                       (fn-for-lolot (rest lolot) #t #t spine-num first-token)
+                                       (fn-for-lolot (rest lolot) #t #f (add1 spine-num) first-token))]
+                              [left? (cond [(and (string=? "*v" first-token-str) (right-hand? (first lolot) spine-num))
+                                             (leaf first-token
+                                                   #f)]
+                                           [(and (string=? "*v" (token-token prev-token)) (>= spine-num 2))
+                                             (leaf first-token
+                                               (fn-for-lolot (rest lolot) #t #t (sub1 spine-num) first-token))]
+                                           [else
+                                             (leaf first-token
+                                               (fn-for-lolot (rest lolot) #t #t spine-num first-token))])]
                               [(and parent? (not left?))
                                (if (and (string=? "*v" first-token-str)
                                         (right-hand? (first lolot) spine-num))
@@ -72,11 +77,12 @@
                                                                             (first lolot)
                                                                             spine-num)
                                                            (add1 spine-num)
-                                                           spine-num))))]
+                                                           spine-num)
+                                                           first-token)))]
                               [else
                                 (leaf first-token
-                                      (fn-for-lolot (rest lolot) #f #f spine-num))])))]
-              (fn-for-lolot lolot #f #f 1)))
+                                      (fn-for-lolot (rest lolot) #f #f spine-num first-token))])))]
+              (fn-for-lolot lolot #f #f 1 #f)))
 
           ; TODO: time complexity
           (define (get-token lot index)
@@ -199,7 +205,7 @@
                                                largest-prev)
                                            #t
                                            num-sub
-                                           (parent-token parent1))
+                                           (parent-left parent1))
                               (fn-for-node (parent-right parent1)
                                            (rest byspine)
                                            (if (> (first byspine) largest-prev)
@@ -207,6 +213,6 @@
                                                largest-prev)
                                            #f
                                            (add1 num-sub)
-                                           (parent-token parent1))))]
+                                           (parent-right parent1))))]
               (fn-for-root (htree-root htree) byspine)))]
     (fn-for-htree htree byspine)))
