@@ -36,25 +36,25 @@
                                             empty))]
               (cond [(empty? lolot) empty]
                     [(string=? "*^" (token-token first-token))
-                     (append (list (parent first-token
-                                           (fn-for-lolot (rest lolot) #t #t spine-num)
-                                           (fn-for-lolot (rest lolot) #t #f (add1 spine-num))))
+                      (list* (parent first-token
+                                     (fn-for-lolot (rest lolot) #t #t spine-num)
+                                     (fn-for-lolot (rest lolot) #t #f (add1 spine-num)))
                              (fn-for-lolot (trim-parent lolot spine-num) #f #f (if (>= spine-num 2)
                                                                                    (sub1 spine-num)
                                                                                    spine-num)))]
-                    [(string=? "*v" (token-token first-token)) (leaf first-token)]
-                    [left? (append (list (leaf first-token))
-                                   (fn-for-lolot (rest lolot) #t #t spine-num))]
+                    [(string=? "*v" (token-token first-token)) (list (leaf first-token))]
+                    [left? (list* (leaf first-token)
+                                  (fn-for-lolot (rest lolot) #t #t spine-num))]
                     [(and parent? (not left?))
-                     (cond [(splits-to-left? (token-token first-token) (first lolot) spine-num)
-                            (append (list (leaf first-token))
-                                    (fn-for-lolot (rest lolot) #t #f (add1 spine-num)))]
-                           [else
-                             (append (list (leaf first-token))
+                      (cond [(splits-to-left? (token-token first-token) (first lolot) spine-num)
+                              (list* (leaf first-token)
+                                     (fn-for-lolot (rest lolot) #t #f (add1 spine-num)))]
+                            [else
+                              (list* (leaf first-token)
                                      (fn-for-lolot (rest lolot) #t #f spine-num))])]
                     [else
-                      (append (list (leaf first-token))
-                              (fn-for-lolot (rest lolot) #f #f spine-num))])))
+                      (list* (leaf first-token)
+                             (fn-for-lolot (rest lolot) #f #f spine-num))])))
 
           ; TODO: time complexity
           (define (get-token lot index)
@@ -94,43 +94,3 @@
                   [else
                     (trim-parent (rest lolot) spine-num)]))]
     (htree (root (fn-for-logs spines)))))
-
-; append-lists
-; HumdrumTree -> HumdrumTree
-; append lists
-
-#|
-(define (append-lists htree)
-  (local [(define (fn-for-root root)
-            (local [(define (iterator branches)
-                      (cond [(empty? branches) ...]
-                            [else
-                              (... (fn-for-lon (first branches))
-                                   (iterator (rest branches)))]))]
-              (iterator (root-branches root))))
-
-          (define (fn-for-lon branch)
-            (cond [(empty? branch) ...]
-                  [else
-                    (... (fn-for-node (first branch))
-                         (fn-for-lon (rest branch)))]))
-
-          (define (fn-for-node node)
-            (cond [(leaf? node) (fn-for-leaf node)]
-                  [else
-                    (fn-for-parent node)]))
-
-          (define (fn-for-leaf leaf)
-            (... (fn-for-token (leaf-token leaf))))
-
-          (define (fn-for-parent parent)
-            (... (fn-for-token (parent-token parent))
-                 (fn-for-lon (parent-left parent))
-                 (fn-for-lon (parent-right parent))))
-
-          (define (fn-for-token token)
-            (... (token-token token)
-                 (token-type token)
-                 (token-record-number token)))]
-    (... (fn-for-root (htree-root htree)))))
-|#
