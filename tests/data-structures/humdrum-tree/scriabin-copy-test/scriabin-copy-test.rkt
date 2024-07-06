@@ -27,3 +27,36 @@
 ; copy-spines
 ; HumdrumTree -> (listof GlobalSpine)
 ; produce a GlobalSpine for each branch in HumdrumTree
+
+;; will probably need to reverse result
+(define (copy-spines htree)
+  (local [(define (fn-for-root root)
+            (local [(define (iterator branches spine-index)
+                      (cond [(empty? branches) empty]
+                            [else
+                              (cons (global-spine (list (fn-for-node (first branches)))
+                                                  spine-index)
+                                    (iterator (rest branches) spine-index))]))]
+              (iterator (root-branches root) 0)))
+
+          ; (fn-for-token ...) -> current
+          (define (fn-for-node node parent? left-children right-children result)
+            (cond [(false? node) ...]
+                  [(leaf? node) (fn-for-leaf node)]
+                  [else
+                    (fn-for-parent node)]))
+
+          (define (fn-for-leaf leaf parent? left-children right-children result)
+            (... (fn-for-token (leaf-token leaf))
+                 (fn-for-node (leaf-next leaf))))
+
+          (define (fn-for-parent parent parent? left-children right-children result)
+            (... (fn-for-token (parent-token parent))
+                 (fn-for-node (parent-left parent))
+                 (fn-for-node (parent-right parent))))
+
+          (define (fn-for-token token parent? left-children right-children result)
+            (... (token-token token)
+                 (token-type token)
+                 (token-record-number token)))]
+    (fn-for-root (htree-root htree))))
