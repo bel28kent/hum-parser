@@ -1,29 +1,43 @@
 #lang racket
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data structures: HumdrumTree
-;;    visualize-htree: produces an image of a HumdrumTree
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 2htdp/image)
 
-(require "../../../parser/data-definitions/data-definitions.rkt"
-         "../data-definitions/data-definitions-list.rkt"
-         2htdp/image)
-
-(provide visualize-htree)
+(provide (all-defined-out))
 
 (define straight-line (line 0 30 "black"))
+(define left-branch   (line -10 30 "black"))
+(define right-branch  (line 10 30 "black"))
 (define top-node (circle 5 "outline" "black"))
+
+(struct tree (root) #:transparent)
+(struct parent (string left right) #:transparent)
+(define tree-ex (tree (list (list "1" "2" "3")
+                            (list "1" "12" "3")
+                            (list "111" "2" "3"))))
+(define split-tree-ex (tree (list (list "1" "2" "3")
+                                  (list (parent "1" (list "1234" "3") (list "3" "12")))
+                                  (list "111" "2" "3"))))
+(define nested-parent-ex (tree (list (list "1" "2" "3" "4" "5")
+                                     (list (parent "1"
+                                                   (list "12" (parent "3"
+                                                                        (list "1" "5")
+                                                                        (list "6" "3")))
+                                                   (list "3" "12" "14" "60")))
+                                     (list "111" "1234" "3" "44" "55"))))
 
 (struct result (images widths) #:transparent)
 
-; visualize-htree
-; HumdrumTree -> Image
+(define parent-ex (parent "1" (list "1234" "3") (list "3" "12")))
+(define subtree (tree (list (parent-left parent-ex) (parent-right parent-ex))))
+
+; visualize-tree
+; Tree -> Image
 ; produces an image of the tree
 
-(define (visualize-htree htree)
-  (local [(define node-img (circle (get-diameter htree) "outline" "black"))
+(define (visualize-tree tree)
+  (local [(define node-img (circle (get-diameter tree) "outline" "black"))
 
-          (define branch-images (list-branch-images htree node-img))
+          (define branch-images (list-branch-images tree node-img))
 
           (define x-positions (branch-x-positions branch-images))
 
@@ -31,10 +45,10 @@
     (add-branch-lines lower-tree-image x-positions)))
 
 ; list-branch-images
-; HumdrumTree -> Result
-; produces a list of images of each branch
+; Tree -> Result
+; produces an image of the tree
 
-(define (list-branch-images htree node-img)
+(define (list-branch-images tree node-img)
   (local [; (listof (listof Natural)) -> (listof Image)
           (define (fn-for-root root)
             (cond [(empty? root) empty]
@@ -45,20 +59,17 @@
           ; (listof Natural) -> Image
           (define (fn-for-branch branch)
             (cond [(and (empty? (rest branch))
-                        (not (parent? (first branch)))) (node-image (token-token
-                                                                      (leaf-token (first branch))) node-img)]
-                  ; can a parent be the last case in a branch? Subspines should always be merged before spine terminator.
+                        (not (parent? (first branch)))) (node-image (first branch) node-img)]
                   [(empty? (rest branch)) (list-subbranch-images (first branch) node-img)]
-                  [(parent? (first branch)) (above/align "left"
-                                                         (list-subbranch-images (first branch) node-img)
-                                                         (above straight-line
-                                                                (fn-for-branch (rest branch))))]
+                  [(parent? (first branch)) (above (list-subbranch-images (first branch) node-img)
+                                                   straight-line
+                                                   (fn-for-branch (rest branch)))]
                   [else
-                   (above (node-image (token-token (leaf-token (first branch))) node-img)
+                   (above (node-image (first branch) node-img)
                           straight-line
                           (fn-for-branch (rest branch)))]))
 
-          (define rnr (fn-for-root (root-branches (htree-root htree))))]
+          (define rnr (fn-for-root (tree-root tree)))]
     (result rnr (map image-width rnr))))
 
 ; list-subbranch-images
@@ -66,8 +77,7 @@
 ; handles parent images
 
 (define (list-subbranch-images parent node-img)
-          ; needs to be HumdrumTree
-  (local [(define subtree (htree (root (list (parent-left parent) (parent-right parent)))))
+  (local [(define subtree (tree (list (parent-left parent) (parent-right parent))))
 
           (define (visualize-subtree subtree)
             (local [(define branch-images (list-branch-images subtree node-img))
@@ -81,12 +91,7 @@
             (local [(define half-tree-width (/ (image-width lower-tree-image) 2))
 
                     (define (add-subbranch-lines x-positions)
-                      (cond [(empty? (rest x-positions)) (add-line lower-tree-image
-                                                                   (first x-positions)
-                                                                   0
-                                                                   half-tree-width
-                                                                   -30
-                                                                   "black")]
+                      (cond [(empty? (rest x-positions)) (add-line lower-tree-image (first x-positions) 0 half-tree-width -30 "black")]
                             [else
                              (add-line (add-subbranch-lines (rest x-positions))
                                        (first x-positions)
@@ -95,16 +100,16 @@
                                        0
                                        "black")]))]
               (above/align "center"
-                           (node-image (token-token (parent-token parent)) node-img)
+                           (node-image (parent-string parent) node-img)
                            (add-subbranch-lines x-positions))))]
     (visualize-subtree subtree)))
 
 ; node-image
-; String -> Image
+; Natural -> Image
 ; produces an image of a node
 
-(define (node-image token-str node-img)
-  (overlay (text token-str 12 "black")
+(define (node-image natural node-img)
+  (overlay (text natural 12 "black")
            node-img))
 
 ; pad
@@ -149,8 +154,7 @@
             ; prev-x. Natural. The x position of the previous line.
             ; prev-midpoint. Natural. The midpoint of the previous branch.
             (local [(define (x-positions branch-widths prev-x prev-midpoint acc)
-                      (cond [(empty? (rest branch-widths)) (reverse
-                                                             (cons (- tree-width (/ (first branch-widths) 2)) acc))]
+                      (cond [(empty? (rest branch-widths)) (reverse (cons (- tree-width (/ (first branch-widths) 2)) acc))]
                             [else
                              (x-positions (rest branch-widths)
                                           (+ prev-x prev-midpoint pad-width (/ (first branch-widths) 2))
@@ -185,49 +189,41 @@
                  (add-branch-lines x-positions))))
 
 ; get-diameter
-; HumdrumTree -> Natural
-; produces the length of the longest token string in the tree
+; Tree -> Natural
+; produces the width of the widest text image in the tree
 
-(define (get-diameter htree)
-  (local [(define (fn-for-root root)
-            (local [(define (iterator branches longest)
-                      (cond [(empty? branches) (image-width (text longest 12 "black"))]
+(define (get-diameter tree)
+  (local [(define (fn-for-root root longest)
+            (cond [(empty? root) (image-width (text longest 12 "black"))]
+                  [else
+                   (local [(define result (fn-for-branch (first root)))]
+                     (if (> (string-length result) (string-length longest))
+                         (fn-for-root (rest root) result)
+                         (fn-for-root (rest root) longest)))]))
+
+          (define (fn-for-branch branch)
+            (local [(define (fn-for-branch branch longest)
+                      (cond [(empty? branch) longest]
+                            [(parent? (first branch)) (local [(define parent-longest (fn-for-parent (first branch)))]
+                                                        (if (> (string-length parent-longest) (string-length longest))
+                                                            (fn-for-branch (rest branch) parent-longest)
+                                                            (fn-for-branch (rest branch) longest)))]
                             [else
-                              (iterator (rest branches)
-                                        (fn-for-lon (first branches) longest))]))]
-              (iterator (root-branches root) "")))
+                             (if (> (string-length (first branch)) (string-length longest))
+                                 (fn-for-branch (rest branch) (first branch))
+                                 (fn-for-branch (rest branch) longest))]))]
+              (fn-for-branch branch "")))
 
-          (define (fn-for-lon branch longest)
-            (cond [(empty? branch) longest]
-                  [else
-                    (local [(define result (fn-for-node (first branch) longest))]
-                      (if (> (string-length result)
-                             (string-length longest))
-                          (fn-for-lon (rest branch) result)
-                          (fn-for-lon (rest branch) longest)))]))
+          (define (fn-for-parent parent)
+            (local [(define left-longest (fn-for-branch (parent-left parent)))
 
-          (define (fn-for-node node longest)
-            (cond [(leaf? node) (fn-for-leaf node)]
-                  [else
-                    (fn-for-parent node longest)]))
-
-          (define (fn-for-leaf leaf)
-            (fn-for-token (leaf-token leaf)))
-
-          (define (fn-for-parent parent longest)
-            (local [(define parent-str (fn-for-token (parent-token parent)))
-                    (define parent-str-length (string-length parent-str))
-
-                    (define left-str (fn-for-lon (parent-left parent) longest))
-                    (define left-str-length (string-length left-str))
-
-                    (define right-str (fn-for-lon (parent-right parent) longest))
-                    (define right-str-length (string-length right-str))]
-              (cond [(and (> parent-str-length left-str-length)
-                          (> parent-str-length right-str-length)) parent-str]
-                    [(> left-str-length right-str-length) left-str]
-                    [right-str])))
-
-          (define (fn-for-token token)
-            (token-token token))]
-    (fn-for-root (htree-root htree))))
+                    (define right-longest (fn-for-branch (parent-right parent)))]
+              (if (and (> (string-length (parent-string parent))
+                          (string-length left-longest))
+                       (> (string-length (parent-string parent))
+                          (string-length right-longest)))
+                  (parent-string parent)
+                  (if (> (string-length left-longest) (string-length right-longest))
+                      left-longest
+                      right-longest))))]
+    (fn-for-root (tree-root tree) "")))
