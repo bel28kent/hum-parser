@@ -6,107 +6,102 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "../../../parser/data-definitions/data-definitions.rkt"
-         (only-in "../../../parser/functions/extract-spine-arity.rkt"
-                  extract-spine-arity)
          (only-in "../../../parser/functions/predicates.rkt"
                   spine-split? spine-join? null-interpretation?)
          (only-in "../../../parser/functions/spine-parser.rkt"
-                  byrecord->byspine spine-parser)
-         "../data-definitions/data-definitions.rkt")
+                  spine-parser)
+         "../data-definitions/data-definitions-list.rkt")
 
 (provide hfile->htree)
+
+#|
+    ASSUMPTIONS:
+        1a. All subspines merge into one spine before termination.
+        1b. All spines terminate correctly; i.e., the last two tokens in all
+            spines are "==" and "*-".
+        2. When a "*v" is encountered it immediately terminates the subspine.
+           (Overlapping left and right subspines when there is more than one
+           spine split creates too many corner cases.)
+|#
 
 ; hfile->htree
 ; HumdrumFile -> HumdrumTree
 ; converts the HumdrumFile to a HumdrumTree
 
 (define (hfile->htree hfile)
-  (htree (root (prune-htree hfile))))
-
-; file->tree
-; HumdrumFile -> HumdrumTree
-; maps a HumdrumFile's spines on to a HumdrumTree
-
-(define (file->tree hfile)
   (local [(define spines (spine-parser hfile))
 
           (define (fn-for-logs logs)
-            (foldr (λ (f rnr) (cons (fn-for-global-spine f) rnr)) empty logs))
+            (cond [(empty? logs) empty]
+                  [else
+                    (cons (fn-for-global-spine (first logs))
+                          (fn-for-logs (rest logs)))]))
 
-          (define (fn-for-global-spine gspine)
-            (fn-for-lolot (global-spine-tokens gspine)))
+          (define (fn-for-global-spine global-spine)
+            (fn-for-lolot (global-spine-tokens global-spine)))
 
           (define (fn-for-lolot lolot)
-            ; parent?: Boolean. True if recursive call is in a parent.
-            ; left?: Boolean. True if recursive call is left child of a parent.
-            ; spine-num: Natural. The index of this (sub)spine.
-            ; prev-token: #f or Token. The previous token; initially false.
-            ;
-            (local [(define (fn-for-lolot lolot parent? left? spine-num prev-token)
-                      (local [(define first-token (if (not (empty? lolot))
-                                                      (get-token (first lolot) spine-num)
-                                                      empty))
+            (local [(define original lolot)
 
-                              (define first-token-str (if (not (empty? first-token))
-                                                          (token-token first-token)
-                                                          empty))]
-                        (cond [(empty? first-token) #f]
-                              [(string=? "*^" first-token-str)
-                               (parent first-token
-                                       (fn-for-lolot (rest lolot) #t #t spine-num first-token)
-                                       (fn-for-lolot (rest lolot) #t #f (add1 spine-num) first-token))]
-                              [left? (cond [(and (string=? "*v" first-token-str) (right-hand? (first lolot) spine-num))
-                                             (leaf first-token
-                                                   #f)]
-                                           [(and (string=? "*v" (token-token prev-token)) (>= spine-num 2))
-                                             (leaf first-token
-                                               (fn-for-lolot (rest lolot) #t #t (sub1 spine-num) first-token))]
-                                           [else
-                                             (leaf first-token
-                                               (fn-for-lolot (rest lolot) #t #t spine-num first-token))])]
+                    (define (fn-for-lolot lolot parent? left? spine-num)
+                      (local [(define first-token (if (not (empty? lolot))
+                                                      (get-token (first lolot) spine-num fn-for-lolot)
+                                                      empty))]
+                        (cond [(empty? lolot) empty]
+                              [(string=? "*^" (token-token first-token))
+                                (local [(define left (fn-for-lolot (rest lolot)
+                                                                   #t #t
+                                                                   spine-num))
+
+                                        (define right (fn-for-lolot (rest lolot)
+                                                                    #t #f
+                                                                    (add1 spine-num)))]
+                                  (list* (parent first-token
+                                                 left
+                                                 right)
+                                         (fn-for-lolot (trim-original original
+                                                                      left
+                                                                      right)
+                                                       #f #f
+                                                       spine-num)))]
+                              [(string=? "*v" (token-token first-token)) (list (leaf first-token))]
+                              [left? (list* (leaf first-token)
+                                            (fn-for-lolot (rest lolot)
+                                                          #t #t
+                                                          spine-num))]
                               [(and parent? (not left?))
-                               (if (and (string=? "*v" first-token-str)
-                                        (right-hand? (first lolot) spine-num))
-                                   (leaf first-token
-                                         #f)
-                                   (leaf first-token
-                                         (fn-for-lolot (rest lolot)
-                                                       #t #f
-                                                       (if (splits-to-left? first-token-str
-                                                                            (first lolot)
-                                                                            spine-num)
-                                                           (add1 spine-num)
-                                                           spine-num)
-                                                           first-token)))]
+                                (cond [(splits-to-left? (token-token first-token) (first lolot) spine-num)
+                                        (list* (leaf first-token)
+                                               (fn-for-lolot (rest lolot)
+                                                             #t #f
+                                                             (add1 spine-num)))]
+                                      [else
+                                        (list* (leaf first-token)
+                                               (fn-for-lolot (rest lolot)
+                                                             #t #f
+                                                             spine-num))])]
                               [else
-                                (leaf first-token
-                                      (fn-for-lolot (rest lolot) #f #f spine-num first-token))])))]
-              (fn-for-lolot lolot #f #f 1 #f)))
+                                (list* (leaf first-token)
+                                       (fn-for-lolot (rest lolot)
+                                                     #f #f
+                                                     spine-num))])))]
+              (fn-for-lolot lolot #f #f 1)))
 
           ; TODO: time complexity
-          (define (get-token lot index)
+          (define (get-token lot index caller)
             (local [(define original lot)
 
                     (define (get-token lot index counter)
                       (cond [(empty? lot) (error "Reached an empty list before finding token."
                                                  original
                                                  index
-                                                 counter)]
+                                                 counter
+                                                 caller)]
                             [else
                               (if (= index counter)
                                   (first lot)
                                   (get-token (rest lot) index (add1 counter)))]))]
               (get-token lot index 1)))
-
-          (define (right-hand? lot spine-num)
-            (local [(define (right-hand? lot counter)
-                      (cond [(empty? lot) #f]
-                            [else
-                              (if (and (= 1 (- spine-num counter))
-                                       (string=? "*v" (token-token (first lot))))
-                                  #t
-                                  (right-hand? (rest lot) (add1 counter)))]))]
-              (right-hand? lot 1)))
 
           (define (splits-to-left? first-token-str lot spine-num)
             (local [(define (splits-to-left? lot counter)
@@ -120,98 +115,58 @@
                       (spine-join? first-token-str)
                       (null-interpretation? first-token-str))
                   (splits-to-left? lot 1)
-                  #f)))]
-    (htree (root (fn-for-logs spines)))))
+                  #f)))
 
-; prune-htree
-; HumdrumFile -> (listof Node)
-; prunes duplicated data in lefthand spines 
+          (define (trim-original original left right)
+            (local [(define left-last-index (token-record-number (leaf-token (first (reverse left)))))
 
-#|
-    Duplicate data is the result of the file->tree converter,
-        which allows data after spine joins to always continue
-        in the left branch.
-    Duplicate data exists only in the left branch of a parent.
-    In the case in which a spine has only been split once,
-        there is no duplication.
-    In the case in which a spine splits mutliple times, and the
-        the spine join is not the last (i.e., it does not reduce
-        the number of subspines to one), there is no duplication.
-    In the case in which a spine splits multiple times, and the
-        the spine join is the last (i.e., it reduces the number
-        of subspines to one), there is duplication because the
-        lefthand spine in the nested parent will repeat data that
-        should only be in the lefthand spine of the topmost
-        parent.
+                    (define right-last-index (token-record-number (leaf-token (first (reverse right)))))
 
-    If no previous SpineArity has been greater than or equal to
-        three, do nothing.
-    If a previous SpineArity has been greater than or equal to
-        three, and this SpineArity is not three, do nothing.
-    If a previous SpineArity has been greater than or equal to
-        three, and this SpineArity is one, substitute false for
-        the rest of parent-left.
-|#
+                    (define record-index (if (< left-last-index right-last-index)
+                                             left-last-index
+                                             right-last-index))
 
-(define (prune-htree hfile)
-  (local [(define htree (file->tree hfile))
-
-          (define byspine (byrecord->byspine (extract-spine-arity hfile)))
-
-          (define (fn-for-htree htree byspine)
-            (local [(define (fn-for-root root byspine)
-                      (local [(define (iterator branches byspine)
-                                (cond [(empty? branches) empty]
-                                      [else
-                                        (cons (fn-for-node (first branches)
-                                                           (first byspine)
-                                                           (first (first byspine))
-                                                           #f
-                                                           1
-                                                           "")
-                                              (iterator (rest branches) byspine))]))]
-                        (iterator (root-branches root) byspine)))
-
-                    (define (fn-for-node node byspine largest-prev left? num-sub prev-token)
-                      (cond [(false? node) #f]
-                            [(leaf? node) (fn-for-leaf node byspine largest-prev left? num-sub prev-token)]
+                    (define (trim-original original)
+                      (cond [(empty? original) (error "Reached an empty list before finding record-index.")]
+                            [(= record-index (token-record-number (first (first original))))
+                             (handle-join (rest original) left right)]
                             [else
-                              (fn-for-parent node byspine largest-prev left? num-sub prev-token)]))
+                              (trim-original (rest original))]))]
+              (trim-original original)))
 
-                    (define (fn-for-leaf leaf1 byspine largest-prev left? num-sub prev-token)
-                      (if (and left?
-                               (> num-sub 1)
-                               (= 1 (first byspine))
-                               (>= largest-prev 3)
-                               (string=? "*v" (token-token prev-token)))
-                          #f
-                          (leaf (leaf-token leaf1)
-                                (fn-for-node (leaf-next leaf1)
-                                             (rest byspine)
-                                             (if (> (first byspine) largest-prev)
-                                                 (first byspine)
-                                                 largest-prev)
-                                             left?
-                                             num-sub
-                                             (leaf-token leaf1)))))
+          (define (handle-join rest-original left right)
+            (if (string=? "*v" (token-token (first (first rest-original))))
+                (if (join-is-already-paired? (first (first rest-original)) left right)
+                    (rest rest-original)
+                    rest-original)
+                rest-original))
 
-                    (define (fn-for-parent parent1 byspine largest-prev left? num-sub prev-token)
-                      (parent (parent-token parent1)
-                              (fn-for-node (parent-left parent1)
-                                           (rest byspine)
-                                           (if (> (first byspine) largest-prev)
-                                               (first byspine)
-                                               largest-prev)
-                                           #t
-                                           num-sub
-                                           (parent-left parent1))
-                              (fn-for-node (parent-right parent1)
-                                           (rest byspine)
-                                           (if (> (first byspine) largest-prev)
-                                               (first byspine)
-                                               largest-prev)
-                                           #f
-                                           (add1 num-sub)
-                                           (parent-right parent1))))]
-              (fn-for-root (htree-root htree) byspine)))]
-    (fn-for-htree htree byspine)))
+          ; produces true if join can be found twice between left and right
+          (define (join-is-already-paired? join left right)
+            (local [(define (counter lot)
+                      (cond [(empty? lot) 0]
+                            [else
+                              (if (equal? join (first lot))
+                                  (add1 (counter (rest lot)))
+                                  (counter (rest lot)))]))
+
+                    (define left-count (counter (branch->lot left)))
+
+                    (define right-count (counter (branch->lot right)))]
+              (if (= 2 (+ left-count right-count))
+                  #t
+                  #f)))
+
+          ; collapses a branch of a tree to a (listof Token)
+          (define (branch->lot branch)
+            (local [(define (branch->lot branch acc)
+                      (cond [(empty? branch) (reverse acc)]
+                            [(leaf? (first branch)) (branch->lot (rest branch)
+                                                                 (cons (leaf-token (first branch)) acc))]
+                            [else
+                              (branch->lot (append (parent-left (first branch))
+                                                   (parent-right (first branch))
+                                                   (rest branch))
+                                           (cons (parent-token (first branch)) acc))]))]
+              (branch->lot branch empty)))]
+    (htree (root (fn-for-logs spines)))))

@@ -1,11 +1,11 @@
 #lang racket
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data structures: HumdrumTree
+;; hum-parser: data structures: HumdrumTree w/ lists
 ;;    Templates
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../data-definitions/data-definitions.rkt")
+(require "../data-definitions/data-definitions-list.rkt")
 
 ;; Melodic or Depth-first traversal
 ;; (Regular recursion through tree)
@@ -24,30 +24,34 @@
             (local [(define (iterator branches)
                       (cond [(empty? branches) ...]
                             [else
-                              (... (fn-for-node (first branches))
+                              (... (fn-for-lon (first branches))
                                    (iterator (rest branches)))]))]
               (iterator (root-branches root))))
 
+          (define (fn-for-lon branch)
+            (cond [(empty? branch) ...]
+                  [else
+                    (... (fn-for-node (first branch))
+                         (fn-for-lon (rest branch)))]))
+
           (define (fn-for-node node)
-            (cond [(false? node) ...]
-                  [(leaf? node) (fn-for-leaf node)]
+            (cond [(leaf? node) (fn-for-leaf node)]
                   [else
                     (fn-for-parent node)]))
 
           (define (fn-for-leaf leaf)
-            (... (fn-for-token (leaf-token leaf))
-                 (fn-for-node (leaf-next leaf))))
+            (... (fn-for-token (leaf-token leaf))))
 
           (define (fn-for-parent parent)
             (... (fn-for-token (parent-token parent))
-                 (fn-for-node (parent-left parent))
-                 (fn-for-node (parent-right parent))))
+                 (fn-for-lon (parent-left parent))
+                 (fn-for-lon (parent-right parent))))
 
           (define (fn-for-token token)
             (... (token-token token)
                  (token-type token)
                  (token-record-number token)))]
-    (fn-for-root (htree-root htree))))
+    (... (fn-for-root (htree-root htree)))))
 
 ;; Harmonic or Breadth-first traversal
 ;; (Recursion with accumulators)
