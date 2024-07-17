@@ -6,7 +6,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "../../../parser/data-definitions/data-definitions.rkt"
-         "../data-definitions/data-definitions-list.rkt"
+         "../data-definitions/data-definitions.rkt"
          2htdp/image)
 
 (provide visualize-htree)

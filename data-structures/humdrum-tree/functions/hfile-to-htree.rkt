@@ -10,7 +10,7 @@
                   spine-split? spine-join? null-interpretation?)
          (only-in "../../../parser/functions/spine-parser.rkt"
                   spine-parser)
-         "../data-definitions/data-definitions-list.rkt")
+         "../data-definitions/data-definitions.rkt")
 
 (provide hfile->htree)
 

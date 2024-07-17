@@ -7,8 +7,8 @@
 
 (require "../../../parser/data-definitions/data-definitions.rkt"
          (only-in "../../../parser/functions/file.rkt" path->hfile)
-         "../../../data-structures/humdrum-tree/data-definitions/data-definitions-list.rkt"
-         "../../../data-structures/humdrum-tree/functions/hfile-to-htree-list.rkt"
+         "../../../data-structures/humdrum-tree/data-definitions/data-definitions.rkt"
+         "../../../data-structures/humdrum-tree/functions/hfile-to-htree.rkt"
          test-engine/racket-tests)
 
 (define one-spine-no-splits    "../data/one-spine-no-splits.krn")
