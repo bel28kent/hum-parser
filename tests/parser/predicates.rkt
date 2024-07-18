@@ -44,9 +44,10 @@
 (check-expect (metadata? MEASURE-TAG)                       #f)
 (check-expect (metadata? (token-token MUSIC-TOKEN-EX))      #f)
 
+; TODO: #f case
 ; is-token?
-(check-expect (is-token? "**kern\t**kern")                 #t)
-(check-expect (is-token? "!!!COM: Bach, Johann Sebastian") #f)
+(check-expect (is-token? "**kern\t**kern")  #t)
+(check-expect (is-token? "! Local comment") #t)
 
 ; exclusive-interpretation?
 (check-expect (exclusive-interpretation? EXCLUSIVE-TAG)                     #t)

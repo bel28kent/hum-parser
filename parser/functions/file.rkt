@@ -13,7 +13,7 @@
 
 ; read-file
 ; String -> (listof String)
-; reads in a file at given path and produces a list of its records split into fields
+; produces list of records split into fields from file at path
 
 (define (read-file path)
   (local [(define (read-file lolos in)

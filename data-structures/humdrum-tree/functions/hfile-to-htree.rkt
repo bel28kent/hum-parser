@@ -45,7 +45,9 @@
 
                     (define (fn-for-lolot lolot parent? left? spine-num)
                       (local [(define first-token (if (not (empty? lolot))
-                                                      (get-token (first lolot) spine-num fn-for-lolot)
+                                                      (get-token
+                                                        (first lolot)
+                                                        spine-num fn-for-lolot)
                                                       empty))]
                         (cond [(empty? lolot) empty]
                               [(string=? "*^" (token-token first-token))
@@ -53,9 +55,10 @@
                                                                    #t #t
                                                                    spine-num))
 
-                                        (define right (fn-for-lolot (rest lolot)
-                                                                    #t #f
-                                                                    (add1 spine-num)))]
+                                        (define right (fn-for-lolot
+                                                        (rest lolot)
+                                                        #t #f
+                                                        (add1 spine-num)))]
                                   (list* (parent first-token
                                                  left
                                                  right)
@@ -64,17 +67,21 @@
                                                                       right)
                                                        #f #f
                                                        spine-num)))]
-                              [(string=? "*v" (token-token first-token)) (list (leaf first-token))]
+                              [(string=? "*v" (token-token first-token))
+                               (list (leaf first-token))]
                               [left? (list* (leaf first-token)
                                             (fn-for-lolot (rest lolot)
                                                           #t #t
                                                           spine-num))]
                               [(and parent? (not left?))
-                                (cond [(splits-to-left? (token-token first-token) (first lolot) spine-num)
-                                        (list* (leaf first-token)
-                                               (fn-for-lolot (rest lolot)
-                                                             #t #f
-                                                             (add1 spine-num)))]
+                                (cond [(splits-to-left?
+                                         (token-token first-token)
+                                         (first lolot)
+                                         spine-num)
+                                       (list* (leaf first-token)
+                                              (fn-for-lolot (rest lolot)
+                                                            #t #f
+                                                            (add1 spine-num)))]
                                       [else
                                         (list* (leaf first-token)
                                                (fn-for-lolot (rest lolot)
@@ -92,15 +99,19 @@
             (local [(define original lot)
 
                     (define (get-token lot index counter)
-                      (cond [(empty? lot) (error "Reached an empty list before finding token."
-                                                 original
-                                                 index
-                                                 counter
-                                                 caller)]
+                      (cond [(empty? lot)
+                             (error
+                               "Reached an empty list before finding token."
+                               original
+                               index
+                               counter
+                               caller)]
                             [else
                               (if (= index counter)
                                   (first lot)
-                                  (get-token (rest lot) index (add1 counter)))]))]
+                                  (get-token (rest lot)
+                                             index
+                                             (add1 counter)))]))]
               (get-token lot index 1)))
 
           (define (splits-to-left? first-token-str lot spine-num)
@@ -110,7 +121,8 @@
                             [else
                               (if (spine-split? (token-token (first lot)))
                                   #t
-                                  (splits-to-left? (rest lot) (add1 counter)))]))]
+                                  (splits-to-left? (rest lot)
+                                                   (add1 counter)))]))]
               (if (or (spine-split? first-token-str)
                       (spine-join? first-token-str)
                       (null-interpretation? first-token-str))
@@ -118,17 +130,25 @@
                   #f)))
 
           (define (trim-original original left right)
-            (local [(define left-last-index (token-record-number (leaf-token (first (reverse left)))))
+            (local [(define left-last-index (token-record-number
+                                              (leaf-token
+                                                (first (reverse left)))))
 
-                    (define right-last-index (token-record-number (leaf-token (first (reverse right)))))
+                    (define right-last-index (token-record-number
+                                               (leaf-token
+                                                 (first (reverse right)))))
 
-                    (define record-index (if (< left-last-index right-last-index)
+                    (define record-index (if (< left-last-index
+                                                right-last-index)
                                              left-last-index
                                              right-last-index))
 
                     (define (trim-original original)
-                      (cond [(empty? original) (error "Reached an empty list before finding record-index.")]
-                            [(= record-index (token-record-number (first (first original))))
+                      (cond [(empty? original)
+                             (error
+                               "Reached empty list before finding index.")]
+                            [(= record-index (token-record-number
+                                               (first (first original))))
                              (handle-join (rest original) left right)]
                             [else
                               (trim-original (rest original))]))]
@@ -136,7 +156,9 @@
 
           (define (handle-join rest-original left right)
             (if (string=? "*v" (token-token (first (first rest-original))))
-                (if (join-is-already-paired? (first (first rest-original)) left right)
+                (if (join-is-already-paired? (first (first rest-original))
+                                             left
+                                             right)
                     (rest rest-original)
                     rest-original)
                 rest-original))
@@ -161,12 +183,15 @@
           (define (branch->lot branch)
             (local [(define (branch->lot branch acc)
                       (cond [(empty? branch) (reverse acc)]
-                            [(leaf? (first branch)) (branch->lot (rest branch)
-                                                                 (cons (leaf-token (first branch)) acc))]
+                            [(leaf? (first branch))
+                             (branch->lot (rest branch)
+                                          (cons (leaf-token (first branch))
+                                                acc))]
                             [else
                               (branch->lot (append (parent-left (first branch))
                                                    (parent-right (first branch))
                                                    (rest branch))
-                                           (cons (parent-token (first branch)) acc))]))]
+                                           (cons (parent-token (first branch))
+                                                 acc))]))]
               (branch->lot branch empty)))]
     (htree (root (fn-for-logs spines)))))

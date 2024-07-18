@@ -178,18 +178,20 @@
 
 (define RECORD-REF-EX (list "!!!AGN: Etude"))  ; scriabin-op08_no07.krn
 (define RECORD-GC-EX (list "!! First ending")) ; gershwin30.krn
-; TODO
-(define RECORD-LC-EX (list "! Adagio\t!\t! Adagio\t!\t! Adagio\t!\t! Adagio\t!")) ; mozart/quartet/k080-01.krn
+; TODO mozart/quartet/k080-01.krn
+(define RECORD-LC-EX
+        (list "! Adagio\t!\t! Adagio\t!\t! Adagio\t!\t! Adagio\t!"))
 
 (struct global-spine (tokens spine-number) #:transparent)
 ; GlobalSpine is (global-spine (listof (listof Token)) Natural)
 ;  Represents a singe global column of a Humdrum file.
 ;  CONSTRAINT: spine-number >= 0
 
-(define GLOBAL-SPINE-EX (global-spine (list (list (token "**kern"  EXCLUSIVE-INTERPRETATION 0))
-                                            (list (token "*clefG2" CLEF                     1))
-                                            (list (token "4a"      SPINE-DATA               2)))
-                                      0))
+(define GLOBAL-SPINE-EX
+        (global-spine (list (list (token "**kern"  EXCLUSIVE-INTERPRETATION 0))
+                            (list (token "*clefG2" CLEF                     1))
+                            (list (token "4a"      SPINE-DATA               2)))
+                      0))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  FILE
@@ -198,70 +200,72 @@
 (struct hfile (records) #:transparent)
 ;  HumdrumFile is (hfile (listof Records))
 ;    Represents a humdrum file.
-(define GERSH-01-FILE-EX (hfile (list (record "!! George Gershwin: (I've Got) Beginner's Luck"
-                                              GLOBAL-COMMENT
-                                              (list "!! George Gershwin: (I've Got) Beginner's Luck")
-                                              0)
-                                      (record "!! Bumper Book of George Gershwin"
-                                              GLOBAL-COMMENT
-                                              (list "!! Bumper Book of George Gershwin")
-                                              1)
-                                      (record "!! London: Chappell Music Ltd., 1987; pp.30-33"
-                                              GLOBAL-COMMENT
-                                              (list "!! London: Chappell Music Ltd., 1987; pp.30-33")
-                                              2)
-                                      (record "**kern"
-                                              TOKEN
-                                              (list (token "**kern" EXCLUSIVE-INTERPRETATION 3))
-                                              3)
-                                      (record "*M4/4"
-                                              TOKEN
-                                              (list (token "*M4/4" TIME-SIG 4))
-                                              4)
-                                      (record "*MM[Moderato]"
-                                              TOKEN
-                                              (list (token "*MM[Moderato]" #f 5))
-                                              5)
-                                      (record "4f#"
-                                              TOKEN
-                                              (list (token "4f#" SPINE-DATA 6))
-                                              6)
-                                      (record "=1"
-                                              TOKEN
-                                              (list (token "=1" MEASURE 7))
-                                              7)
-                                      (record "4a"
-                                              TOKEN
-                                              (list (token "4a" SPINE-DATA 8))
-                                              8)
-                                      (record "8a"
-                                              TOKEN
-                                              (list (token "8a" SPINE-DATA 9))
-                                              9)
-                                      (record "[8a"
-                                              TOKEN
-                                              (list (token "[8a" SPINE-DATA 10))
-                                              10)
-                                      (record "8a]"
-                                              TOKEN
-                                              (list (token "8a]" SPINE-DATA 11))
-                                              11)
-                                      (record "8a"
-                                              TOKEN
-                                              (list (token "8a" SPINE-DATA 12))
-                                              12)
-                                      (record "4a"
-                                              TOKEN
-                                              (list (token "4a" SPINE-DATA 13))
-                                              13)
-                                      (record "===="
-                                              TOKEN
-                                              (list (token "====" MEASURE 14))
-                                              14)
-                                      (record "*-"
-                                              TOKEN
-                                              (list (token "*-" SPINE-TERMINATOR 15))
-                                              15))))
+(define GERSH-01-FILE-EX
+        (hfile
+          (list (record "!! George Gershwin: (I've Got) Beginner's Luck"
+                        GLOBAL-COMMENT
+                        (list "!! George Gershwin: (I've Got) Beginner's Luck")
+                        0)
+                (record "!! Bumper Book of George Gershwin"
+                        GLOBAL-COMMENT
+                        (list "!! Bumper Book of George Gershwin")
+                        1)
+                (record "!! London: Chappell Music Ltd., 1987; pp.30-33"
+                        GLOBAL-COMMENT
+                        (list "!! London: Chappell Music Ltd., 1987; pp.30-33")
+                        2)
+                (record "**kern"
+                        TOKEN
+                        (list (token "**kern" EXCLUSIVE-INTERPRETATION 3))
+                        3)
+                (record "*M4/4"
+                        TOKEN
+                        (list (token "*M4/4" TIME-SIG 4))
+                        4)
+                (record "*MM[Moderato]"
+                        TOKEN
+                        (list (token "*MM[Moderato]" #f 5))
+                        5)
+                (record "4f#"
+                        TOKEN
+                        (list (token "4f#" SPINE-DATA 6))
+                        6)
+                (record "=1"
+                        TOKEN
+                        (list (token "=1" MEASURE 7))
+                        7)
+                (record "4a"
+                        TOKEN
+                        (list (token "4a" SPINE-DATA 8))
+                        8)
+                (record "8a"
+                        TOKEN
+                        (list (token "8a" SPINE-DATA 9))
+                        9)
+                (record "[8a"
+                        TOKEN
+                        (list (token "[8a" SPINE-DATA 10))
+                        10)
+                (record "8a]"
+                        TOKEN
+                        (list (token "8a]" SPINE-DATA 11))
+                        11)
+                (record "8a"
+                        TOKEN
+                        (list (token "8a" SPINE-DATA 12))
+                        12)
+                (record "4a"
+                        TOKEN
+                        (list (token "4a" SPINE-DATA 13))
+                        13)
+                (record "===="
+                        TOKEN
+                        (list (token "====" MEASURE 14))
+                        14)
+                (record "*-"
+                        TOKEN
+                        (list (token "*-" SPINE-TERMINATOR 15))
+                        15))))
 
 (struct spine-arity (global lolon) #:transparent)
 ; SpineArity is (spine-arity Natural (listof (listof Natural)))

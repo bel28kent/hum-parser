@@ -24,9 +24,10 @@
 
 ; filter-type
 (check-expect (filter-type record-type TOKEN empty) empty)
-(check-expect (map (λ (r) (record-type r)) (filter-type record-type
-                                                        TOKEN
-                                                        (hfile-records (path->hfile BERG-PATH))))
+(check-expect (map (λ (r) (record-type r))
+                   (filter-type record-type
+                                TOKEN
+                                (hfile-records (path->hfile BERG-PATH))))
               (list TOKEN TOKEN TOKEN TOKEN TOKEN
                     TOKEN TOKEN TOKEN TOKEN TOKEN
                     TOKEN TOKEN TOKEN TOKEN TOKEN))

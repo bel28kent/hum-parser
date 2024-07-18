@@ -92,25 +92,28 @@
                                                               (list 1 1))))
 ; lolon
 (check-expect (lolon (list TEST-RECORD-1)) (list (list 1)))
-(check-expect (lolon (filter-type record-type TOKEN (hfile-records BERG))) (list (list 1 1)
-                                                                                 (list 1 1)
-                                                                                 (list 1 1)
-                                                                                 (list 1 1)
-                                                                                 (list 1 1)
-                                                                                 (list 1 1)
-                                                                                 (list 1 1)
-                                                                                 (list 1 1)
-                                                                                 (list 1 1)
-                                                                                 (list 1 1)
-                                                                                 (list 1 1)
-                                                                                 (list 1 1)
-                                                                                 (list 1 1)
-                                                                                 (list 1 1)
-                                                                                 (list 1 1)))
+(check-expect (lolon (filter-type record-type
+                                  TOKEN
+                                  (hfile-records BERG)))
+              (list (list 1 1)
+                    (list 1 1)
+                    (list 1 1)
+                    (list 1 1)
+                    (list 1 1)
+                    (list 1 1)
+                    (list 1 1)
+                    (list 1 1)
+                    (list 1 1)
+                    (list 1 1)
+                    (list 1 1)
+                    (list 1 1)
+                    (list 1 1)
+                    (list 1 1)
+                    (list 1 1)))
 
 ; lon-caller
-(check-expect (lon-caller SPLIT (list 1 1 1)) (list 1 2 1)) ; next record is AFTER-SPLIT
-(check-expect (lon-caller JOIN (list 1 2 1)) (list 1 1 1)) ; next record is AFTER-JOIN
+(check-expect (lon-caller SPLIT (list 1 1 1)) (list 1 2 1))
+(check-expect (lon-caller JOIN (list 1 2 1)) (list 1 1 1))
 (check-expect (lon-caller (record "4a" TOKEN (list (token "4a" SPINE-DATA 9)) 9)
                           (list 1))
               (list 1))
@@ -120,13 +123,14 @@
 (check-expect (previous-spine-struct? TEST-RECORD-2) #t)
 (check-expect (previous-spine-struct? TEST-RECORD-3) #t)
 (check-expect (previous-spine-struct? TEST-RECORD-4) #f)
-(check-expect (previous-spine-struct? (record "*\t*^\t*\t*"
-                                              TOKEN
-                                              (list (token "*" NULL-INTERPRETATION 20)
-                                                    (token "*^" SPINE-SPLIT 20)
-                                                    (token "*" NULL-INTERPRETATION 20)
-                                                    (token "*" NULL-INTERPRETATION 20))
-                                              20))
+(check-expect (previous-spine-struct?
+                (record "*\t*^\t*\t*"
+                        TOKEN
+                        (list (token "*" NULL-INTERPRETATION 20)
+                              (token "*^" SPINE-SPLIT 20)
+                              (token "*" NULL-INTERPRETATION 20)
+                              (token "*" NULL-INTERPRETATION 20))
+                        20))
               #t)
 
 ; split-or-join-token?
@@ -140,20 +144,21 @@
 (check-expect (split-or-join-record TEST-RECORD-2) SPINE-SPLIT)
 (check-expect (split-or-join-record TEST-RECORD-3) SPINE-JOIN)
 (check-expect (split-or-join-record TEST-RECORD-4) #f)
-(check-expect (split-or-join-record (record "*\t*^\t*\t*"
-                                              TOKEN
-                                              (list (token "*" NULL-INTERPRETATION 20)
-                                                    (token "*^" SPINE-SPLIT 20)
-                                                    (token "*" NULL-INTERPRETATION 20)
-                                                    (token "*" NULL-INTERPRETATION 20))
-                                              20))
+(check-expect (split-or-join-record (record
+                                      "*\t*^\t*\t*"
+                                      TOKEN
+                                      (list (token "*" NULL-INTERPRETATION 20)
+                                            (token "*^" SPINE-SPLIT 20)
+                                            (token "*" NULL-INTERPRETATION 20)
+                                            (token "*" NULL-INTERPRETATION 20))
+                                      20))
               SPINE-SPLIT)
 
 ; struct-lon
-(check-expect (struct-lon SPLIT (list 1 1 1)) (list 1 2 1)) ; next record is AFTER-SPLIT
+(check-expect (struct-lon SPLIT (list 1 1 1)) (list 1 2 1))
 (check-expect (struct-lon SPLIT-LEFT (list 1 1 1)) (list 2 1 1))
 (check-expect (struct-lon SPLIT-RIGHT (list 1 1 1)) (list 1 1 2))
-(check-expect (struct-lon JOIN (list 1 2 1)) (list 1 1 1)) ; next record is AFTER-JOIN
+(check-expect (struct-lon JOIN (list 1 2 1)) (list 1 1 1))
 (check-expect (struct-lon JOIN-LEFT (list 2 1 1)) (list 1 1 1))
 (check-expect (struct-lon JOIN-RIGHT (list 1 1 2)) (list 1 1 1))
 

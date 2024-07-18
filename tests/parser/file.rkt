@@ -173,16 +173,19 @@
                                                (list "!!!COM: Berg, Alban")
                                                0))))
                           (list "!!!COM: Berg, Alban"))
-(check-expect (hfile->los (hfile (list (record "!!!COM: Berg, Alban"
-                                               REFERENCE-RECORD
-                                               (list "!!!COM: Berg, Alban")
-                                               0)
-                                       (record "**pc\t**kern"
-                                               TOKEN
-                                               (list (token "**pc" EXCLUSIVE-INTERPRETATION 1)
-                                                     (token "**kern" EXCLUSIVE-INTERPRETATION 1))
-                                               1))))
-                          (list "!!!COM: Berg, Alban" "**pc\t**kern"))
+(check-expect (hfile->los
+                (hfile
+                  (list
+                    (record "!!!COM: Berg, Alban"
+                            REFERENCE-RECORD
+                            (list "!!!COM: Berg, Alban")
+                            0)
+                    (record "**pc\t**kern"
+                            TOKEN
+                            (list (token "**pc" EXCLUSIVE-INTERPRETATION 1)
+                                  (token "**kern" EXCLUSIVE-INTERPRETATION 1))
+                            1))))
+              (list "!!!COM: Berg, Alban" "**pc\t**kern"))
 
 ; write-file
 ; should not be run more than once because file exists

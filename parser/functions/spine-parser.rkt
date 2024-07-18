@@ -33,7 +33,7 @@
 
 ; byrecord->byspine
 ; SpineArity -> (listof (listof Natural))
-; produces the lolon of the spine arity, but numbers grouped by spine instead of record
+; produces lolon of spine arity, but numbers grouped by spine instead of record
 
 (define (byrecord->byspine spine-arity)
   (local [(define number-global-spines (spine-arity-global spine-arity))
@@ -43,10 +43,11 @@
           ; (listof (listof Natural)) -> (listof (listof Natural))
           (define (spine-iterator lolon)
             ; num-spine: Natural. Number of spines processed so far.
-            ; spine-lists: (listof (listof Natural)). list of spine-list fields from byspine
+            ; spine-lists: lolon. list of spine-list fields from byspine
             ;
             (local [(define (iterator num-spine spine-lists acc)
-                      (cond [(= num-spine number-global-spines) (reverse (cons (acc-spine-list acc) spine-lists))]
+                      (cond [(= num-spine number-global-spines)
+                             (reverse (cons (acc-spine-list acc) spine-lists))]
                             [else
                               (iterator (add1 num-spine)
                                         (cons (acc-spine-list acc) spine-lists)
@@ -57,51 +58,64 @@
 
           ; (listof (listof Natural)) -> acc
           (define (byspine lolon)
-            ; spine-list: (listof Natural). list of number of tokens for a spine.
-            ; remaining: (listof (listof Natural)). list of remaining spine numbers.
+            ; spine-list: (listof Natural). list of number tokens for a spine.
+            ; remaining: (listof (listof Natural)). remaining spine numbers.
             ;
             (local [(define (iterator arity spine-list remaining)
-                      (cond [(empty? arity) (acc (reverse spine-list) (reverse remaining))]
+                      (cond [(empty? arity) (acc (reverse spine-list)
+                                                 (reverse remaining))]
                             [else
                               (iterator (rest arity)
-                                        (cons (first (first arity)) spine-list)
-                                        (cons (rest (first arity)) remaining))]))]
+                                        (cons (first (first arity))
+                                              spine-list)
+                                        (cons (rest (first arity))
+                                              remaining))]))]
               (iterator lolon empty empty)))]
     (spine-iterator (spine-arity-lolon spine-arity))))
 
 ; tokens-by-spine
-; (listof (listof Token)) (listof (listof Natural)) -> (listof (listof (listof Token)))
+; (listof (listof Token)) (listof (listof Natural)) ->
+; (listof (listof (listof Token)))
 ; produces the list of lot, separated by spine.
 
 (define (tokens-by-spine unwrapped byspine)
   (local [(struct acc (spine-list remaining))
 
-          ; (listof (listof Token)) (listof (listof Natural)) -> (listof (listof (listof Token)))
+          ; (listof (listof Token)) (listof (listof Natural)) ->
+          ; (listof (listof (listof Token)))
           (define (lolo-iterator lolot lolon)
-            ; spine-list: (listof (listof Token)). Accumulates the output of lon-iterator calls.
+            ; spine-list: (listof (listof Token)). Output of lon-iterator calls.
             ;
             (local [(define (lolo-iterator lolot lolon spine-list)
                       (cond [(andmap empty? lolot) (reverse spine-list)]
                             [else
-                              (local [(define output (lon-iterator lolot (first lolon)))]
+                              (local [(define output
+                                              (lon-iterator lolot
+                                                            (first lolon)))]
                                 (lolo-iterator (acc-remaining output)
                                                (rest lolon)
-                                               (cons (acc-spine-list output) spine-list)))]))]
+                                               (cons (acc-spine-list output)
+                                                     spine-list)))]))]
               (lolo-iterator lolot lolon empty)))
 
           ; (listof (listof Token)) (listof Natural) -> acc
           (define (lon-iterator lolot lon)
-            ; spine-list: (listof (listof Token)). Accumulates output of lot-iterator calls.
-            ; remaining-acc: (listof (listof Token)). Accumulates the remaining tokens after lot-iterator calls.
+            ; spine-list: (listof (listof Token)). Output of lot-iterator calls.
+            ; remaining-acc: (listof (listof Token)). Remaining tokens.
             ;
             (local [(define (lon-iterator lolot lon spine-list remaining-acc)
-                      (cond [(empty? lolot) (acc (reverse spine-list) (reverse remaining-acc))]
+                      (cond [(empty? lolot) (acc (reverse spine-list)
+                                                 (reverse remaining-acc))]
                             [else
-                              (local [(define output (lot-iterator (first lolot) (first lon)))]
+                              (local [(define output
+                                              (lot-iterator (first lolot)
+                                                            (first lon)))]
                                 (lon-iterator (rest lolot)
                                               (rest lon)
-                                              (cons (acc-spine-list output) spine-list)
-                                              (cons (acc-remaining output) remaining-acc)))]))]
+                                              (cons (acc-spine-list output)
+                                                    spine-list)
+                                              (cons (acc-remaining output)
+                                                    remaining-acc)))]))]
               (lon-iterator lolot lon empty empty)))
 
           ; (listof Token) Natural -> acc
@@ -110,9 +124,12 @@
             ; spine-list: (listof Token). List of tokens accumulated so far.
             ;
             (local [(define (lot-iterator lot counter spine-list)
-                      (cond [(= number-tokens counter) (acc (reverse spine-list) lot)]
+                      (cond [(= number-tokens counter) (acc (reverse spine-list)
+                                                            lot)]
                             [else
-                              (lot-iterator (rest lot) (add1 counter) (cons (first lot) spine-list))]))]
+                              (lot-iterator (rest lot)
+                                            (add1 counter)
+                                            (cons (first lot) spine-list))]))]
               (lot-iterator (rest lot) 1 (list (first lot)))))]
     (lolo-iterator unwrapped byspine)))
 
@@ -127,7 +144,10 @@
             (cond [(empty? lololot) (reverse logs)]
                   [else
                     (lololot->logs (rest lololot)
-                                   (cons (global-spine (first lololot) counter) logs)
+                                   (cons (global-spine
+                                           (first lololot)
+                                           counter)
+                                         logs)
                                    (add1 counter))]))]
     (lololot->logs lololot empty 0)))
 
@@ -137,13 +157,14 @@
 
 (define (logs->lolos logs)
   (local [(define (logs-iterator logs)
-            ; lolos: (listof (listof String)). Accumulates los for each global spine.
+            ; lolos: (listof (listof String)). los for each global spine.
             ;
             (local [(define (logs-iterator logs lolos)
                       (cond [(empty? logs) (reverse lolos)]
                             [else
                               (logs-iterator (rest logs)
-                                             (cons (gs->los (first logs)) lolos))]))]
+                                             (cons (gs->los (first logs))
+                                                   lolos))]))]
               (logs-iterator logs empty)))
 
           (define (gs->los gs)
@@ -151,14 +172,21 @@
 
                     (define (lolot-iterator lolot)
                       (local [(define (lolot-iterator lolot los)
-                                ; los: (listof String). list of strings accumulated so far.
+                                ; los: (listof String). list of strings so far.
                                 ;
                                 (cond [(empty? lolot) (reverse los)]
                                       [else
-                                        (lolot-iterator (rest lolot)
-                                                        (cons (gather (foldr (λ (f r) (cons (token-token f) r))
-                                                                             empty
-                                                                             (first lolot))) los))]))]
+                                      (lolot-iterator (rest lolot)
+                                                      (cons
+                                                        (gather
+                                                          (foldr
+                                                            (λ (f r)
+                                                               (cons
+                                                                 (token-token f)
+                                                                 r))
+                                                            empty
+                                                            (first lolot)))
+                                                        los))]))]
                         (lolot-iterator lolot empty)))]
               (lolot-iterator lolot)))]
     (logs-iterator logs)))

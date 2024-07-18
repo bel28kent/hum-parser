@@ -24,7 +24,8 @@
 (check-expect (lololot->logs (tokens-by-spine (list (list KERN-TOKEN))
                                               (list (list 1))))
               (list (global-spine (list (list KERN-TOKEN)) 0)))
-(check-expect (lololot->logs (tokens-by-spine (list (list KERN-TOKEN KERN-TOKEN))
+(check-expect (lololot->logs (tokens-by-spine (list
+                                                (list KERN-TOKEN KERN-TOKEN))
                                               (list (list 1) (list 1))))
               (list (global-spine (list (list KERN-TOKEN)) 0)
                     (global-spine (list (list KERN-TOKEN)) 1)))

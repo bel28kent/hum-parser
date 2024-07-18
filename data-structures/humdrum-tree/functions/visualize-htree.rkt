@@ -27,7 +27,8 @@
 
           (define x-positions (branch-x-positions branch-images))
 
-          (define lower-tree-image (pad-bottom-of-tree (result-images branch-images)))]
+          (define lower-tree-image (pad-bottom-of-tree
+                                     (result-images branch-images)))]
     (add-branch-lines lower-tree-image x-positions)))
 
 ; list-branch-images
@@ -45,16 +46,28 @@
           ; (listof Natural) -> Image
           (define (fn-for-branch branch)
             (cond [(and (empty? (rest branch))
-                        (not (parent? (first branch)))) (node-image (token-token
-                                                                      (leaf-token (first branch))) node-img)]
-                  ; can a parent be the last case in a branch? Subspines should always be merged before spine terminator.
-                  [(empty? (rest branch)) (list-subbranch-images (first branch) node-img)]
-                  [(parent? (first branch)) (above/align "left"
-                                                         (list-subbranch-images (first branch) node-img)
-                                                         (above straight-line
-                                                                (fn-for-branch (rest branch))))]
+                        (not (parent? (first branch)))) (node-image
+                                                          (token-token
+                                                            (leaf-token
+                                                              (first branch)))
+                                                          node-img)]
+                  ; can a parent be the last case in a branch?
+                  ; Subspines should always be merged before spine terminator.
+                  [(empty? (rest branch)) (list-subbranch-images
+                                            (first branch)
+                                            node-img)]
+                  [(parent? (first branch))
+                   (above/align "left"
+                                (list-subbranch-images
+                                  (first branch)
+                                  node-img)
+                                (above straight-line
+                                       (fn-for-branch
+                                         (rest branch))))]
                   [else
-                   (above (node-image (token-token (leaf-token (first branch))) node-img)
+                   (above (node-image
+                            (token-token (leaf-token (first branch)))
+                            node-img)
                           straight-line
                           (fn-for-branch (rest branch)))]))
 
@@ -67,26 +80,32 @@
 
 (define (list-subbranch-images parent node-img)
           ; needs to be HumdrumTree
-  (local [(define subtree (htree (root (list (parent-left parent) (parent-right parent)))))
+  (local [(define subtree (htree
+                            (root (list (parent-left parent)
+                                        (parent-right parent)))))
 
           (define (visualize-subtree subtree)
-            (local [(define branch-images (list-branch-images subtree node-img))
+            (local [(define branch-images (list-branch-images
+                                            subtree node-img))
 
                     (define x-positions (branch-x-positions branch-images))
 
-                    (define lower-tree-image (pad-bottom-of-tree (result-images branch-images)))]
+                    (define lower-tree-image (pad-bottom-of-tree
+                                               (result-images branch-images)))]
               (add-subbranch-lines lower-tree-image x-positions)))
 
           (define (add-subbranch-lines lower-tree-image x-positions)
-            (local [(define half-tree-width (/ (image-width lower-tree-image) 2))
+            (local [(define half-tree-width (/ (image-width lower-tree-image)
+                                               2))
 
                     (define (add-subbranch-lines x-positions)
-                      (cond [(empty? (rest x-positions)) (add-line lower-tree-image
-                                                                   (first x-positions)
-                                                                   0
-                                                                   half-tree-width
-                                                                   -30
-                                                                   "black")]
+                      (cond [(empty? (rest x-positions))
+                             (add-line lower-tree-image
+                                       (first x-positions)
+                                       0
+                                       half-tree-width
+                                       -30
+                                       "black")]
                             [else
                              (add-line (add-subbranch-lines (rest x-positions))
                                        (first x-positions)
@@ -95,7 +114,8 @@
                                        0
                                        "black")]))]
               (above/align "center"
-                           (node-image (token-token (parent-token parent)) node-img)
+                           (node-image (token-token (parent-token parent))
+                                       node-img)
                            (add-subbranch-lines x-positions))))]
     (visualize-subtree subtree)))
 
@@ -133,29 +153,43 @@
 
 ; branch-x-positions
 ; Result -> (listof Natural)
-; produces the list of x positions where lines from top node will connect with top of branch
+; produces list of x positions where top node lines will meet top of branches
 
 (define (branch-x-positions result)
   (local [; width of each branch
           (define branch-widths (result-widths result))
 
           ; width of padding rectangle
-          (define pad-width (image-width (pad (image-height (first (result-images result))))))
+          (define pad-width (image-width
+                              (pad
+                                (image-height
+                                  (first (result-images result))))))
 
           ; width of bottom image
-          (define tree-width (image-width (pad-bottom-of-tree (result-images result))))
+          (define tree-width (image-width
+                               (pad-bottom-of-tree (result-images result))))
 
           (define (x-positions branch-widths)
             ; prev-x. Natural. The x position of the previous line.
             ; prev-midpoint. Natural. The midpoint of the previous branch.
             (local [(define (x-positions branch-widths prev-x prev-midpoint acc)
-                      (cond [(empty? (rest branch-widths)) (reverse
-                                                             (cons (- tree-width (/ (first branch-widths) 2)) acc))]
+                      (cond [(empty? (rest branch-widths))
+                             (reverse
+                               (cons (- tree-width
+                                        (/ (first branch-widths) 2))
+                                     acc))]
                             [else
                              (x-positions (rest branch-widths)
-                                          (+ prev-x prev-midpoint pad-width (/ (first branch-widths) 2))
+                                          (+ prev-x
+                                             prev-midpoint
+                                             pad-width
+                                             (/ (first branch-widths) 2))
                                           (/ (first branch-widths) 2)
-                                          (cons (+ prev-x prev-midpoint pad-width (/ (first branch-widths) 2)) acc))]))]
+                                          (cons (+ prev-x
+                                                   prev-midpoint
+                                                   pad-width
+                                                   (/ (first branch-widths) 2))
+                                                acc))]))]
               (if (= 1 (length branch-widths))
                   (list (/ (first branch-widths) 2))
                   (x-positions (rest branch-widths)
@@ -172,7 +206,12 @@
   (local [(define half-tree-width (/ (image-width tree-image) 2))
 
           (define (add-branch-lines x-positions)
-            (cond [(empty? (rest x-positions)) (add-line tree-image (first x-positions) 0 half-tree-width -30 "black")]
+            (cond [(empty? (rest x-positions)) (add-line tree-image
+                                                         (first x-positions)
+                                                         0
+                                                         half-tree-width
+                                                         -30
+                                                         "black")]
                   [else
                    (add-line (add-branch-lines (rest x-positions))
                              (first x-positions)
@@ -191,16 +230,20 @@
 (define (get-diameter htree)
   (local [(define (fn-for-root root)
             (local [(define (iterator branches longest)
-                      (cond [(empty? branches) (image-width (text longest 12 "black"))]
+                      (cond [(empty? branches) (image-width
+                                                 (text longest 12 "black"))]
                             [else
                               (iterator (rest branches)
-                                        (fn-for-lon (first branches) longest))]))]
+                                        (fn-for-lon
+                                          (first branches)
+                                          longest))]))]
               (iterator (root-branches root) "")))
 
           (define (fn-for-lon branch longest)
             (cond [(empty? branch) longest]
                   [else
-                    (local [(define result (fn-for-node (first branch) longest))]
+                    (local [(define result (fn-for-node (first branch)
+                                                        longest))]
                       (if (> (string-length result)
                              (string-length longest))
                           (fn-for-lon (rest branch) result)
@@ -221,7 +264,8 @@
                     (define left-str (fn-for-lon (parent-left parent) longest))
                     (define left-str-length (string-length left-str))
 
-                    (define right-str (fn-for-lon (parent-right parent) longest))
+                    (define right-str (fn-for-lon (parent-right parent)
+                                                  longest))
                     (define right-str-length (string-length right-str))]
               (cond [(and (> parent-str-length left-str-length)
                           (> parent-str-length right-str-length)) parent-str]

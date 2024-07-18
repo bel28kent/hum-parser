@@ -40,8 +40,9 @@
                                 (rid-tandem-interpretations
                                   (rid-empty-interpretations
                                     (rid-data-records
-                                      (rid-null-data-records (hfile-records
-                                                               (path->hfile filename)))))))))))))))
+                                      (rid-null-data-records
+                                        (hfile-records
+                                          (path->hfile filename)))))))))))))))
 
 ; output
 ; (listof Record) -> (void)
@@ -113,7 +114,8 @@
 (define (rid-interpretations lor)
   (local [(define (not-interpretation? r)
             (not (and (string=? TOKEN (record-type r))
-                      (interpretation? (token-token (first (record-split r)))))))]
+                      (interpretation?
+                        (token-token (first (record-split r)))))))]
     (if (interpretations)
         (filter not-interpretation? lor)
         lor)))
@@ -125,7 +127,8 @@
 (define (rid-tandem-interpretations lor)
   (local [(define (not-tandem-interpretation? r)
             (not (and (string=? TOKEN (record-type r))
-                      (tandem-interpretation? (token-token (first (record-split r)))))))]
+                      (tandem-interpretation?
+                        (token-token (first (record-split r)))))))]
     (if (tandem)
         (filter not-tandem-interpretation? lor)
         lor)))
@@ -141,7 +144,9 @@
 
           (define (empty-interpretation? split)
             (cond [(empty? split) #t]
-                  [(not (string=? NULL-INTERPRETATION (token-type (first split)))) #f]
+                  [(not (string=? NULL-INTERPRETATION
+                                  (token-type (first split))))
+                        #f]
                   [else
                     (empty-interpretation? (rest split))]))]
     (if (e)
@@ -158,7 +163,8 @@
                 (string=? GLOBAL-COMMENT (record-type r))
                 (string=? LOCAL-COMMENT (record-type r))
                 (and (string=? TOKEN (record-type r))
-                     (interpretation? (token-token (first (record-split r)))))))]
+                     (interpretation?
+                       (token-token (first (record-split r)))))))]
     (if (spine)
         (filter not-data-record? lor)
         lor)))
@@ -174,7 +180,9 @@
 
           (define (null-data-record? split)
             (cond [(empty? split) #t]
-                  [(not (string=? NULL-SPINE-DATA (token-type (first split)))) #f]
+                  [(not (string=? NULL-SPINE-DATA
+                                  (token-type (first split))))
+                        #f]
                   [else
                     (null-data-record? (rest split))]))]
     (if (n)
@@ -183,23 +191,29 @@
 
 ; rid-duplicate-exclusive-interpretations
 ; (listof Record) -> (listof Record)
-; filters records with exclusive interpretations that occur after the exclusive interpretation record
+; filters exclusive interpretations after first exclusive interpretation record
 
 (define (rid-duplicate-exclusive-interpretations lor)
   (local [(define (find-first-exclusive-record-number lor)
             (cond [(empty? lor) -1] ; records use zero-based indexing
                   [(and (string=? TOKEN (record-type (first lor)))
                         (string=? EXCLUSIVE-INTERPRETATION
-                                  (token-type (first (record-split (first lor)))))) (record-record-number (first lor))]
+                                  (token-type
+                                    (first
+                                      (record-split (first lor))))))
+                   (record-record-number (first lor))]
                   [else
                     (find-first-exclusive-record-number (rest lor))]))
 
-          (define first-exclusive-record-number (find-first-exclusive-record-number lor))
+          (define first-exclusive-record-number
+                  (find-first-exclusive-record-number lor))
 
           (define (not-duplicate-exclusive-interpretation? r)
             (not (and (string=? TOKEN (record-type r))
-                      (ormap exclusive-interpretation? (map (λ (t) (token-token t)) (record-split r)))
-                      (> (record-record-number r) first-exclusive-record-number))))]
+                      (ormap exclusive-interpretation?
+                             (map (λ (t) (token-token t)) (record-split r)))
+                      (> (record-record-number r)
+                         first-exclusive-record-number))))]
       (if (duplicates)
           (if (= -1 first-exclusive-record-number)
               lor

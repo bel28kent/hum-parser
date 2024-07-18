@@ -37,7 +37,8 @@
 ; produce true if string is a type of metadata
 
 (define (metadata? string)
-  (ormap true? (valmap string (list reference? global-comment? local-comment?))))
+  (ormap true?
+         (valmap string (list reference? global-comment? local-comment?))))
 
 ; is-token?
 ; String -> Boolean
@@ -129,7 +130,8 @@
 ; produce true if string is spine split, spine join, or terminator
 
 (define (spine-structure? token)
-  (ormap true? (valmap token (list spine-split? spine-join? spine-terminator?))))
+  (ormap true?
+         (valmap token (list spine-split? spine-join? spine-terminator?))))
 
 ; measure?
 ; String -> Boolean
@@ -186,7 +188,12 @@
 ; produce true if string is not METADATA and is not another TOKEN type
 
 (define (spine-data? token)
-  (andmap not (valmap token (list metadata? interpretation? spine-structure? measure? null-spine-data?))))
+  (andmap not
+          (valmap token (list metadata?
+                              interpretation?
+                              spine-structure?
+                              measure?
+                              null-spine-data?))))
 
 ; null-spine-data?
 ; String -> Boolean
