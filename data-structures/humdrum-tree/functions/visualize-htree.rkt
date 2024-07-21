@@ -13,6 +13,7 @@
 
 (define straight-line (line 0 30 "black"))
 (define top-node (circle 5 "outline" "black"))
+(define pad-width 50)
 
 (struct result (images widths) #:transparent)
 
@@ -45,25 +46,31 @@
 
           ; (listof Natural) -> Image
           (define (fn-for-branch branch)
-            (cond [(and (empty? (rest branch))
-                        (not (parent? (first branch)))) (node-image
-                                                          (token-token
-                                                            (leaf-token
-                                                              (first branch)))
-                                                          node-img)]
-                  ; can a parent be the last case in a branch?
-                  ; Subspines should always be merged before spine terminator.
-                  [(empty? (rest branch)) (list-subbranch-images
-                                            (first branch)
-                                            node-img)]
+            (cond [(empty? (rest branch)) (node-image (token-token
+                                                        (leaf-token
+                                                          (first branch)))
+                                                      node-img)]
                   [(parent? (first branch))
-                   (above/align "left"
-                                (list-subbranch-images
-                                  (first branch)
-                                  node-img)
-                                (above straight-line
-                                       (fn-for-branch
-                                         (rest branch))))]
+                   (local [(define top-image (subbranch-image
+                                               (first branch)
+                                               node-img))
+
+                           (define width-top-image (image-width top-image))
+
+                           (define bottom-image (fn-for-branch (rest branch)))
+
+                           (define padding-rectangle
+                                   (rectangle (* (+ (image-width node-img)
+                                                    pad-width)
+                                                 (factor top-image node-img))
+                                              (image-height bottom-image)
+                                              "outline"
+                                              "white"))]
+                     (above top-image
+                            (beside
+                              (above straight-line
+                                     bottom-image)
+                              padding-rectangle)))]
                   [else
                    (above (node-image
                             (token-token (leaf-token (first branch)))
@@ -74,11 +81,11 @@
           (define rnr (fn-for-root (root-branches (htree-root htree))))]
     (result rnr (map image-width rnr))))
 
-; list-subbranch-images
+; subbranch-image
 ; Parent -> Image
 ; handles parent images
 
-(define (list-subbranch-images parent node-img)
+(define (subbranch-image parent node-img)
           ; needs to be HumdrumTree
   (local [(define subtree (htree
                             (root (list (parent-left parent)
@@ -133,7 +140,7 @@
 
 ; assumes naive layered
 (define (pad height)
-  (rectangle 50 height "outline" "white"))
+  (rectangle pad-width height "outline" "white"))
 
 ; pad-bottom-of-tree
 ; (listof Image) -> Image
@@ -222,6 +229,17 @@
     (above/align "center"
                  top-node
                  (add-branch-lines x-positions))))
+
+; factor
+; Image -> Natural
+; produces a natural corresponding to one less than number of spines in parent
+
+; TODO: could return zero
+(define (factor parent-image node-img)
+  (local [(define width-parent-image (image-width parent-image))
+
+          (define width-node-img (image-width node-img))]
+    (sub1 (round (/ width-parent-image (+ width-node-img pad-width))))))
 
 ; get-diameter
 ; HumdrumTree -> Natural

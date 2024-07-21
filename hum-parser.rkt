@@ -21,11 +21,11 @@
 (module data-structures racket/base
   (require  "data-structures/humdrum-tree/data-definitions/data-definitions.rkt"
             "data-structures/humdrum-tree/functions/hfile-to-htree.rkt"
-            "data-structures/humdrum-tree/functions/htree-to-str.rkt"
+            ;"data-structures/humdrum-tree/functions/htree-to-str.rkt"
             "data-structures/humdrum-tree/functions/visualize-htree.rkt")
   (provide  (all-from-out "data-structures/humdrum-tree/data-definitions/data-definitions.rkt")
             (all-from-out "data-structures/humdrum-tree/functions/hfile-to-htree.rkt")
-            (all-from-out "data-structures/humdrum-tree/functions/htree-to-str.rkt")
+            ;(all-from-out "data-structures/humdrum-tree/functions/htree-to-str.rkt")
             (all-from-out "data-structures/humdrum-tree/functions/visualize-htree.rkt")))
 
 (require 'parser
