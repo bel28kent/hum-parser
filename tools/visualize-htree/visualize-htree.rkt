@@ -32,7 +32,7 @@
                                                     filename)))]
     (string-append without-extension "-htree.svg")))
 
-(define visualize-htree
+(define visualize-htree-cmd
   (command-line
     #:args (filename)
     (htree-svg filename)))
