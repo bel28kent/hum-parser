@@ -6,6 +6,34 @@
 
 (require "../../../parser/data-definitions/data-definitions.rkt")
 
+#|
+    A HumdrumTree is a tree with an arbitrary number of branches.
+    Each branch in the tree represents one global spine in a
+    Humdrum file. Branches are ordered; the leftmost branch of the
+    tree is the leftmost spine of the Humdrum file.
+
+    A branch is a list of nodes. This list is also ordered, with the
+    first node of each branch being the exclusive interpretation
+    of the corresponding spine, and the remaining tokens following
+    in the order that they would be read in a file.
+
+    A node is either a leaf or a parent. A leaf represents a single
+    token. A parent represents a spine split that creates a left and
+    right sub-branch.
+
+    The HumdrumTree differs from the HumdrumGraph in the traversal of
+    a branch after a parent. In a HumdrumTree, the traversal should
+    continue from the left side of the parent. Trees do not allow for
+    joins, so the traversal cannot continue from both sub-branches.
+    Spine joins are interpreted as joining the right sub-branch with
+    the left sub-branch. When recursing through a HumdrumTree, the
+    result of the recursive call on the rest of a branch should then be
+    combined with the result of the function call on the left sub-branch
+    of the parent. The exact implementation of this combination will
+    vary between programs; the function templates provide abstract
+    examples of how this can be done.
+|#
+
 (provide (all-defined-out))
 
 (struct htree (root) #:transparent)
@@ -39,10 +67,10 @@
 ;;  For examples of more complicated data, see
 ;;  tests/data-structures/humdrum-tree/hfile-to-htree.rkt
 
-; Empty humdrum tree
+; Empty HumdrumTree
 (define EMPTY-HTREE (htree (root empty)))
 
-; Humdrum tree with one spine, no splits
+; HumdrumTree with one spine, no splits
 (define SIMPLE-HTREE (htree
                        (root
                          (list
@@ -51,7 +79,7 @@
                              (leaf (token "4a" SPINE-DATA 1))
                              (leaf (token "4b" SPINE-DATA 2)))))))
 
-; Humdrum tree with two spines, no splits
+; HumdrumTree with two spines, no splits
 (define HTREE-TWO-SPINES
         (htree
           (root
@@ -63,7 +91,7 @@
                     (leaf (token "f" #f 1))
                     (leaf (token "p" #f 2)))))))
 
-; Humdrum tree with one spine, splits
+; HumdrumTree with one spine, splits
 (define HTREE-ONE-SPLITS
         (htree
           (root

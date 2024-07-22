@@ -1,8 +1,8 @@
 #lang racket
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data structures: HumdrumTree w/ lists
-;;    Templates
+;; hum-parser: data structures: HumdrumTree
+;;    Function templates
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "../data-definitions/data-definitions.rkt")
@@ -30,22 +30,17 @@
 
           (define (fn-for-lon branch)
             (cond [(empty? branch) ...]
-                  [else
-                    (... (fn-for-node (first branch))
-                         (fn-for-lon (rest branch)))]))
-
-          (define (fn-for-node node)
-            (cond [(leaf? node) (fn-for-leaf node)]
-                  [else
-                    (fn-for-parent node)]))
+                  [(leaf? (first branch)) (... (fn-for-leaf (first branch))
+                                               (fn-for-lon (rest branch)))]
+                  [else ; parent case
+                    (... (fn-for-token (parent-token (first branch)))
+                         ; combination of parent left with data after parent
+                         (... (fn-for-lon (parent-left (first branch)))
+                              (fn-for-lon (rest branch)))
+                         (fn-for-lon (parent-right (first branch))))]))
 
           (define (fn-for-leaf leaf)
             (... (fn-for-token (leaf-token leaf))))
-
-          (define (fn-for-parent parent)
-            (... (fn-for-token (parent-token parent))
-                 (fn-for-lon (parent-left parent))
-                 (fn-for-lon (parent-right parent))))
 
           (define (fn-for-token token)
             (... (token-token token)
@@ -65,4 +60,51 @@
 ;;    otherwise they will be lost in the recursion.
 ;;
 ;;    This traversal is akin to a harmonic analysis, considering
-;;    all notes that are sounding simultaenously.
+;;    all notes that are sounding simultaneously. Note, though,
+;;    that this template treats each node as it is encountered.
+;;    If the user wants to treat all nodes at one level together,
+;;    then a second accumulator must be added that accumulates the
+;;    first of each branch, and only calls the analysis function
+;;    when the (empty? branches) is reached, passing that second
+;;    accumulator to the analysis function.
+
+(define (fn-for-htree htree)
+  (local [(define (fn-for-root root)
+                    ; acc. (listof (listof Node)). the rest of each branch.
+            (local [(define (iterator branches acc)
+                      (cond [(and (empty? branches) (empty? acc)) ...]
+                            [(and (empty? branches)
+                                  (not (empty? acc))) (iterator
+                                                        (reverse acc)
+                                                        empty)]
+                            [else
+                              (local [(define fof (first (first branches)))
+
+                                      (define result
+                                              (cond [(leaf? fof)
+                                                     (fn-for-leaf fof)]
+                                                    [(parent? fof)
+                                                     (fn-for-leaf
+                                                       (parent-token fof))]))]
+                                (... result
+                                     (iterator (rest branches)
+                                               (if (parent? fof)
+                                                   (cons
+                                                     (parent-right fof)
+                                                       (cons
+                                                         (parent-left fof)
+                                                           acc))
+                                                   (cons
+                                                     (rest
+                                                       (first branches))
+                                                     acc)))))]))]
+              (iterator (root-branches root) empty)))
+
+          (define (fn-for-leaf leaf)
+            (... (fn-for-token (leaf-token leaf))))
+
+          (define (fn-for-token token)
+            (... (token-token token)
+                 (token-type token)
+                 (token-record-number token)))]
+    (... (fn-for-root (htree-root htree)))))
