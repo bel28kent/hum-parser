@@ -1,6 +1,6 @@
 # Programmer:  Bryan Jacob Bell
 # Begun:       19 June 2024
-# Modified:    01 July 2024
+# Modified:    22 July 2024
 # File:        Makefile
 # Syntax:      GNU make
 # Description: makes executables
@@ -63,7 +63,7 @@ bin:
 ####################
 ##  tools
 
-tools: ridkt hum-type spine-arity
+tools: ridkt hum-type spine-arity visualize-htree
 
 ridkt:
 	@echo "Making ridkt executable"
@@ -77,10 +77,15 @@ spine-arity:
 	@echo "Making spine-arity executable"
 	@raco exe tools/spine-arity/spine-arity.rkt
 
+visualize-htree:
+	@echo "Making visualize-htree executable"
+	@raco exe tools/visualize-htree/visualize-htree.rkt
+
 ####################
 ##  move
 
-move: ridkt-move hum-type-move spine-arity-move
+move: ridkt-move hum-type-move spine-arity-move \
+      visualize-htree-move
 
 ridkt-move:
 	@echo "Moving ridkt executable to hum-parser/bin"
@@ -94,11 +99,16 @@ spine-arity-move:
 	@echo "Moving spine-arity executable to hum-parser/bin"
 	@mv tools/spine-arity/spine-arity $(BINDIR)
 
+visualize-htree-move:
+	@echo "Moving visualize-htree executable to hum-parser/bin"
+	@mv tools/visualize-htree/visualize-htree $(BINDIR)
+
 ####################
 ##  uninstall
 
 uninstall: un-ridkt un-hum-type \
-           un-spine-arity un-bin
+           un-spine-arity un-visualize-htree \
+           un-bin
 
 un-ridkt:
 	@echo "Uninstalling ridkt executable"
@@ -111,6 +121,10 @@ un-hum-type:
 un-spine-arity:
 	@echo "Uninstalling spine-arity executable"
 	@rm bin/spine-arity
+
+un-visualize-htree:
+	@echo "Uninstalling visualize-htree executable"
+	@rm bin/visualize-htree
 
 un-bin:
 	@echo "Uninstalling hum-parser/bin"
