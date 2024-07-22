@@ -59,48 +59,48 @@
 
 ;; Harmonic or Breadth-first traversal
 ;; (Recursion with accumulators)
-;;    This template starts at the root of the graph, pursues
-;;    the leftmost branch to start, and then cuts horizontally
-;;    across the graph. After cutting across, the traversal then
-;;    takes the next node in the leftmost branch, and again
-;;    cuts across to the rightmost branch. This method requires
-;;    accumulating (keeping track of) the remaining nodes in the
-;;    branches that will not be visited until the next cut;
-;;    otherwise they will be lost in the recursion.
-;;
-;;    This traversal is akin to a harmonic analysis, considering
-;;    all notes that are sounding simultaneously.
+;;    This template uses HumdrumGraph as the type of the function's
+;;    parameter, but otherwise is identical to the harmonic traversal
+;;    template for a HumdrumTree. Because the traversal is cutting
+;;    across the data structure, the graph's joins make no difference.
 
-(define (fn-for-htree htree)
+(define (fn-for-hgraph hgraph)
   (local [(define (fn-for-root root)
-            (local [(define (iterator branches)
-                      (cond [(empty? branches) ...]
+                    ; acc. (listof (listof Node)). the rest of each branch.
+            (local [(define (iterator branches acc)
+                      (cond [(and (empty? branches) (empty? acc)) ...]
+                            [(and (empty? branches)
+                                  (not (empty? acc))) (iterator
+                                                        (reverse acc)
+                                                        empty)]
                             [else
-                              (... (fn-for-lon (first branches))
-                                   (iterator (rest branches)))]))]
-              (iterator (root-branches root))))
+                              (local [(define fof (first (first branches)))
 
-          (define (fn-for-lon branch)
-            (cond [(empty? branch) ...]
-                  [else
-                    (... (fn-for-node (first branch))
-                         (fn-for-lon (rest branch)))]))
-
-          (define (fn-for-node node)
-            (cond [(leaf? node) (fn-for-leaf node)]
-                  [else
-                    (fn-for-parent node)]))
+                                      (define result
+                                              (cond [(leaf? fof)
+                                                     (fn-for-leaf fof)]
+                                                    [(parent? fof)
+                                                     (fn-for-leaf
+                                                       (parent-token fof))]))]
+                                (... result
+                                     (iterator (rest branches)
+                                               (if (parent? fof)
+                                                   (cons
+                                                     (parent-right fof)
+                                                       (cons
+                                                         (parent-left fof)
+                                                           acc))
+                                                   (cons
+                                                     (rest
+                                                       (first branches))
+                                                     acc)))))]))]
+              (iterator (root-branches root) empty)))
 
           (define (fn-for-leaf leaf)
             (... (fn-for-token (leaf-token leaf))))
-
-          (define (fn-for-parent parent)
-            (... (fn-for-token (parent-token parent))
-                 (fn-for-lon (parent-left parent))
-                 (fn-for-lon (parent-right parent))))
 
           (define (fn-for-token token)
             (... (token-token token)
                  (token-type token)
                  (token-record-number token)))]
-    (... (fn-for-root (htree-root htree)))))
+    (... (fn-for-root (hgraph-root hgraph)))))
