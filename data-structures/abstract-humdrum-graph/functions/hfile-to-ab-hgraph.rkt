@@ -1,9 +1,10 @@
 #lang racket
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data structures: HumdrumTree
-;;    hfile->htree: converts HumdrumFile to HumdrumTree
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; hum-parser: data structures: AbstractHumdrumGraph
+;;    hfile->ab-hgraph: Converts HumdrumFile to AbstractHumdrumGraph
+;;        or one of its subtypes
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "../../../parser/data-definitions/data-definitions.rkt"
          (only-in "../../../parser/functions/predicates.rkt"
@@ -12,7 +13,7 @@
                   spine-parser)
          "../data-definitions/data-definitions.rkt")
 
-(provide hfile->htree)
+(provide hfile->ab-hgraph)
 
 #|
     ASSUMPTIONS:
@@ -24,11 +25,11 @@
            spine split creates too many corner cases.)
 |#
 
-; hfile->htree
-; HumdrumFile -> HumdrumTree
-; converts the HumdrumFile to a HumdrumTree
+; hfile->ab-hgraph
+; HumdrumFile Type -> AbstractHumdrumGraph
+; converts the HumdrumFile to an AbstractHumdrumGraph or one of its subtypes
 
-(define (hfile->htree hfile)
+(define (hfile->ab-hgraph hfile type)
   (local [(define spines (spine-parser hfile))
 
           (define (fn-for-logs logs)
@@ -194,4 +195,4 @@
                                            (cons (parent-token (first branch))
                                                  acc))]))]
               (branch->lot branch empty)))]
-    (htree (root (fn-for-logs spines)))))
+    (type (root (fn-for-logs spines)))))

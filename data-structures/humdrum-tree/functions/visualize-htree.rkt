@@ -6,6 +6,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "../../../parser/data-definitions/data-definitions.rkt"
+         "../../abstract-humdrum-graph/data-definitions/data-definitions.rkt"
          "../data-definitions/data-definitions.rkt"
          2htdp/image)
 
@@ -78,7 +79,9 @@
                           straight-line
                           (fn-for-branch (rest branch)))]))
 
-          (define rnr (fn-for-root (root-branches (htree-root htree))))]
+          (define rnr (fn-for-root
+                        (root-branches
+                          (abstract-humdrum-graph-root htree))))]
     (result rnr (map image-width rnr))))
 
 ; subbranch-image
@@ -292,4 +295,4 @@
 
           (define (fn-for-token token)
             (token-token token))]
-    (fn-for-root (htree-root htree))))
+    (fn-for-root (abstract-humdrum-graph-root htree))))

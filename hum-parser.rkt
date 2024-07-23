@@ -19,14 +19,16 @@
             (all-from-out "parser/functions/type.rkt")))
 
 (module data-structures racket/base
-  (require  "data-structures/humdrum-tree/data-definitions/data-definitions.rkt"
-            "data-structures/humdrum-tree/functions/hfile-to-htree.rkt"
-            ;"data-structures/humdrum-tree/functions/htree-to-str.rkt"
-            "data-structures/humdrum-tree/functions/visualize-htree.rkt")
-  (provide  (all-from-out "data-structures/humdrum-tree/data-definitions/data-definitions.rkt")
-            (all-from-out "data-structures/humdrum-tree/functions/hfile-to-htree.rkt")
-            ;(all-from-out "data-structures/humdrum-tree/functions/htree-to-str.rkt")
-            (all-from-out "data-structures/humdrum-tree/functions/visualize-htree.rkt")))
+  (require  "data-structures/abstract-humdrum-graph/data-definitions/data-definitions.rkt"
+            "data-structures/abstract-humdrum-graph/functions/hfile-to-ab-hgraph.rkt"
+            "data-structures/humdrum-tree/data-definitions/data-definitions.rkt"
+            "data-structures/humdrum-tree/functions/visualize-htree.rkt"
+            "data-structures/humdrum-graph/data-definitions/data-definitions.rkt")
+  (provide  (all-from-out "data-structures/abstract-humdrum-graph/data-definitions/data-definitions.rkt")
+            (all-from-out "data-structures/abstract-humdrum-graph/functions/hfile-to-ab-hgraph.rkt")
+            (all-from-out "data-structures/humdrum-tree/data-definitions/data-definitions.rkt")
+            (all-from-out "data-structures/humdrum-tree/functions/visualize-htree.rkt")
+            (all-from-out "data-structures/humdrum-graph/data-definitions/data-definitions.rkt")))
 
 (require 'parser
          'data-structures)
