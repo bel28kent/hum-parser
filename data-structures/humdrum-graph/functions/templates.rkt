@@ -59,48 +59,4 @@
 
 ;; Harmonic or Breadth-first traversal
 ;; (Recursion with accumulators)
-;;    This template uses HumdrumGraph as the type of the function's
-;;    parameter, but otherwise is identical to the harmonic traversal
-;;    template for a HumdrumTree. Because the traversal is cutting
-;;    across the data structure, the graph's joins make no difference.
-
-(define (fn-for-hgraph hgraph)
-  (local [(define (fn-for-root root)
-                    ; acc. (listof (listof Node)). the rest of each branch.
-            (local [(define (iterator branches acc)
-                      (cond [(and (empty? branches) (empty? acc)) ...]
-                            [(and (empty? branches)
-                                  (not (empty? acc))) (iterator
-                                                        (reverse acc)
-                                                        empty)]
-                            [else
-                              (local [(define fof (first (first branches)))
-
-                                      (define result
-                                              (cond [(leaf? fof)
-                                                     (fn-for-leaf fof)]
-                                                    [(parent? fof)
-                                                     (fn-for-leaf
-                                                       (parent-token fof))]))]
-                                (... result
-                                     (iterator (rest branches)
-                                               (if (parent? fof)
-                                                   (cons
-                                                     (parent-right fof)
-                                                       (cons
-                                                         (parent-left fof)
-                                                           acc))
-                                                   (cons
-                                                     (rest
-                                                       (first branches))
-                                                     acc)))))]))]
-              (iterator (root-branches root) empty)))
-
-          (define (fn-for-leaf leaf)
-            (... (fn-for-token (leaf-token leaf))))
-
-          (define (fn-for-token token)
-            (... (token-token token)
-                 (token-type token)
-                 (token-record-number token)))]
-    (... (fn-for-root (hgraph-root hgraph)))))
+;;    See ../../abstract-humdrum-graph/functions/templates.rkt
