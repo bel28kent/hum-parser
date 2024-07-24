@@ -1,16 +1,16 @@
 #lang racket
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data-structures: HumdrumTree
-;;   tests for hfile->htree
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; hum-parser: data-structures: AbstractHumdrumGraph
+;;   tests for hfile->ab-hgraph
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require
-   "../../../parser/data-definitions/data-definitions.rkt"
-   (only-in "../../../parser/functions/file.rkt" path->hfile)
-   "../../../data-structures/humdrum-tree/data-definitions/data-definitions.rkt"
-   "../../../data-structures/humdrum-tree/functions/hfile-to-htree.rkt"
-   test-engine/racket-tests)
+  "../../../parser/data-definitions/data-definitions.rkt"
+  (only-in "../../../parser/functions/file.rkt" path->hfile)
+  "../../../data-structures/abstract-humdrum-graph/data-definitions/data-definitions.rkt"
+  "../../../data-structures/abstract-humdrum-graph/functions/hfile-to-ab-hgraph.rkt"
+  test-engine/racket-tests)
 
 (define one-spine-no-splits    "../data/one-spine-no-splits.krn")
 (define one-spine-one-split    "../data/one-spine-one-split.krn")
@@ -36,9 +36,9 @@
   (path->hfile three-spines-two-splits-not-consecutive-2))
 (define four-cases-hfile             (path->hfile four-cases))
 
-; hfile->htree
-(check-expect (hfile->htree one-spine-no-splits-hfile)
-              (htree
+; hfile->ab-hgraph
+(check-expect (hfile->ab-hgraph one-spine-no-splits-hfile ab-hgraph)
+              (ab-hgraph
                 (root
                   (list (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
                               (leaf (token "*clefG2" CLEF 1))
@@ -52,8 +52,8 @@
                               (leaf (token "4a" SPINE-DATA 9))
                               (leaf (token "==" MEASURE 10))
                               (leaf (token "*-" SPINE-TERMINATOR 11)))))))
-(check-expect (hfile->htree one-spine-one-split-hfile)
-              (htree
+(check-expect (hfile->ab-hgraph one-spine-one-split-hfile ab-hgraph)
+              (ab-hgraph
                 (root
                   (list (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
                               (leaf (token "*clefG2" CLEF 1))
@@ -73,8 +73,8 @@
                                             (leaf (token "*v" SPINE-JOIN 11))))
                               (leaf (token "==" MEASURE 12))
                               (leaf (token "*-" SPINE-TERMINATOR 13)))))))
-(check-expect (hfile->htree one-spine-two-splits-hfile)
-  (htree
+(check-expect (hfile->ab-hgraph one-spine-two-splits-hfile ab-hgraph)
+  (ab-hgraph
     (root
       (list
         (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
@@ -105,8 +105,8 @@
                             (leaf (token "*v" SPINE-JOIN 13))))
               (leaf (token "==" MEASURE 14))
               (leaf (token "*-" SPINE-TERMINATOR 15)))))))
-(check-expect (hfile->htree two-spines-no-splits-hfile)
-              (htree
+(check-expect (hfile->ab-hgraph two-spines-no-splits-hfile ab-hgraph)
+              (ab-hgraph
                 (root
                   (list
                     (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
@@ -133,8 +133,8 @@
                           (leaf (token "." NULL-SPINE-DATA 9))
                           (leaf (token "==" MEASURE 10))
                           (leaf (token "*-" SPINE-TERMINATOR 11)))))))
-(check-expect (hfile->htree two-spines-one-splits-hfile)
-              (htree
+(check-expect (hfile->ab-hgraph two-spines-one-splits-hfile ab-hgraph)
+              (ab-hgraph
                 (root
                   (list
                     (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
@@ -169,8 +169,8 @@
                           (leaf (token "*" NULL-INTERPRETATION 11))
                           (leaf (token "==" MEASURE 12))
                           (leaf (token "*-" SPINE-TERMINATOR 13)))))))
-(check-expect (hfile->htree two-spines-both-split-hfile)
-              (htree
+(check-expect (hfile->ab-hgraph two-spines-both-split-hfile ab-hgraph)
+              (ab-hgraph
                (root
                  (list
                    (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
@@ -217,8 +217,9 @@
                          (leaf (token "*" NULL-INTERPRETATION 13))
                          (leaf (token "==" MEASURE 14))
                          (leaf (token "*-" SPINE-TERMINATOR 15)))))))
-(check-expect (hfile->htree three-spines-two-splits-not-consecutive-hfile)
-(htree
+(check-expect (hfile->ab-hgraph three-spines-two-splits-not-consecutive-hfile
+                                ab-hgraph)
+(ab-hgraph
   (root
     (list
       (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
@@ -447,8 +448,9 @@
             (leaf (token "*" NULL-INTERPRETATION 50))
             (leaf (token "==" MEASURE 51))
             (leaf (token "*-" SPINE-TERMINATOR 52)))))))
-(check-expect (hfile->htree three-spines-two-splits-not-consecutive-2-hfile)
-  (htree
+(check-expect (hfile->ab-hgraph three-spines-two-splits-not-consecutive-2-hfile
+                                ab-hgraph)
+  (ab-hgraph
     (root
       (list
         (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
@@ -676,8 +678,8 @@
               (leaf (token "*" NULL-INTERPRETATION 50))
               (leaf (token "==" MEASURE 51))
               (leaf (token "*-" SPINE-TERMINATOR 52)))))))
-(check-expect (hfile->htree four-cases-hfile)
-  (htree
+(check-expect (hfile->ab-hgraph four-cases-hfile ab-hgraph)
+  (ab-hgraph
     (root
       (list
         (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
