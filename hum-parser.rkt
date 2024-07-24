@@ -21,14 +21,18 @@
 (module data-structures racket/base
   (require  "data-structures/abstract-humdrum-graph/data-definitions/data-definitions.rkt"
             "data-structures/abstract-humdrum-graph/functions/hfile-to-ab-hgraph.rkt"
+            "data-structures/abstract-humdrum-graph/functions/longest-string-in.rkt"
             "data-structures/humdrum-tree/data-definitions/data-definitions.rkt"
             "data-structures/humdrum-tree/functions/visualize-htree.rkt"
-            "data-structures/humdrum-graph/data-definitions/data-definitions.rkt")
+            "data-structures/humdrum-graph/data-definitions/data-definitions.rkt"
+            "data-structures/humdrum-graph/functions/visualize-hgraph.rkt")
   (provide  (all-from-out "data-structures/abstract-humdrum-graph/data-definitions/data-definitions.rkt")
             (all-from-out "data-structures/abstract-humdrum-graph/functions/hfile-to-ab-hgraph.rkt")
+            (all-from-out "data-structures/abstract-humdrum-graph/functions/longest-string-in.rkt")
             (all-from-out "data-structures/humdrum-tree/data-definitions/data-definitions.rkt")
             (all-from-out "data-structures/humdrum-tree/functions/visualize-htree.rkt")
-            (all-from-out "data-structures/humdrum-graph/data-definitions/data-definitions.rkt")))
+            (all-from-out "data-structures/humdrum-graph/data-definitions/data-definitions.rkt")
+            (all-from-out "data-structures/humdrum-graph/functions/visualize-hgraph.rkt")))
 
 (require 'parser
          'data-structures)

@@ -1,8 +1,8 @@
 #lang racket
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data structures: HumdrumTree
-;;    visualize-htree: produces an image of a HumdrumTree
+;; hum-parser: data structures: HumdrumGraph
+;;    visualize-hgraph: produces an image of a HumdrumGraph
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "../../../parser/data-definitions/data-definitions.rkt"
@@ -11,7 +11,7 @@
          "../data-definitions/data-definitions.rkt"
          2htdp/image)
 
-(provide visualize-htree)
+(provide visualize-hgraph)
 
 (define straight-line (line 0 30 "black"))
 (define top-node (circle 5 "outline" "black"))
@@ -19,31 +19,31 @@
 
 (struct result (images widths) #:transparent)
 
-; visualize-htree
-; HumdrumTree -> Image
-; produces an image of the tree
+; visualize-hgraph
+; HumdrumGraph -> Image
+; produces an image of the graph
 
-(define (visualize-htree htree)
+(define (visualize-hgraph hgraph)
   (local [(define node-img (circle (image-width
-                                     (text (longest-string-in htree)
+                                     (text (longest-string-in hgraph)
                                            12
                                            "black"))
                                    "outline"
                                    "black"))
 
-          (define branch-images (list-branch-images htree node-img))
+          (define branch-images (list-branch-images hgraph node-img))
 
           (define x-positions (branch-x-positions branch-images))
 
-          (define lower-tree-image (pad-bottom-of-tree
-                                     (result-images branch-images)))]
-    (add-branch-lines lower-tree-image x-positions)))
+          (define lower-graph-image (pad-bottom-of-graph
+                                      (result-images branch-images)))]
+    (add-branch-lines lower-graph-image x-positions)))
 
 ; list-branch-images
-; HumdrumTree -> Result
+; HumdrumGraph -> Result
 ; produces a list of images of each branch
 
-(define (list-branch-images htree node-img)
+(define (list-branch-images hgraph node-img)
   (local [; (listof (listof Natural)) -> (listof Image)
           (define (fn-for-root root)
             (cond [(empty? root) empty]
@@ -58,36 +58,30 @@
                                                           (first branch)))
                                                       node-img)]
                   [(parent? (first branch))
-                   (local [(define top-image (subbranch-image
-                                               (first branch)
-                                               node-img))
+                    (local [(define top-image (subbranch-image (first branch)
+                                                               node-img))
+                            (define width-top-image (image-width top-image))
 
-                           (define width-top-image (image-width top-image))
+                            (define bottom-image (fn-for-branch (rest branch)))
 
-                           (define bottom-image (fn-for-branch (rest branch)))
-
-                           (define padding-rectangle
-                                   (rectangle (* (+ (image-width node-img)
-                                                    pad-width)
-                                                 (factor top-image node-img))
-                                              (image-height bottom-image)
-                                              "outline"
-                                              "white"))]
-                     (above top-image
-                            (beside
-                              (above straight-line
-                                     bottom-image)
-                              padding-rectangle)))]
+                            (define left-x (* (- (/ width-top-image 2)
+                                                 (/ (image-width node-img) 2))
+                                              -1))
+                            (define right-x (- (/ width-top-image 2)
+                                               (/ (image-width node-img) 2)))]
+                      (above top-image
+                             (beside (line left-x  -30 "black")
+                                     (line right-x -30 "black"))
+                             bottom-image))]
                   [else
-                   (above (node-image
-                            (token-token (leaf-token (first branch)))
-                            node-img)
-                          straight-line
-                          (fn-for-branch (rest branch)))]))
+                    (above (node-image (token-token (leaf-token (first branch)))
+                                       node-img)
+                           straight-line
+                           (fn-for-branch (rest branch)))]))
 
           (define rnr (fn-for-root
                         (root-branches
-                          (abstract-humdrum-graph-root htree))))]
+                          (abstract-humdrum-graph-root hgraph))))]
     (result rnr (map image-width rnr))))
 
 ; subbranch-image
@@ -95,44 +89,44 @@
 ; handles parent images
 
 (define (subbranch-image parent node-img)
-  (local [(define subtree (htree
-                            (root (list (parent-left parent)
-                                        (parent-right parent)))))
+  (local [(define subgraph (hgraph
+                             (root (list (parent-left parent)
+                                         (parent-right parent)))))
 
-          (define (visualize-subtree subtree)
+          (define (visualize-subgraph subgraph)
             (local [(define branch-images (list-branch-images
-                                            subtree node-img))
+                                            subgraph node-img))
 
                     (define x-positions (branch-x-positions branch-images))
 
-                    (define lower-tree-image (pad-bottom-of-tree
-                                               (result-images branch-images)))]
-              (add-subbranch-lines lower-tree-image x-positions)))
+                    (define lower-graph-image (pad-bottom-of-graph
+                                                (result-images branch-images)))]
+              (add-subbranch-lines lower-graph-image x-positions)))
 
-          (define (add-subbranch-lines lower-tree-image x-positions)
-            (local [(define half-tree-width (/ (image-width lower-tree-image)
-                                               2))
+          (define (add-subbranch-lines lower-graph-image x-positions)
+            (local [(define half-graph-width (/ (image-width lower-graph-image)
+                                                2))
 
                     (define (add-subbranch-lines x-positions)
                       (cond [(empty? (rest x-positions))
-                             (add-line lower-tree-image
+                             (add-line lower-graph-image
                                        (first x-positions)
                                        0
-                                       half-tree-width
+                                       half-graph-width
                                        -30
                                        "black")]
                             [else
                              (add-line (add-subbranch-lines (rest x-positions))
                                        (first x-positions)
                                        30
-                                       half-tree-width
+                                       half-graph-width
                                        0
                                        "black")]))]
               (above/align "center"
                            (node-image (token-token (parent-token parent))
                                        node-img)
                            (add-subbranch-lines x-positions))))]
-    (visualize-subtree subtree)))
+    (visualize-subgraph subgraph)))
 
 ; node-image
 ; String -> Image
@@ -150,21 +144,21 @@
 (define (pad height)
   (rectangle pad-width height "outline" "white"))
 
-; pad-bottom-of-tree
+; pad-bottom-of-graph
 ; (listof Image) -> Image
 ; produces a concatenation of result-images, separated by padding rectangle
 
-(define (pad-bottom-of-tree loi)
+(define (pad-bottom-of-graph loi)
   (local [(define padding (pad (image-height (first loi))))
           
-          (define (pad-bottom-of-tree loi)
+          (define (pad-bottom-of-graph loi)
             (cond [(empty? (rest loi)) (first loi)]
                   [else
                    ; if not naive layered: beside/align "top"
                    (beside (first loi)
                            padding
-                           (pad-bottom-of-tree (rest loi)))]))]
-    (pad-bottom-of-tree loi)))
+                           (pad-bottom-of-graph (rest loi)))]))]
+    (pad-bottom-of-graph loi)))
 
 ; branch-x-positions
 ; Result -> (listof Natural)
@@ -181,8 +175,8 @@
                                   (first (result-images result))))))
 
           ; width of bottom image
-          (define tree-width (image-width
-                               (pad-bottom-of-tree (result-images result))))
+          (define graph-width (image-width
+                                (pad-bottom-of-graph (result-images result))))
 
           (define (x-positions branch-widths)
             ; prev-x. Natural. The x position of the previous line.
@@ -190,7 +184,7 @@
             (local [(define (x-positions branch-widths prev-x prev-midpoint acc)
                       (cond [(empty? (rest branch-widths))
                              (reverse
-                               (cons (- tree-width
+                               (cons (- graph-width
                                         (/ (first branch-widths) 2))
                                      acc))]
                             [else
@@ -215,23 +209,23 @@
 
 ; add-branch-lines
 ; Image (listof Natural) -> Image
-; produces the final image of the tree
+; produces the final image of the graph
 
-(define (add-branch-lines tree-image x-positions)
-  (local [(define half-tree-width (/ (image-width tree-image) 2))
+(define (add-branch-lines graph-image x-positions)
+  (local [(define half-graph-width (/ (image-width graph-image) 2))
 
           (define (add-branch-lines x-positions)
-            (cond [(empty? (rest x-positions)) (add-line tree-image
+            (cond [(empty? (rest x-positions)) (add-line graph-image
                                                          (first x-positions)
                                                          0
-                                                         half-tree-width
+                                                         half-graph-width
                                                          -30
                                                          "black")]
                   [else
                    (add-line (add-branch-lines (rest x-positions))
                              (first x-positions)
                              30
-                             half-tree-width
+                             half-graph-width
                              0
                              "black")]))]
     (above/align "center"
