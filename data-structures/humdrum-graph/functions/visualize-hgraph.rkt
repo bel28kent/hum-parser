@@ -9,7 +9,9 @@
          "../../abstract-humdrum-graph/data-definitions/data-definitions.rkt"
          "../../abstract-humdrum-graph/functions/longest-string-in.rkt"
          "../data-definitions/data-definitions.rkt"
-         2htdp/image)
+         2htdp/image
+         test-engine/racket-tests
+         uuid)
 
 (provide visualize-hgraph)
 
@@ -40,7 +42,7 @@
     (add-branch-lines lower-graph-image x-positions)))
 
 ; list-branch-images
-; HumdrumGraph -> Result
+; HumdrumGraph Image String -> Result
 ; produces a list of images of each branch
 
 (define (list-branch-images hgraph node-img)
@@ -53,31 +55,67 @@
 
           ; (listof Natural) -> Image
           (define (fn-for-branch branch)
-            (cond [(empty? (rest branch)) (node-image (token-token
-                                                        (leaf-token
-                                                          (first branch)))
-                                                      node-img)]
-                  [(parent? (first branch))
-                    (local [(define top-image (subbranch-image (first branch)
-                                                               node-img))
-                            (define width-top-image (image-width top-image))
+            (local [(define (fn-for-branch branch)
+                      (cond [(empty? (rest branch))
+                             (node-image (token-token
+                                           (leaf-token
+                                             (first branch)))
+                                          node-img)]
+                            [(parent? (first branch))
+                             (local [(define top-image (subbranch-image
+                                                         (first branch)
+                                                         node-img))
+                                     (define width-top-image (image-width
+                                                               top-image))
+                                     (define factor-top-image (factor
+                                                                top-image
+                                                                node-img))
 
-                            (define bottom-image (fn-for-branch (rest branch)))
+                                     (define bottom-image
+                                             ;(begin (save-svg-image
+                                             ;         top-image
+                                             ;         (string-append "top-image"
+                                             ;                        (uuid-string)
+                                             ;                        ".svg"))
+                                                    (fn-for-branch
+                                                      (rest branch)))
 
-                            (define left-x (* (- (/ width-top-image 2)
-                                                 (/ (image-width node-img) 2))
-                                              -1))
-                            (define right-x (- (/ width-top-image 2)
-                                               (/ (image-width node-img) 2)))]
-                      (above top-image
-                             (beside (line left-x  -30 "black")
-                                     (line right-x -30 "black"))
-                             bottom-image))]
-                  [else
-                    (above (node-image (token-token (leaf-token (first branch)))
-                                       node-img)
-                           straight-line
-                           (fn-for-branch (rest branch)))]))
+                                     (define left-x (* (- (/ width-top-image 2)
+                                                          (/ (image-width
+                                                               node-img)
+                                                             2))
+                                                    -1))
+                                     (define right-x (+ (/ pad-width 2)
+                                                        (/ (image-width
+                                                             node-img)
+                                                           2)))
+
+                                     (define lines (beside (line left-x
+                                                                 -30
+                                                                 "black")
+                                                           (line right-x
+                                                                 -30
+                                                                 "black")))
+
+                                     (define lines-pad (rectangle (/ (image-width
+                                                                       node-img)
+                                                                     2)
+                                                                  (image-height
+                                                                    lines)
+                                                                  "outline"
+                                                                  "white"))]
+                               (above (above/align "left"
+                                                   top-image
+                                                   (beside lines-pad lines))
+                                      bottom-image))]
+                            [else
+                              (above (node-image (token-token
+                                                   (leaf-token
+                                                     (first branch)))
+                                                 node-img)
+                                     straight-line
+                                     (fn-for-branch (rest branch)))]))]
+              (fn-for-branch branch)))
 
           (define rnr (fn-for-root
                         (root-branches
@@ -94,8 +132,8 @@
                                          (parent-right parent)))))
 
           (define (visualize-subgraph subgraph)
-            (local [(define branch-images (list-branch-images
-                                            subgraph node-img))
+            (local [(define branch-images (list-branch-images subgraph
+                                                              node-img))
 
                     (define x-positions (branch-x-positions branch-images))
 
@@ -129,7 +167,7 @@
     (visualize-subgraph subgraph)))
 
 ; node-image
-; String -> Image
+; String Image -> Image
 ; produces an image of a node
 
 (define (node-image token-str node-img)
@@ -233,8 +271,23 @@
                  (add-branch-lines x-positions))))
 
 ; factor
-; Image -> Natural
+; Image Image -> Natural
 ; produces a natural corresponding to one less than number of spines in parent
+(check-expect (local [(define node-img (node-image "4.G# 4.dn 4.f#X 4.g#"
+                                                   (circle (image-width
+                                                             (text "4.G# 4.dn 4.f#X 4.g#"
+                                                                   12
+                                                                   "black"))
+                                                            "outline"
+                                                            "black")))
+                      (define padding (pad (image-height node-img)))
+                      (define parent-img (beside node-img
+                                                 padding
+                                                 node-img
+                                                 padding
+                                                 node-img))]
+                (factor parent-img node-img))
+              2)
 
 ; TODO: could return zero
 (define (factor parent-image node-img)
@@ -242,3 +295,5 @@
 
           (define width-node-img (image-width node-img))]
     (sub1 (round (/ width-parent-image (+ width-node-img pad-width))))))
+
+(test)

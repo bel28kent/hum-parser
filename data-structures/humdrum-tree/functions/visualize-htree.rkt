@@ -40,7 +40,7 @@
     (add-branch-lines lower-tree-image x-positions)))
 
 ; list-branch-images
-; HumdrumTree -> Result
+; HumdrumTree Image -> Result
 ; produces a list of images of each branch
 
 (define (list-branch-images htree node-img)
@@ -135,7 +135,7 @@
     (visualize-subtree subtree)))
 
 ; node-image
-; String -> Image
+; String Image -> Image
 ; produces an image of a node
 
 (define (node-image token-str node-img)
@@ -239,7 +239,7 @@
                  (add-branch-lines x-positions))))
 
 ; factor
-; Image -> Natural
+; Image Image -> Natural
 ; produces a natural corresponding to one less than number of spines in parent
 
 ; TODO: could return zero
