@@ -8,16 +8,11 @@
 (require "../../../parser/data-definitions/data-definitions.rkt"
          "../../abstract-humdrum-graph/data-definitions/data-definitions.rkt"
          "../../abstract-humdrum-graph/functions/longest-string-in.rkt"
+         "../../abstract-humdrum-graph/functions/visualize-ab-hgraph.rkt"
          "../data-definitions/data-definitions.rkt"
          2htdp/image)
 
 (provide visualize-htree)
-
-(define straight-line (line 0 30 "black"))
-(define top-node (circle 5 "outline" "black"))
-(define pad-width 50)
-
-(struct result (images widths) #:transparent)
 
 ; visualize-htree
 ; HumdrumTree -> Image
@@ -26,16 +21,16 @@
 (define (visualize-htree htree)
   (local [(define node-img (circle (image-width
                                      (text (longest-string-in htree)
-                                           12
-                                           "black"))
-                                   "outline"
-                                   "black"))
+                                           font-size
+                                           colour))
+                                   mode
+                                   colour))
 
           (define branch-images (list-branch-images htree node-img))
 
           (define x-positions (branch-x-positions branch-images))
 
-          (define lower-tree-image (pad-bottom-of-tree
+          (define lower-tree-image (pad-bottom-of-graph
                                      (result-images branch-images)))]
     (add-branch-lines lower-tree-image x-positions)))
 
@@ -71,8 +66,8 @@
                                                     pad-width)
                                                  (factor top-image node-img))
                                               (image-height bottom-image)
-                                              "outline"
-                                              "white"))]
+                                              mode
+                                              pad-colour))]
                      (above top-image
                             (beside
                               (above straight-line
@@ -105,7 +100,7 @@
 
                     (define x-positions (branch-x-positions branch-images))
 
-                    (define lower-tree-image (pad-bottom-of-tree
+                    (define lower-tree-image (pad-bottom-of-graph
                                                (result-images branch-images)))]
               (add-subbranch-lines lower-tree-image x-positions)))
 
@@ -119,132 +114,17 @@
                                        (first x-positions)
                                        0
                                        half-tree-width
-                                       -30
-                                       "black")]
+                                       negative-y
+                                       colour)]
                             [else
                              (add-line (add-subbranch-lines (rest x-positions))
                                        (first x-positions)
-                                       30
+                                       positive-y
                                        half-tree-width
                                        0
-                                       "black")]))]
+                                       colour)]))]
               (above/align "center"
                            (node-image (token-token (parent-token parent))
                                        node-img)
                            (add-subbranch-lines x-positions))))]
     (visualize-subtree subtree)))
-
-; node-image
-; String Image -> Image
-; produces an image of a node
-
-(define (node-image token-str node-img)
-  (overlay (text token-str 12 "black")
-           node-img))
-
-; pad
-; Natural -> Image
-; produces a white rectangle to pad space between branches
-
-; assumes naive layered
-(define (pad height)
-  (rectangle pad-width height "outline" "white"))
-
-; pad-bottom-of-tree
-; (listof Image) -> Image
-; produces a concatenation of result-images, separated by padding rectangle
-
-(define (pad-bottom-of-tree loi)
-  (local [(define padding (pad (image-height (first loi))))
-          
-          (define (pad-bottom-of-tree loi)
-            (cond [(empty? (rest loi)) (first loi)]
-                  [else
-                   ; if not naive layered: beside/align "top"
-                   (beside (first loi)
-                           padding
-                           (pad-bottom-of-tree (rest loi)))]))]
-    (pad-bottom-of-tree loi)))
-
-; branch-x-positions
-; Result -> (listof Natural)
-; produces list of x positions where top node lines will meet top of branches
-
-(define (branch-x-positions result)
-  (local [; width of each branch
-          (define branch-widths (result-widths result))
-
-          ; width of padding rectangle
-          (define pad-width (image-width
-                              (pad
-                                (image-height
-                                  (first (result-images result))))))
-
-          ; width of bottom image
-          (define tree-width (image-width
-                               (pad-bottom-of-tree (result-images result))))
-
-          (define (x-positions branch-widths)
-            ; prev-x. Natural. The x position of the previous line.
-            ; prev-midpoint. Natural. The midpoint of the previous branch.
-            (local [(define (x-positions branch-widths prev-x prev-midpoint acc)
-                      (cond [(empty? (rest branch-widths))
-                             (reverse
-                               (cons (- tree-width
-                                        (/ (first branch-widths) 2))
-                                     acc))]
-                            [else
-                             (x-positions (rest branch-widths)
-                                          (+ prev-x
-                                             prev-midpoint
-                                             pad-width
-                                             (/ (first branch-widths) 2))
-                                          (/ (first branch-widths) 2)
-                                          (cons (+ prev-x
-                                                   prev-midpoint
-                                                   pad-width
-                                                   (/ (first branch-widths) 2))
-                                                acc))]))]
-              (if (= 1 (length branch-widths))
-                  (list (/ (first branch-widths) 2))
-                  (x-positions (rest branch-widths)
-                               (/ (first branch-widths) 2)
-                               (/ (first branch-widths) 2)
-                               (list (/ (first branch-widths) 2))))))]
-    (x-positions branch-widths)))
-
-; add-branch-lines
-; Image (listof Natural) -> Image
-; produces the final image of the tree
-
-(define (add-branch-lines tree-image x-positions)
-  (local [(define half-tree-width (/ (image-width tree-image) 2))
-
-          (define (add-branch-lines x-positions)
-            (cond [(empty? (rest x-positions)) (add-line tree-image
-                                                         (first x-positions)
-                                                         0
-                                                         half-tree-width
-                                                         -30
-                                                         "black")]
-                  [else
-                   (add-line (add-branch-lines (rest x-positions))
-                             (first x-positions)
-                             30
-                             half-tree-width
-                             0
-                             "black")]))]
-    (above/align "center"
-                 top-node
-                 (add-branch-lines x-positions))))
-
-; factor
-; Image Image -> Natural
-; produces a natural corresponding to one less than number of spines in parent
-
-; TODO: could return zero
-(define (factor parent-image node-img)
-  (local [(define width-parent-image (image-width parent-image))
-
-          (define width-node-img (image-width node-img))]
-    (sub1 (round (/ width-parent-image (+ width-node-img pad-width))))))

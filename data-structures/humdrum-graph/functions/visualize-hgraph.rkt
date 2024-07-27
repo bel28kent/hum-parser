@@ -8,18 +8,11 @@
 (require "../../../parser/data-definitions/data-definitions.rkt"
          "../../abstract-humdrum-graph/data-definitions/data-definitions.rkt"
          "../../abstract-humdrum-graph/functions/longest-string-in.rkt"
+         "../../abstract-humdrum-graph/functions/visualize-ab-hgraph.rkt"
          "../data-definitions/data-definitions.rkt"
-         2htdp/image
-         test-engine/racket-tests
-         uuid)
+         2htdp/image)
 
 (provide visualize-hgraph)
-
-(define straight-line (line 0 30 "black"))
-(define top-node (circle 5 "outline" "black"))
-(define pad-width 50)
-
-(struct result (images widths) #:transparent)
 
 ; visualize-hgraph
 ; HumdrumGraph -> Image
@@ -28,10 +21,10 @@
 (define (visualize-hgraph hgraph)
   (local [(define node-img (circle (image-width
                                      (text (longest-string-in hgraph)
-                                           12
-                                           "black"))
-                                   "outline"
-                                   "black"))
+                                           font-size
+                                           colour))
+                                   mode
+                                   colour))
 
           (define branch-images (list-branch-images hgraph node-img))
 
@@ -55,7 +48,9 @@
 
           ; (listof Natural) -> Image
           (define (fn-for-branch branch)
-            (local [(define (fn-for-branch branch)
+            (local [(define half-node-img (/ (image-width node-img) 2))
+
+                    (define (fn-for-branch branch)
                       (cond [(empty? (rest branch))
                              (node-image (token-token
                                            (leaf-token
@@ -67,43 +62,28 @@
                                                          node-img))
                                      (define width-top-image (image-width
                                                                top-image))
-                                     (define factor-top-image (factor
-                                                                top-image
-                                                                node-img))
 
-                                     (define bottom-image
-                                             ;(begin (save-svg-image
-                                             ;         top-image
-                                             ;         (string-append "top-image"
-                                             ;                        (uuid-string)
-                                             ;                        ".svg"))
-                                                    (fn-for-branch
-                                                      (rest branch)))
+                                     (define bottom-image (fn-for-branch
+                                                            (rest branch)))
 
                                      (define left-x (* (- (/ width-top-image 2)
-                                                          (/ (image-width
-                                                               node-img)
-                                                             2))
-                                                    -1))
+                                                          half-node-img)
+                                                       -1))
                                      (define right-x (+ (/ pad-width 2)
-                                                        (/ (image-width
-                                                             node-img)
-                                                           2)))
+                                                        half-node-img))
 
                                      (define lines (beside (line left-x
-                                                                 -30
-                                                                 "black")
+                                                                 negative-y
+                                                                 colour)
                                                            (line right-x
-                                                                 -30
-                                                                 "black")))
+                                                                 negative-y
+                                                                 colour)))
 
-                                     (define lines-pad (rectangle (/ (image-width
-                                                                       node-img)
-                                                                     2)
+                                     (define lines-pad (rectangle half-node-img
                                                                   (image-height
                                                                     lines)
-                                                                  "outline"
-                                                                  "white"))]
+                                                                  mode
+                                                                  pad-colour))]
                                (above (above/align "left"
                                                    top-image
                                                    (beside lines-pad lines))
@@ -124,7 +104,7 @@
 
 ; subbranch-image
 ; Parent Image -> Image
-; handles parent images
+; produces an image of the parent
 
 (define (subbranch-image parent node-img)
   (local [(define subgraph (hgraph
@@ -151,149 +131,17 @@
                                        (first x-positions)
                                        0
                                        half-graph-width
-                                       -30
-                                       "black")]
+                                       negative-y
+                                       colour)]
                             [else
                              (add-line (add-subbranch-lines (rest x-positions))
                                        (first x-positions)
-                                       30
+                                       positive-y
                                        half-graph-width
                                        0
-                                       "black")]))]
+                                       colour)]))]
               (above/align "center"
                            (node-image (token-token (parent-token parent))
                                        node-img)
                            (add-subbranch-lines x-positions))))]
     (visualize-subgraph subgraph)))
-
-; node-image
-; String Image -> Image
-; produces an image of a node
-
-(define (node-image token-str node-img)
-  (overlay (text token-str 12 "black")
-           node-img))
-
-; pad
-; Natural -> Image
-; produces a white rectangle to pad space between branches
-
-; assumes naive layered
-(define (pad height)
-  (rectangle pad-width height "outline" "white"))
-
-; pad-bottom-of-graph
-; (listof Image) -> Image
-; produces a concatenation of result-images, separated by padding rectangle
-
-(define (pad-bottom-of-graph loi)
-  (local [(define padding (pad (image-height (first loi))))
-          
-          (define (pad-bottom-of-graph loi)
-            (cond [(empty? (rest loi)) (first loi)]
-                  [else
-                   ; if not naive layered: beside/align "top"
-                   (beside (first loi)
-                           padding
-                           (pad-bottom-of-graph (rest loi)))]))]
-    (pad-bottom-of-graph loi)))
-
-; branch-x-positions
-; Result -> (listof Natural)
-; produces list of x positions where top node lines will meet top of branches
-
-(define (branch-x-positions result)
-  (local [; width of each branch
-          (define branch-widths (result-widths result))
-
-          ; width of padding rectangle
-          (define pad-width (image-width
-                              (pad
-                                (image-height
-                                  (first (result-images result))))))
-
-          ; width of bottom image
-          (define graph-width (image-width
-                                (pad-bottom-of-graph (result-images result))))
-
-          (define (x-positions branch-widths)
-            ; prev-x. Natural. The x position of the previous line.
-            ; prev-midpoint. Natural. The midpoint of the previous branch.
-            (local [(define (x-positions branch-widths prev-x prev-midpoint acc)
-                      (cond [(empty? (rest branch-widths))
-                             (reverse
-                               (cons (- graph-width
-                                        (/ (first branch-widths) 2))
-                                     acc))]
-                            [else
-                             (x-positions (rest branch-widths)
-                                          (+ prev-x
-                                             prev-midpoint
-                                             pad-width
-                                             (/ (first branch-widths) 2))
-                                          (/ (first branch-widths) 2)
-                                          (cons (+ prev-x
-                                                   prev-midpoint
-                                                   pad-width
-                                                   (/ (first branch-widths) 2))
-                                                acc))]))]
-              (if (= 1 (length branch-widths))
-                  (list (/ (first branch-widths) 2))
-                  (x-positions (rest branch-widths)
-                               (/ (first branch-widths) 2)
-                               (/ (first branch-widths) 2)
-                               (list (/ (first branch-widths) 2))))))]
-    (x-positions branch-widths)))
-
-; add-branch-lines
-; Image (listof Natural) -> Image
-; produces the final image of the graph
-
-(define (add-branch-lines graph-image x-positions)
-  (local [(define half-graph-width (/ (image-width graph-image) 2))
-
-          (define (add-branch-lines x-positions)
-            (cond [(empty? (rest x-positions)) (add-line graph-image
-                                                         (first x-positions)
-                                                         0
-                                                         half-graph-width
-                                                         -30
-                                                         "black")]
-                  [else
-                   (add-line (add-branch-lines (rest x-positions))
-                             (first x-positions)
-                             30
-                             half-graph-width
-                             0
-                             "black")]))]
-    (above/align "center"
-                 top-node
-                 (add-branch-lines x-positions))))
-
-; factor
-; Image Image -> Natural
-; produces a natural corresponding to one less than number of spines in parent
-(check-expect (local [(define node-img (node-image "4.G# 4.dn 4.f#X 4.g#"
-                                                   (circle (image-width
-                                                             (text "4.G# 4.dn 4.f#X 4.g#"
-                                                                   12
-                                                                   "black"))
-                                                            "outline"
-                                                            "black")))
-                      (define padding (pad (image-height node-img)))
-                      (define parent-img (beside node-img
-                                                 padding
-                                                 node-img
-                                                 padding
-                                                 node-img))]
-                (factor parent-img node-img))
-              2)
-
-; TODO: could return zero
-(define (factor parent-image node-img)
-  (local [(define width-parent-image (image-width parent-image))
-
-          (define width-node-img (image-width node-img))]
-    (sub1 (round (/ width-parent-image (+ width-node-img pad-width))))))
-
-(test)
