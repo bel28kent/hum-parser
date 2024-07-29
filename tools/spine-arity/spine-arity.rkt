@@ -6,11 +6,12 @@
 ;;    how many tokens in a record belong to a spine
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require
- "../../parser/data-definitions/data-definitions.rkt"
- (only-in "../../parser/functions/file.rkt" path->hfile)
- (only-in "../../parser/functions/extract-spine-arity.rkt" extract-spine-arity)
- racket/cmdline)
+(require racket/cmdline
+         "../../parser/data-definitions/data-definitions.rkt"
+         (only-in "../../parser/functions/file.rkt"
+                  path->hfile)
+         (only-in "../../parser/functions/extract-spine-arity.rkt"
+                  extract-spine-arity))
 
 (define spine-arity
   (command-line
