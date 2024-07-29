@@ -1,4 +1,4 @@
-#lang racket
+#lang racket/base
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; hum-parser: data structures: AbstractHumdrumGraph
@@ -6,7 +6,9 @@
 ;;        or one of its subtypes
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../../../parser/data-definitions/data-definitions.rkt"
+(require racket/list
+         racket/local
+         "../../../parser/data-definitions/data-definitions.rkt"
          (only-in "../../../parser/functions/predicates.rkt"
                   spine-split? spine-join? null-interpretation?)
          (only-in "../../../parser/functions/spine-parser.rkt"
