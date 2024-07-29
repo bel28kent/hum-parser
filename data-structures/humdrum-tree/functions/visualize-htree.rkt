@@ -1,16 +1,18 @@
-#lang racket
+#lang racket/base
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; hum-parser: data structures: HumdrumTree
 ;;    visualize-htree: produces an image of a HumdrumTree
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../../../parser/data-definitions/data-definitions.rkt"
+(require racket/list
+         racket/local
+         2htdp/image
+         "../../../parser/data-definitions/data-definitions.rkt"
          "../../abstract-humdrum-graph/data-definitions/data-definitions.rkt"
          "../../abstract-humdrum-graph/functions/longest-string-in.rkt"
          "../../abstract-humdrum-graph/functions/visualize-ab-hgraph.rkt"
-         "../data-definitions/data-definitions.rkt"
-         2htdp/image)
+         "../data-definitions/data-definitions.rkt")
 
 (provide visualize-htree)
 
