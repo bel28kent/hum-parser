@@ -1,13 +1,16 @@
-#lang racket
+#lang racket/base
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; hum-parser: tools: hum-type
 ;;    type a humdrum file's records
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../../parser/data-definitions/data-definitions.rkt"
-         (only-in "../../parser/functions/file.rkt" path->hfile)
-         racket/cmdline)
+(require racket/bool
+         racket/cmdline
+         racket/list
+         racket/local
+         "../../parser/data-definitions/data-definitions.rkt"
+         (only-in "../../parser/functions/file.rkt" path->hfile))
 
 (define record (make-parameter #f))
 (define token  (make-parameter #f))
