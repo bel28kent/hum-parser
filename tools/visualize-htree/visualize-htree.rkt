@@ -1,15 +1,19 @@
-#lang racket
+#lang racket/base
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; hum-parser: tools: visualize-htree
 ;;    produces an svg image of the file as a HumdrumTree 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require (only-in "../../parser/functions/file.rkt" path->hfile)
-         "../../data-structures/humdrum-tree/functions/hfile-to-htree.rkt"
-         "../../data-structures/humdrum-tree/functions/visualize-htree.rkt"
+(require racket/cmdline
+         racket/list
+         racket/local
          2htdp/image
-         racket/cmdline)
+         (only-in "../../parser/functions/file.rkt"
+                  path->hfile)
+         "../../data-structures/abstract-humdrum-graph/functions/hfile-to-ab-hgraph.rkt"
+         "../../data-structures/humdrum-tree/data-definitions/data-definitions.rkt"
+         "../../data-structures/humdrum-tree/functions/visualize-htree.rkt")
 
 ; htree-svg
 ; String -> Image
@@ -18,8 +22,9 @@
 (define (htree-svg filename)
   (save-svg-image
     (visualize-htree
-      (hfile->htree
-        (path->hfile filename)))
+      (hfile->ab-hgraph
+        (path->hfile filename)
+        htree))
     (svg-filename filename)))
 
 ; svg-filename
