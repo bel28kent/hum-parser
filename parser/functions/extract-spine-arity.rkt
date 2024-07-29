@@ -1,10 +1,13 @@
-#lang racket
+#lang racket/base
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; hum-parser: functions: extract-spine-arity
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../data-definitions/data-definitions.rkt"
+(require racket/bool
+         racket/list
+         racket/local
+         "../data-definitions/data-definitions.rkt"
          "abstract.rkt")
 
 (provide (all-defined-out))
