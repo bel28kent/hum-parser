@@ -1,10 +1,12 @@
-#lang racket
+#lang racket/base
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  hum-parser: functions: split & gather
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../data-definitions/data-definitions.rkt")
+(require racket/list
+         racket/local
+         "../data-definitions/data-definitions.rkt")
 
 (provide (all-defined-out))
 
