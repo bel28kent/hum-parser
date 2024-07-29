@@ -1,4 +1,4 @@
-#lang racket
+#lang racket/base
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; hum-parser: data structures: AbstractHumdrumGraph
@@ -6,7 +6,9 @@
 ;;        in the AbstractHumdrumGraph
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../../../parser/data-definitions/data-definitions.rkt"
+(require racket/list
+         racket/local
+         "../../../parser/data-definitions/data-definitions.rkt"
          "../data-definitions/data-definitions.rkt")
 
 (provide longest-string-in)
