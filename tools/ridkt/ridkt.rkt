@@ -1,4 +1,4 @@
-#lang racket
+#lang racket/base
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; hum-parser: tools: ridkt
@@ -6,12 +6,12 @@
 ;;    emulates humdrum-tools rid
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../../parser/data-definitions/data-definitions.rkt"
-         "../../parser/functions/abstract.rkt"
-         (only-in "../../parser/functions/file.rkt"
-                  path->hfile)
-         "../../parser/functions/predicates.rkt"
-         racket/cmdline)
+(require racket/cmdline
+         racket/list
+         racket/local
+         "../../parser/data-definitions/data-definitions.rkt"
+         (only-in "../../parser/functions/file.rkt" path->hfile)
+         "../../parser/functions/predicates.rkt")
 
 (define references      (make-parameter #f))
 (define global          (make-parameter #f))
