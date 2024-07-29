@@ -1,11 +1,10 @@
-#lang racket
+#lang racket/base
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; hum-parser: data structures: HumdrumTree
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../../../parser/data-definitions/data-definitions.rkt"
-         "../../abstract-humdrum-graph/data-definitions/data-definitions.rkt")
+(require "../../abstract-humdrum-graph/data-definitions/data-definitions.rkt")
 
 (provide (all-defined-out))
 
