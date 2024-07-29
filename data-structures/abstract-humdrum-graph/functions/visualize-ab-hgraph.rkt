@@ -1,4 +1,4 @@
-#lang racket
+#lang racket/base
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; hum-parser: data structures: AbstractHumdrumGraph
@@ -6,8 +6,8 @@
 ;;        visualizing HumdrumTree and HumdrumGraph
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../../../parser/data-definitions/data-definitions.rkt"
-         "../../abstract-humdrum-graph/data-definitions/data-definitions.rkt"
+(require racket/list
+         racket/local
          2htdp/image)
 
 (provide (all-defined-out))
