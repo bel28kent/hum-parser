@@ -1,10 +1,12 @@
-#lang racket
+#lang racket/base
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  hum-parser: functions: type
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../data-definitions/data-definitions.rkt"
+(require racket/bool
+         racket/local
+         "../data-definitions/data-definitions.rkt"
          "predicates.rkt")
 
 (provide (all-defined-out))
