@@ -6,7 +6,8 @@
 
 (require racket/bool
          racket/list
-         racket/local)
+         racket/local
+         "../data-definitions/data-definitions.rkt")
 
 (provide (all-defined-out))
 

@@ -31,4 +31,20 @@
               (list TOKEN TOKEN TOKEN TOKEN TOKEN
                     TOKEN TOKEN TOKEN TOKEN TOKEN
                     TOKEN TOKEN TOKEN TOKEN TOKEN))
+
+; shift
+(check-expect (shift empty) empty)
+(check-expect (shift (list 1)) empty)
+(check-expect (shift (list 1 2 3)) (list 2 3))
+
+; valmap
+(check-expect (valmap 1 empty) empty)
+(check-expect (valmap 1 (list zero?)) (list #f))
+(check-expect (valmap 1 (list zero? positive? add1))
+              (list #f #t 2))
+
+; true?
+(check-expect (true? #t) #t)
+(check-expect (true? #f) #f)
+
 (test)

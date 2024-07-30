@@ -107,9 +107,7 @@
             (cond [(string=? (split-or-join-record previous) SPINE-SPLIT)
                    (split previous)]
                   [(string=? (split-or-join-record previous) SPINE-JOIN)
-                   (join previous)]
-                  [else
-                    (caller (rest tokens))]))
+                   (join previous)]))
 
           (define (split previous)
             ; num-tokens: Natural. Number tokens w/in a spine processed so far.

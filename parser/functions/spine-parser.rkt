@@ -8,8 +8,9 @@
          racket/local
          "../data-definitions/data-definitions.rkt"
          "abstract.rkt"
-         "split-and-gather.rkt"
-         (only-in "extract-spine-arity.rkt" extract-spine-arity))
+         (only-in "extract-spine-arity.rkt"
+                  extract-spine-arity)
+         "split-and-gather.rkt")
 
 (provide (all-defined-out))
 
@@ -50,9 +51,9 @@
                       (cond [(= num-spine number-global-spines)
                              (reverse (cons (acc-spine-list acc) spine-lists))]
                             [else
-                              (iterator (add1 num-spine)
-                                        (cons (acc-spine-list acc) spine-lists)
-                                        (byspine (acc-remaining acc)))]))]
+                             (iterator (add1 num-spine)
+                                       (cons (acc-spine-list acc) spine-lists)
+                                       (byspine (acc-remaining acc)))]))]
               (local [(define first-spine (byspine lolon))]
                 (iterator 1 empty (acc (acc-spine-list first-spine)
                                        (acc-remaining  first-spine))))))
@@ -66,11 +67,11 @@
                       (cond [(empty? arity) (acc (reverse spine-list)
                                                  (reverse remaining))]
                             [else
-                              (iterator (rest arity)
-                                        (cons (first (first arity))
-                                              spine-list)
-                                        (cons (rest (first arity))
-                                              remaining))]))]
+                             (iterator (rest arity)
+                                       (cons (first (first arity))
+                                             spine-list)
+                                       (cons (rest (first arity))
+                                             remaining))]))]
               (iterator lolon empty empty)))]
     (spine-iterator (spine-arity-lolon spine-arity))))
 
@@ -90,13 +91,13 @@
             (local [(define (lolo-iterator lolot lolon spine-list)
                       (cond [(andmap empty? lolot) (reverse spine-list)]
                             [else
-                              (local [(define output
-                                              (lon-iterator lolot
-                                                            (first lolon)))]
-                                (lolo-iterator (acc-remaining output)
-                                               (rest lolon)
-                                               (cons (acc-spine-list output)
-                                                     spine-list)))]))]
+                             (local [(define output
+                                       (lon-iterator lolot
+                                                     (first lolon)))]
+                               (lolo-iterator (acc-remaining output)
+                                              (rest lolon)
+                                              (cons (acc-spine-list output)
+                                                    spine-list)))]))]
               (lolo-iterator lolot lolon empty)))
 
           ; (listof (listof Token)) (listof Natural) -> acc
@@ -108,15 +109,15 @@
                       (cond [(empty? lolot) (acc (reverse spine-list)
                                                  (reverse remaining-acc))]
                             [else
-                              (local [(define output
-                                              (lot-iterator (first lolot)
-                                                            (first lon)))]
-                                (lon-iterator (rest lolot)
-                                              (rest lon)
-                                              (cons (acc-spine-list output)
-                                                    spine-list)
-                                              (cons (acc-remaining output)
-                                                    remaining-acc)))]))]
+                             (local [(define output
+                                       (lot-iterator (first lolot)
+                                                     (first lon)))]
+                               (lon-iterator (rest lolot)
+                                             (rest lon)
+                                             (cons (acc-spine-list output)
+                                                   spine-list)
+                                             (cons (acc-remaining output)
+                                                   remaining-acc)))]))]
               (lon-iterator lolot lon empty empty)))
 
           ; (listof Token) Natural -> acc
@@ -128,9 +129,9 @@
                       (cond [(= number-tokens counter) (acc (reverse spine-list)
                                                             lot)]
                             [else
-                              (lot-iterator (rest lot)
-                                            (add1 counter)
-                                            (cons (first lot) spine-list))]))]
+                             (lot-iterator (rest lot)
+                                           (add1 counter)
+                                           (cons (first lot) spine-list))]))]
               (lot-iterator (rest lot) 1 (list (first lot)))))]
     (lolo-iterator unwrapped byspine)))
 
@@ -144,12 +145,12 @@
   (local [(define (lololot->logs lololot logs counter)
             (cond [(empty? lololot) (reverse logs)]
                   [else
-                    (lololot->logs (rest lololot)
-                                   (cons (global-spine
-                                           (first lololot)
-                                           counter)
-                                         logs)
-                                   (add1 counter))]))]
+                   (lololot->logs (rest lololot)
+                                  (cons (global-spine
+                                         (first lololot)
+                                         counter)
+                                        logs)
+                                  (add1 counter))]))]
     (lololot->logs lololot empty 0)))
 
 ; logs->lolos
@@ -163,9 +164,9 @@
             (local [(define (logs-iterator logs lolos)
                       (cond [(empty? logs) (reverse lolos)]
                             [else
-                              (logs-iterator (rest logs)
-                                             (cons (gs->los (first logs))
-                                                   lolos))]))]
+                             (logs-iterator (rest logs)
+                                            (cons (gs->los (first logs))
+                                                  lolos))]))]
               (logs-iterator logs empty)))
 
           (define (gs->los gs)
@@ -177,16 +178,16 @@
                                 ;
                                 (cond [(empty? lolot) (reverse los)]
                                       [else
-                                      (lolot-iterator (rest lolot)
-                                                      (cons
+                                       (lolot-iterator (rest lolot)
+                                                       (cons
                                                         (gather
-                                                          (foldr
-                                                            (λ (f r)
-                                                               (cons
-                                                                 (token-token f)
-                                                                 r))
-                                                            empty
-                                                            (first lolot)))
+                                                         (foldr
+                                                          (λ (f r)
+                                                            (cons
+                                                             (token-token f)
+                                                             r))
+                                                          empty
+                                                          (first lolot)))
                                                         los))]))]
                         (lolot-iterator lolot empty)))]
               (lolot-iterator lolot)))]

@@ -26,6 +26,21 @@
                             (token "*^" SPINE-SPLIT 3)
                             (token "*" NULL-INTERPRETATION 3))
                       3))
+(define SECOND-SPLIT (record "*\t*^\t*\t*"
+                             TOKEN
+                             (list (token "*" NULL-INTERPRETATION 4)
+                                   (token "*^" SPINE-SPLIT 4)
+                                   (token "*" NULL-INTERPRETATION 4)
+                                   (token "*" NULL-INTERPRETATION 4))
+                             4))
+(define THIRD-SPLIT (record "*\t*\t*^\t*\t*"
+                            TOKEN
+                            (list (token "*" NULL-INTERPRETATION 5)
+                                  (token "*" NULL-INTERPRETATION 5)
+                                  (token "*^" SPINE-SPLIT 5)
+                                  (token "*" NULL-INTERPRETATION 5)
+                                  (token "*" NULL-INTERPRETATION 5))
+                            5))
 (define SPLIT-LEFT (record "*^\t*\t*"
                            TOKEN
                            (list (token "*^" SPINE-SPLIT 3)
@@ -45,6 +60,41 @@
                                   (token "4aa" SPINE-DATA 4)
                                   (token "4aaa" SPINE-DATA 4))
                             4))
+(define THIRD-JOIN-A (record "*\t*v\t*v\t*\t*\t*"
+                           TOKEN
+                           (list (token "*" NULL-INTERPRETATION 1)
+                                 (token "*v" SPINE-JOIN 1)
+                                 (token "*v" SPINE-JOIN 1)
+                                 (token "*" NULL-INTERPRETATION 1)
+                                 (token "*" NULL-INTERPRETATION 1)
+                                 (token "*" NULL-INTERPRETATION 1))
+                           1))
+(define THIRD-JOIN-B (record "*\t*\t*v\t*v\t*\t*"
+                           TOKEN
+                           (list (token "*" NULL-INTERPRETATION 1)
+                                 (token "*" NULL-INTERPRETATION 1)
+                                 (token "*v" SPINE-JOIN 1)
+                                 (token "*v" SPINE-JOIN 1)
+                                 (token "*" NULL-INTERPRETATION 1)
+                                 (token "*" NULL-INTERPRETATION 1))
+                           1))
+(define THIRD-JOIN-C (record "*\t*\t*\t*v\t*v\t*"
+                           TOKEN
+                           (list (token "*" NULL-INTERPRETATION 1)
+                                 (token "*" NULL-INTERPRETATION 1)
+                                 (token "*" NULL-INTERPRETATION 1)
+                                 (token "*v" SPINE-JOIN 1)
+                                 (token "*v" SPINE-JOIN 1)
+                                 (token "*" NULL-INTERPRETATION 1))
+                           1))
+(define SECOND-JOIN (record "*\t*\t*v\t*v\t*"
+                            TOKEN
+                            (list (token "*" NULL-INTERPRETATION 2)
+                                  (token "*" NULL-INTERPRETATION 2)
+                                  (token "*v" SPINE-JOIN 2)
+                                  (token "*v" SPINE-JOIN 2)
+                                  (token "*" NULL-INTERPRETATION 2))
+                            2))
 (define JOIN (record "*\t*v\t*v\t*"
                      TOKEN
                      (list (token "*" NULL-INTERPRETATION 3)
@@ -158,6 +208,12 @@
 (check-expect (struct-lon SPLIT (list 1 1 1)) (list 1 2 1))
 (check-expect (struct-lon SPLIT-LEFT (list 1 1 1)) (list 2 1 1))
 (check-expect (struct-lon SPLIT-RIGHT (list 1 1 1)) (list 1 1 2))
+(check-expect (struct-lon SECOND-SPLIT (list 1 2 1)) (list 1 3 1))
+(check-expect (struct-lon THIRD-SPLIT (list 1 3 1)) (list 1 4 1))
+(check-expect (struct-lon THIRD-JOIN-A (list 1 4 1)) (list 1 3 1))
+(check-expect (struct-lon THIRD-JOIN-B (list 1 4 1)) (list 1 3 1))
+(check-expect (struct-lon THIRD-JOIN-C (list 1 4 1)) (list 1 3 1))
+(check-expect (struct-lon SECOND-JOIN (list 1 3 1)) (list 1 2 1))
 (check-expect (struct-lon JOIN (list 1 2 1)) (list 1 1 1))
 (check-expect (struct-lon JOIN-LEFT (list 2 1 1)) (list 1 1 1))
 (check-expect (struct-lon JOIN-RIGHT (list 1 1 2)) (list 1 1 1))
