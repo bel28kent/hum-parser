@@ -2,15 +2,15 @@
 
 ## Records
 All lines read from a file can be sorted into one of four categories:
-```
+```markdown
 	- `ReferenceRecord`
 	- `GlobalComment`
 	- `LocalComment`
 	- `Token`
 ```
-`ReferenceRecord`, `GlobalComment`, and `LocalComment` are Metadata; they contain
-information about the file or encoding. A Metadata record starts with one of
-three tags, each defined as a sequence of bangs:
+`ReferenceRecord`, `GlobalComment`, and `LocalComment` are each a `MetadataType`;
+they contain information about the file or encoding. A Metadata record starts
+with one of three tags, each defined as a sequence of bangs:
 ```racket
 	(define REFERENCE-TAG "!!!")
 	(define GLOBAL-TAG    "!!")
