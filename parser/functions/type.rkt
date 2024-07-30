@@ -32,16 +32,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; type-record
-; String -> MetadataType or Token or false
-; produce the type of the record or false if unknown
+; String -> MetadataType or Token
+; produce the type of the record
 
 (define (type-record string)
-  (local [(define bool (type-metadata string))]
-    (if (false? bool)
-        (if (is-token? string)
-            TOKEN
-            #f)
-        bool)))
+  (local [(define metadata (type-metadata string))]
+    (if (false? metadata)
+        TOKEN
+        metadata)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  TOKEN FUNCTIONS
@@ -84,6 +82,7 @@
 (check-expect (type-metadata "!!!COM: Scriabin, Alexander")   REFERENCE-RECORD)
 (check-expect (type-metadata "!! See pg. 5 of print edition") GLOBAL-COMMENT)
 (check-expect (type-metadata "!\t! In some editions A#")      LOCAL-COMMENT)
+(check-expect (type-metadata "4a\t4aa")                       #f)
 
 ; type-record
 (check-expect (type-record "!!!COM: Scriabin, Alexander")   REFERENCE-RECORD)
