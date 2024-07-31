@@ -7,7 +7,6 @@
 (require racket/bool
          racket/list
          racket/local
-         racket/string
          "../data-definitions/data-definitions.rkt"
          "abstract.rkt")
 
@@ -43,37 +42,6 @@
 (define (metadata? string)
   (ormap true?
          (valmap string (list reference? global-comment? local-comment?))))
-
-; is-token?
-; String -> Boolean
-; produce true if string contains SEPARATOR or can be typed as a token
-
-(define (is-token? string)
-  (local [(define (type-token token)
-            (cond [(exclusive-interpretation? token) EXCLUSIVE-INTERPRETATION]
-                  [(tandem-interpretation? token)    (type-tandem token)]
-                  [(null-interpretation? token)      NULL-INTERPRETATION]
-                  [(measure? token)                  MEASURE]
-                  [(spine-data? token)               SPINE-DATA]
-                  [(null-spine-data? token)          NULL-SPINE-DATA]
-                  [(local-comment-token? token)      LOCAL-COMMENT]
-                  [else
-                    #f]))
-
-          (define (type-tandem token)
-            (cond [(spine-split? token)      SPINE-SPLIT]
-                  [(spine-join? token)       SPINE-JOIN]
-                  [(spine-terminator? token) SPINE-TERMINATOR]
-                  [(clef? token)             CLEF]
-                  [(time-sig? token)         TIME-SIG]
-                  [(key-sig? token)          KEY-SIG]
-                  [(key-label? token)        KEY-LABEL]
-                  [(staff-number? token)     STAFF-NUMBER]
-                  [(instrument-class? token) INSTRUMENT-CLASS]
-                  [else
-                    #f]))]
-    (or (string-contains? string SEPARATOR)
-      (not (false? (type-token string))))))
 
 ; exclusive-interpretation?
 ; String -> Boolean
@@ -206,7 +174,6 @@
 (define (null-spine-data? token)
   (string=? "." token))
 
-; TODO: type
 ; local-comment-token?
 ; String -> Boolean
 ; produce true if string starts with "!"
