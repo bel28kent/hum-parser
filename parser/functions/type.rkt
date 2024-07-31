@@ -75,7 +75,7 @@
                     #f]))]
     (if (false? (regexp-match #px"^!?[^!\t]+$" token))
         (raise-argument-error 'type-token
-                              "A string that does not contain a bang or tab"
+                              "A string that does not contain a tab or more than one bang"
                               token)
         (cond [(exclusive-interpretation? token) EXCLUSIVE-INTERPRETATION]
               [(tandem-interpretation? token)    (type-tandem token)]
