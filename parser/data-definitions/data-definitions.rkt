@@ -43,6 +43,7 @@
 (define STAFF-NUMBER             "StaffNumber")
 (define INSTRUMENT-CLASS         "InstrumentClass")
 (define OTTAVA                   "Ottava")
+(define GROUP-ATTRIBUTION        "GroupAttribution")
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  METADATA
@@ -118,6 +119,7 @@
 ;  - StaffNumber
 ;  - InstrumentClass
 ;  - Ottava
+;  - GroupAttribution
 ;  - #f
 ;  Represents a token starting with TANDEM-TAG, or false if unknown
 
@@ -153,6 +155,9 @@
 
 ; Ottava is "Ottava"
 ;  Represents a token that matches "^\\*X?8.+$"
+
+; GroupAttribution is "GroupAttribution"
+;  Represents a token that matches "^\\*grp:.+$"
 
 ; Measure is "Measure"
 ;  Represents a token starting with MEASURE-TAG

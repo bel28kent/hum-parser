@@ -162,6 +162,13 @@
 (define (ottava? token)
   (not (false? (regexp-match #px"^\\*X?8.+$" token))))
 
+; group-attribution?
+; String -> Boolean
+; produce true if string matches "^\\*grp:.+$"
+
+(define (group-attribution? token)
+  (not (false? (regexp-match #px"^\\*grp:.+$" token))))
+
 ; spine-data?
 ; String -> Boolean
 ; produce true if string is not METADATA and is not another TOKEN type

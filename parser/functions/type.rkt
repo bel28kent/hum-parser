@@ -54,16 +54,17 @@
           ; String -> TandemInterpretation or false
           ; produce the type of the tandem interpretation or false if unknown
           (define (type-tandem token)
-            (cond [(spine-split? token)      SPINE-SPLIT]
-                  [(spine-join? token)       SPINE-JOIN]
-                  [(spine-terminator? token) SPINE-TERMINATOR]
-                  [(clef? token)             CLEF]
-                  [(time-sig? token)         TIME-SIG]
-                  [(key-sig? token)          KEY-SIG]
-                  [(key-label? token)        KEY-LABEL]
-                  [(staff-number? token)     STAFF-NUMBER]
-                  [(instrument-class? token) INSTRUMENT-CLASS]
-                  [(ottava? token)           OTTAVA]
+            (cond [(spine-split? token)       SPINE-SPLIT]
+                  [(spine-join? token)        SPINE-JOIN]
+                  [(spine-terminator? token)  SPINE-TERMINATOR]
+                  [(clef? token)              CLEF]
+                  [(time-sig? token)          TIME-SIG]
+                  [(key-sig? token)           KEY-SIG]
+                  [(key-label? token)         KEY-LABEL]
+                  [(staff-number? token)      STAFF-NUMBER]
+                  [(instrument-class? token)  INSTRUMENT-CLASS]
+                  [(ottava? token)            OTTAVA]
+                  [(group-attribution? token) GROUP-ATTRIBUTION]
                   [else
                     #f]))]
     (if (false? (regexp-match #px"^!?[^!\t]+$" token))

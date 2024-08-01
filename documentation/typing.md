@@ -47,6 +47,7 @@ where `TandemInterpretation` is one of:
 	- StaffNumber
 	- InstrumentClass
 	- Ottava
+	- GroupAttribution
 	- #f
 ```
 Given the extensibility of Humdrum, the false subclass `#f` represents unknown
