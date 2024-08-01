@@ -206,6 +206,28 @@
 (check-expect (instrument-class? "*C:")       #f)
 (check-expect (instrument-class? "*staff1")   #f)
 
+; ottava?
+(check-expect (ottava? "*8va")      #t)
+(check-expect (ottava? "*X8va")     #t)
+(check-expect (ottava? "*8ba")      #t)
+(check-expect (ottava? "*X8ba")     #t)
+(check-expect (ottava? "=4a")       #f)
+(check-expect (ottava? "*part20")   #f)
+(check-expect (ottava? "*Xtremolo") #f)
+
+; group-attribution?
+(check-expect (group-attribution? "*grp:A")    #t)
+(check-expect (group-attribution? "*grp:B")    #t)
+(check-expect (group-attribution? "=4a")       #f)
+(check-expect (group-attribution? "*part20")   #f)
+
+; part-number?
+(check-expect (part-number? "*part1")    #t)
+(check-expect (part-number? "*part20")   #t)
+(check-expect (part-number? "=4a")       #f)
+(check-expect (part-number? "*Xtremolo") #f)
+
+
 ; spine-data?
 (check-expect (spine-data? (token-token MUSIC-TOKEN-EX))        #t)
 (check-expect (spine-data? MEASURE-TAG)                         #f)
@@ -220,5 +242,10 @@
 (check-expect (null-spine-data? "4a") #f)
 (check-expect (null-spine-data? "ff") #f)
 (check-expect (null-spine-data? "a-") #f)
+
+; local-comment-token?
+(check-expect (local-comment-token? "!")               #t)
+(check-expect (local-comment-token? "! Local comment") #t)
+(check-expect (local-comment-token? "*8va")            #f)
 
 (test)
