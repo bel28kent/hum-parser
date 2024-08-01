@@ -72,11 +72,10 @@
 ; produces true if type of token is SpineSplit or SpineJoin
 
 (define (split-or-join-token? token)
-  (cond [(false? (token-type token)) #f]
-        [(string=? (token-type token) SPINE-SPLIT) #t]
-        [(string=? (token-type token) SPINE-JOIN) #t]
-        [else
-          #f]))
+  (local [(define type (token-type token))]
+    (and (string? type)
+         (or (string=? type SPINE-SPLIT)
+             (string=? type SPINE-JOIN)))))
 
 ; split-or-join-record
 ; Record -> SpineSplit or SpineJoin or false
