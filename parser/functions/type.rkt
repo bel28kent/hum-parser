@@ -63,6 +63,7 @@
                   [(key-label? token)        KEY-LABEL]
                   [(staff-number? token)     STAFF-NUMBER]
                   [(instrument-class? token) INSTRUMENT-CLASS]
+                  [(ottava? token)           OTTAVA]
                   [else
                     #f]))]
     (if (false? (regexp-match #px"^!?[^!\t]+$" token))

@@ -42,6 +42,7 @@
 (define KEY-LABEL                "KeyLabel")
 (define STAFF-NUMBER             "StaffNumber")
 (define INSTRUMENT-CLASS         "InstrumentClass")
+(define OTTAVA                   "Ottava")
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  METADATA
@@ -116,6 +117,7 @@
 ;  - KeyLabel
 ;  - StaffNumber
 ;  - InstrumentClass
+;  - Ottava
 ;  - #f
 ;  Represents a token starting with TANDEM-TAG, or false if unknown
 
@@ -148,6 +150,9 @@
 
 ; InstrumentClass is "InstrumentClass"
 ;  Represents a token that matches "\\*I[[:alpha:]]+"
+
+; Ottava is "Ottava"
+;  Represents a token that matches "^\\*X?8.+$"
 
 ; Measure is "Measure"
 ;  Represents a token starting with MEASURE-TAG

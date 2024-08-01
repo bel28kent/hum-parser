@@ -155,6 +155,13 @@
 (define (instrument-class? token)
   (not (false? (regexp-match #px"\\*I[[:alpha:]]+" token))))
 
+; ottava?
+; String -> Boolean
+; produce true if string matches "^\\*X?8.+$"
+
+(define (ottava? token)
+  (not (false? (regexp-match #px"^\\*X?8.+$" token))))
+
 ; spine-data?
 ; String -> Boolean
 ; produce true if string is not METADATA and is not another TOKEN type
