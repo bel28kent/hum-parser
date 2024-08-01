@@ -24,6 +24,34 @@ There are no constraints on the string argument to `type-metadata` and
 ## Spines
 
 ## Tokens
+Tokens can be typed as one of several subclasses:
+```
+	- ExclusiveInterpretation
+	- TandemInterpretation
+	- Measure
+	- SpineData
+	- NullSpineData
+	- LocalComment
+	- #f
+```
+where `TandemInterpretation` is one of:
+```
+	- SpineSplit
+	- SpineJoin
+	- SpineTerminator
+	- NullInterpretation
+	- Clef
+	- TimeSignature
+	- KeySignature
+	- KeyLabel
+	- StaffNumber
+	- InstrumentClass
+	- #f
+```
+Given the extensibility of Humdrum, the false subclass `#f` represents unknown
+types, tokens that cannot be typed by the current data definitions. This
+allows for the user's data to still be parsed, though typing will be restricted.
+
 The string argument to `type-token` must match the regular expression
 `^!?[^!\t]+$`, otherwise an argument error is raised. One bang is allowed at the
 beginning of the string for local comments, which will have one token for each

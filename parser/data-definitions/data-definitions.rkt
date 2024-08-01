@@ -3,8 +3,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  hum-parser: data definitions
 ;;
-;;    NB: All example constants must end with -EX
-;;        All type constants are at the top of file
+;;    NB: All example constants must end with -EX.
+;;        All type constants are at the top of file.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (provide (all-defined-out))
@@ -99,7 +99,8 @@
 ;  - SpineData
 ;  - NullSpineData
 ;  - LocalComment
-;  Represents the type of a Token
+;  - #f
+;  Represents the type of a Token, or false if unknown
 
 ; ExclusiveInterpretation is "ExclusiveInterpretation"
 ;  Represents a token starting with EXCLUSIVE-TAG
@@ -115,7 +116,8 @@
 ;  - KeyLabel
 ;  - StaffNumber
 ;  - InstrumentClass
-;  Represents a token starting with TANDEM-TAG
+;  - #f
+;  Represents a token starting with TANDEM-TAG, or false if unknown
 
 ; SpineSplit is "SpineSplit"
 ;  Represents a token that equals SPLIT-TOKEN
