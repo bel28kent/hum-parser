@@ -203,6 +203,15 @@
                                             (token "*" NULL-INTERPRETATION 20))
                                       20))
               SPINE-SPLIT)
+(check-expect (split-or-join-record (record
+                                      "*\t*v\t*v\t*"
+                                      TOKEN
+                                      (list (token "*"  NULL-INTERPRETATION 20)
+                                            (token "*v" SPINE-JOIN 20)
+                                            (token "*v" SPINE-JOIN 20)
+                                            (token "*"  NULL-INTERPRETATION 20))
+                                      20))
+              SPINE-JOIN)
 
 ; struct-lon
 (check-expect (struct-lon SPLIT (list 1 1 1)) (list 1 2 1))

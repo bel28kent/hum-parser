@@ -85,14 +85,16 @@
   (local [(define tokens (record-split record))
 
           (define (split-or-join tokens)
-            (cond [(empty? tokens) #f]
-                  [(false? (token-type (first tokens))) (split-or-join
-                                                          (rest tokens))]
-                  [(string=? (token-type (first tokens)) SPINE-SPLIT)
-                   SPINE-SPLIT]
-                  [(string=? (token-type (first tokens)) SPINE-JOIN) SPINE-JOIN]
-                  [else
-                    (split-or-join (rest tokens))]))]
+            (local [(define type (if (empty? tokens)
+                                     #f
+                                     (token-type (first tokens))))]
+              (cond [(empty? tokens) #f]
+                    [(and (string? type)
+                          (string=? type SPINE-SPLIT)) SPINE-SPLIT]
+                    [(and (string? type)
+                          (string=? type SPINE-JOIN)) SPINE-JOIN]
+                    [else
+                      (split-or-join (rest tokens))])))]
     (split-or-join tokens)))
 
 ; struct-lon
