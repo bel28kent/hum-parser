@@ -169,6 +169,13 @@
 (define (group-attribution? token)
   (not (false? (regexp-match #px"^\\*grp:.+$" token))))
 
+; part-number?
+; String -> Boolean
+; produce true if string matches "^\\*part[[:digit:]]+$"
+
+(define (part-number? token)
+  (not (false? (regexp-match #px"^\\*part[[:digit:]]+$" token))))
+
 ; spine-data?
 ; String -> Boolean
 ; produce true if string is not METADATA and is not another TOKEN type

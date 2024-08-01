@@ -65,6 +65,7 @@
                   [(instrument-class? token)  INSTRUMENT-CLASS]
                   [(ottava? token)            OTTAVA]
                   [(group-attribution? token) GROUP-ATTRIBUTION]
+                  [(part-number? token)       PART-NUMBER]
                   [else
                     #f]))]
     (if (false? (regexp-match #px"^!?[^!\t]+$" token))

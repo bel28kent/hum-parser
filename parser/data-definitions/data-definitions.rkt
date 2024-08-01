@@ -44,6 +44,7 @@
 (define INSTRUMENT-CLASS         "InstrumentClass")
 (define OTTAVA                   "Ottava")
 (define GROUP-ATTRIBUTION        "GroupAttribution")
+(define PART-NUMBER              "PartNumber")
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  METADATA
@@ -120,6 +121,7 @@
 ;  - InstrumentClass
 ;  - Ottava
 ;  - GroupAttribution
+;  - PartNumber
 ;  - #f
 ;  Represents a token starting with TANDEM-TAG, or false if unknown
 
@@ -158,6 +160,9 @@
 
 ; GroupAttribution is "GroupAttribution"
 ;  Represents a token that matches "^\\*grp:.+$"
+
+; PartNumber is "PartNumber"
+;  Represents a token that matches "^\\*part[[:digit:]]+$"
 
 ; Measure is "Measure"
 ;  Represents a token starting with MEASURE-TAG
