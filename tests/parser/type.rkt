@@ -50,8 +50,4 @@
 (check-error  (type-token "4aa\t4aaa"))
 (check-error  (type-token "!!!COM: Bach, Johann Sebastian"))
 
-; is-token-record?
-(check-expect (is-token-record? "**kern\t**kern")  #t)
-(check-expect (is-token-record? "! Local comment") #t)
-
 (test)

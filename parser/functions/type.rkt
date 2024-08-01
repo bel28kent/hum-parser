@@ -41,14 +41,6 @@
         TOKEN
         metadata)))
 
-; is-token-record?
-; String -> Boolean
-; produce true if string contains SEPARATOR or can be typed as a token
-
-(define (is-token-record? string)
-  (or (string-contains? string SEPARATOR)
-      (not (false? (type-token string)))))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  TOKEN FUNCTIONS
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
