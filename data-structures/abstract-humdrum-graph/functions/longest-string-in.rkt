@@ -8,14 +8,23 @@
 
 (require racket/list
          racket/local
+         test-engine/racket-tests
          "../../../parser/data-definitions/data-definitions.rkt"
-         "../data-definitions/data-definitions.rkt")
+         (only-in "../../../parser/functions/file.rkt"
+                  path->hfile)
+         "../data-definitions/data-definitions.rkt"
+         "hfile-to-ab-hgraph.rkt")
 
 (provide longest-string-in)
+
+(define three-spines-no-splits
+        (hfile->ab-hgraph (path->hfile "../../../tests/data-structures/data/three-spines-two-splits-not-consecutive.krn")
+                          ab-hgraph))
 
 ; longest-string-in
 ; AbstractHumdrumGraph -> String
 ; produces the longest token string in the tree
+(check-expect (longest-string-in three-spines-no-splits) "2.C#] 2.B]")
 
 (define (longest-string-in ab-hgraph)
   (local [(define (fn-for-root root)
@@ -46,22 +55,23 @@
           (define (fn-for-leaf leaf)
             (fn-for-token (leaf-token leaf)))
 
+          #|
+              "*^" can never be the longest string in parent because the left
+              and right children will at least contain "*v", which is equal in
+              length to "*^".
+          |#
           (define (fn-for-parent parent longest)
-            (local [(define parent-str (fn-for-token (parent-token parent)))
-                    (define parent-str-length (string-length parent-str))
-
-                    (define left-str (fn-for-lon (parent-left parent) longest))
+            (local [(define left-str (fn-for-lon (parent-left parent) longest))
                     (define left-str-length (string-length left-str))
 
-                    (define right-str (fn-for-lon (parent-right parent)
-                                                  longest))
+                    (define right-str (fn-for-lon (parent-right parent) longest))
                     (define right-str-length (string-length right-str))]
-              (cond [(and (> parent-str-length left-str-length)
-                          (> parent-str-length right-str-length))
-                     parent-str]
-                    [(> left-str-length right-str-length) left-str]
-                    [right-str])))
+              (if (> left-str-length right-str-length)
+                  left-str
+                  right-str)))
 
           (define (fn-for-token token)
             (token-token token))]
     (fn-for-root (abstract-humdrum-graph-root ab-hgraph))))
+
+(test)

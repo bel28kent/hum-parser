@@ -53,7 +53,7 @@
                       (local [(define first-token (if (not (empty? lolot))
                                                       (get-token
                                                         (first lolot)
-                                                        spine-num fn-for-lolot)
+                                                        spine-num)
                                                       empty))]
                         (cond [(empty? lolot) empty]
                               [(string=? "*^" (token-token first-token))
@@ -101,8 +101,12 @@
               (fn-for-lolot lolot #f #f 1)))]
     (type (root (fn-for-logs spines)))))
 
-; TODO: time complexity
-(define (get-token lot index caller)
+; get-token
+; (listof Token) Natural -> Token
+; produces the token at index
+(check-error (get-token empty 1))
+
+(define (get-token lot index)
   (local [(define original lot)
 
           (define (get-token lot index counter)
@@ -110,8 +114,7 @@
                                   "Reached an empty list before finding token."
                                   original
                                   index
-                                  counter
-                                  caller)]
+                                  counter)]
                   [else
                     (if (= index counter)
                         (first lot)
@@ -120,9 +123,20 @@
                                    (add1 counter)))]))]
     (get-token lot index 1)))
 
+; splits-to-left?
+; String (listof Token) Natural -> Boolean
+; produces true if there is a spine split to the left of this token
+(check-error (splits-to-left? "*"
+                              (list (token "*" NULL-INTERPRETATION 10)
+                                    (token "*" NULL-INTERPRETATION 10)
+                                    (token "*clefG2" CLEF 10))
+                              4))
+
 (define (splits-to-left? first-token-str lot spine-num)
   (local [(define (splits-to-left? lot counter)
-            (cond [(empty? lot) #f]
+            (cond [(empty? lot) (error "Reached an empty list before getting to this spine."
+                                       lot
+                                       spine-num)]
                   [(= counter spine-num) #f]
                   [else
                     (if (spine-split? (token-token (first lot)))
@@ -134,6 +148,13 @@
             (null-interpretation? first-token-str))
         (splits-to-left? lot 1)
         #f)))
+
+; trim-original
+; (listof Token) (listof Token) (listof Token) -> (listof Token)
+; produces the original list of tokens with parent contents removed
+(check-error (trim-original empty
+                            (list (token "*-" SPINE-TERMINATOR 50))
+                            (list (token "*-" SPINE-TERMINATOR 50))))
 
 (define (trim-original original left right)
   (local [(define left-last-index (token-record-number
@@ -160,6 +181,10 @@
                     (trim-original (rest original))]))]
     (trim-original original)))
 
+; handle-join
+; (listof Token) (listof Token) (listof Token) -> (listof Token)
+; removes "*v" from original only if its pair has already been processed
+
 (define (handle-join rest-original left right)
   (if (string=? "*v" (token-token (first (first rest-original))))
       (if (join-is-already-paired? (first (first rest-original))
@@ -169,7 +194,10 @@
           rest-original)
       rest-original))
 
+; join-is-already-paired?
+; Token (listof Token) (listof Token) -> Boolean
 ; produces true if join can be found twice between left and right
+
 (define (join-is-already-paired? join left right)
   (local [(define (counter lot)
             (cond [(empty? lot) 0]
@@ -185,7 +213,10 @@
         #t
         #f)))
 
+; branch->lot
+; (listof Node) -> (listof Token)
 ; collapses a branch of a tree to a (listof Token)
+
 (define (branch->lot branch)
   (local [(define (branch->lot branch acc)
             (cond [(empty? branch) (reverse acc)]
