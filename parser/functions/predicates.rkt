@@ -150,10 +150,10 @@
 
 ; instrument-class?
 ; String -> Boolean
-; produce true if string matches "\\*I[[:alpha:]]+"
+; produce true if string matches "^\\*I.+$"
 
 (define (instrument-class? token)
-  (not (false? (regexp-match #px"\\*I[[:alpha:]]+" token))))
+  (not (false? (regexp-match #px"^\\*I.+$" token))))
 
 ; ottava?
 ; String -> Boolean
