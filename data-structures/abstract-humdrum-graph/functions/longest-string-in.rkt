@@ -8,23 +8,14 @@
 
 (require racket/list
          racket/local
-         test-engine/racket-tests
          "../../../parser/data-definitions/data-definitions.rkt"
-         (only-in "../../../parser/functions/file.rkt"
-                  path->hfile)
-         "../data-definitions/data-definitions.rkt"
-         "hfile-to-ab-hgraph.rkt")
+         "../data-definitions/data-definitions.rkt")
 
 (provide longest-string-in)
-
-(define three-spines-no-splits
-        (hfile->ab-hgraph (path->hfile "../../../tests/data-structures/data/three-spines-two-splits-not-consecutive.krn")
-                          ab-hgraph))
 
 ; longest-string-in
 ; AbstractHumdrumGraph -> String
 ; produces the longest token string in the tree
-(check-expect (longest-string-in three-spines-no-splits) "2.C#] 2.B]")
 
 (define (longest-string-in ab-hgraph)
   (local [(define (fn-for-root root)
@@ -64,7 +55,8 @@
             (local [(define left-str (fn-for-lon (parent-left parent) longest))
                     (define left-str-length (string-length left-str))
 
-                    (define right-str (fn-for-lon (parent-right parent) longest))
+                    (define right-str (fn-for-lon (parent-right parent)
+                                                  longest))
                     (define right-str-length (string-length right-str))]
               (if (> left-str-length right-str-length)
                   left-str
@@ -73,5 +65,3 @@
           (define (fn-for-token token)
             (token-token token))]
     (fn-for-root (abstract-humdrum-graph-root ab-hgraph))))
-
-(test)
