@@ -36,7 +36,6 @@
 ; Natural -> Image
 ; produces a white rectangle to pad space between branches
 
-; assumes naive layered
 (define (pad height)
   (rectangle pad-width height mode pad-colour))
 

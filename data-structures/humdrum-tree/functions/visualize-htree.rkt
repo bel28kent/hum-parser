@@ -14,7 +14,7 @@
          "../../abstract-humdrum-graph/functions/visualize-ab-hgraph.rkt"
          "../data-definitions/data-definitions.rkt")
 
-(provide visualize-htree)
+(provide (all-defined-out))
 
 ; visualize-htree
 ; HumdrumTree -> Image

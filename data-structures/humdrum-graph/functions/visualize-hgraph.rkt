@@ -14,7 +14,7 @@
          "../../abstract-humdrum-graph/functions/visualize-ab-hgraph.rkt"
          "../data-definitions/data-definitions.rkt")
 
-(provide visualize-hgraph)
+(provide (all-defined-out))
 
 ; visualize-hgraph
 ; HumdrumGraph -> Image
@@ -22,9 +22,9 @@
 
 (define (visualize-hgraph hgraph)
   (local [(define node-img (circle (image-width
-                                     (text (longest-string-in hgraph)
-                                           font-size
-                                           colour))
+                                    (text (longest-string-in hgraph)
+                                          font-size
+                                          colour))
                                    mode
                                    colour))
 
@@ -33,7 +33,7 @@
           (define x-positions (branch-x-positions branch-images))
 
           (define lower-graph-image (pad-bottom-of-graph
-                                      (result-images branch-images)))]
+                                     (result-images branch-images)))]
     (add-branch-lines lower-graph-image x-positions)))
 
 ; list-branch-images
@@ -55,18 +55,18 @@
                     (define (fn-for-branch branch)
                       (cond [(empty? (rest branch))
                              (node-image (token-token
-                                           (leaf-token
-                                             (first branch)))
-                                          node-img)]
+                                          (leaf-token
+                                           (first branch)))
+                                         node-img)]
                             [(parent? (first branch))
                              (local [(define top-image (subbranch-image
-                                                         (first branch)
-                                                         node-img))
+                                                        (first branch)
+                                                        node-img))
                                      (define width-top-image (image-width
-                                                               top-image))
+                                                              top-image))
 
                                      (define bottom-image (fn-for-branch
-                                                            (rest branch)))
+                                                           (rest branch)))
 
                                      (define left-x (* (- (/ width-top-image 2)
                                                           half-node-img)
@@ -83,7 +83,7 @@
 
                                      (define lines-pad (rectangle half-node-img
                                                                   (image-height
-                                                                    lines)
+                                                                   lines)
                                                                   mode
                                                                   pad-colour))]
                                (above (above/align "left"
@@ -91,17 +91,17 @@
                                                    (beside lines-pad lines))
                                       bottom-image))]
                             [else
-                              (above (node-image (token-token
-                                                   (leaf-token
-                                                     (first branch)))
-                                                 node-img)
-                                     straight-line
-                                     (fn-for-branch (rest branch)))]))]
+                             (above (node-image (token-token
+                                                 (leaf-token
+                                                  (first branch)))
+                                                node-img)
+                                    straight-line
+                                    (fn-for-branch (rest branch)))]))]
               (fn-for-branch branch)))
 
           (define rnr (fn-for-root
-                        (root-branches
-                          (abstract-humdrum-graph-root hgraph))))]
+                       (root-branches
+                        (abstract-humdrum-graph-root hgraph))))]
     (result rnr (map image-width rnr))))
 
 ; subbranch-image
@@ -110,8 +110,8 @@
 
 (define (subbranch-image parent node-img)
   (local [(define subgraph (hgraph
-                             (root (list (parent-left parent)
-                                         (parent-right parent)))))
+                            (root (list (parent-left parent)
+                                        (parent-right parent)))))
 
           (define (visualize-subgraph subgraph)
             (local [(define branch-images (list-branch-images subgraph
@@ -120,7 +120,7 @@
                     (define x-positions (branch-x-positions branch-images))
 
                     (define lower-graph-image (pad-bottom-of-graph
-                                                (result-images branch-images)))]
+                                               (result-images branch-images)))]
               (add-subbranch-lines lower-graph-image x-positions)))
 
           (define (add-subbranch-lines lower-graph-image x-positions)
