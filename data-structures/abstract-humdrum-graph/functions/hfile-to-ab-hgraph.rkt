@@ -153,8 +153,8 @@
 ; (listof Token) (listof Token) (listof Token) -> (listof Token)
 ; produces the original list of tokens with parent contents removed
 (check-error (trim-original empty
-                            (list (token "*-" SPINE-TERMINATOR 50))
-                            (list (token "*-" SPINE-TERMINATOR 50))))
+                            (list (leaf (token "*-" SPINE-TERMINATOR 50)))
+                            (list (leaf (token "*-" SPINE-TERMINATOR 50)))))
 
 (define (trim-original original left right)
   (local [(define left-last-index (token-record-number
