@@ -10,7 +10,9 @@
   (only-in "../../../parser/functions/file.rkt" path->hfile)
   "../../../data-structures/abstract-humdrum-graph/data-definitions/data-definitions.rkt"
   "../../../data-structures/abstract-humdrum-graph/functions/hfile-to-ab-hgraph.rkt"
-  test-engine/racket-tests)
+  test-engine/racket-tests
+  (only-in rackunit
+           check-exn))
 
 (define one-spine-no-splits    "../data/one-spine-no-splits.krn")
 (define one-spine-one-split    "../data/one-spine-one-split.krn")
@@ -857,18 +859,24 @@
               (leaf (token "*-" SPINE-TERMINATOR 44)))))))
 
 ; get-token
-(check-error (get-token empty 1))
+(check-exn #rx"reached empty before finding token"
+           (λ ()
+              (get-token empty 1)))
 
 ; splits-to-left?
-(check-error (splits-to-left? "*"
-                              (list (token "*" NULL-INTERPRETATION 10)
-                                    (token "*" NULL-INTERPRETATION 10)
-                                    (token "*clefG2" CLEF 10))
-                              4))
+(check-exn #rx"reached empty before this spine"
+           (λ ()
+              (splits-to-left? "*"
+                               (list (token "*" NULL-INTERPRETATION 10)
+                                     (token "*" NULL-INTERPRETATION 10)
+                                     (token "*clefG2" CLEF 10))
+                               4)))
 
 ; trim-original
-(check-error (trim-original empty
-                            (list (leaf (token "*-" SPINE-TERMINATOR 50)))
-                            (list (leaf (token "*-" SPINE-TERMINATOR 50)))))
+(check-exn #rx"reached empty before finding index"
+           (λ ()
+              (trim-original empty
+                             (list (leaf (token "*-" SPINE-TERMINATOR 50)))
+                             (list (leaf (token "*-" SPINE-TERMINATOR 50))))))
 
 (test)

@@ -15,7 +15,7 @@
                   spine-parser)
          "../data-definitions/data-definitions.rkt")
 
-(provide hfile->ab-hgraph)
+(provide (all-defined-out))
 
 #|
     ASSUMPTIONS:
@@ -106,8 +106,10 @@
   (local [(define original lot)
 
           (define (get-token lot index counter)
-            (cond [(empty? lot) (error
-                                  "Reached an empty list before finding token."
+            (cond [(empty? lot) (raise-result-error
+                                  'get-token
+                                  "reached empty before finding token"
+                                  0
                                   original
                                   index
                                   counter)]
@@ -125,7 +127,10 @@
 
 (define (splits-to-left? first-token-str lot spine-num)
   (local [(define (splits-to-left? lot counter)
-            (cond [(empty? lot) (error "Reached an empty list before getting to this spine."
+            (cond [(empty? lot) (raise-result-error
+                                       'splits-to-left?
+                                       "reached empty before this spine"
+                                       0
                                        lot
                                        spine-num)]
                   [(= counter spine-num) #f]
@@ -151,7 +156,12 @@
 
           (define (trim-original original)
             (cond [(empty? original)
-                   (error "Reached empty list before finding index.")]
+                   (raise-result-error 'trim-original
+                                       "reached empty before finding index"
+                                       0
+                                       original
+                                       left
+                                       right)]
                   [(= record-index (token-record-number
                                      (first (first original))))
                    (handle-join (rest original) left right)]
