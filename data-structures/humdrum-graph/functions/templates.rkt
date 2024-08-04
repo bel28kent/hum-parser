@@ -55,7 +55,7 @@
             (... (token-token token)
                  (token-type token)
                  (token-record-number token)))]
-    (... (fn-for-root (hgraph-root hgraph)))))
+    (... (fn-for-root (abstract-humdrum-graph-root hgraph)))))
 
 ;; Harmonic or Breadth-first traversal
 ;; (Recursion with accumulators)

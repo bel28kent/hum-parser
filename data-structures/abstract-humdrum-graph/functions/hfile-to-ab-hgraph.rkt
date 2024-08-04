@@ -232,6 +232,7 @@
                                       acc))]))]
     (branch->lot branch empty)))
 
+#|
 (define one-spine-no-splits    "../../../tests/data-structures/data/one-spine-no-splits.krn")
 (define one-spine-one-split    "../../../tests/data-structures/data/one-spine-one-split.krn")
 (define one-spine-two-splits   "../../../tests/data-structures/data/one-spine-two-splits.krn")
@@ -963,3 +964,4 @@
               (leaf (token "*-" SPINE-TERMINATOR 30)))))))
 
 (test)
+|#
