@@ -73,3 +73,29 @@
   (local [(define (write-file los out)
             (foldl (λ (f r) (displayln f out)) (void) los))]
     (call-with-output-file path (λ (out) (write-file los out)))))
+
+; build-filenames
+; String String Natural -> (listof String)
+; produces a list of numbered filenames
+
+(define (build-filenames start extension number)
+  (local [(define number-str-length (string-length
+                                      (number->string number)))
+
+          (define (strings->filename n)
+            (string-append start
+                           (match-number-str-length
+                             (number->string (add1 n)))
+                           extension))
+
+          (define (match-number-str-length str)
+            (local [(define str-length (string-length str))]
+              (if (= number-str-length str-length)
+                  str
+                  (string-append (zeros (- number-str-length
+                                           str-length))
+                                 str))))
+
+          (define (zeros repeat)
+            (make-string repeat #\0))]
+    (build-list number strings->filename)))
