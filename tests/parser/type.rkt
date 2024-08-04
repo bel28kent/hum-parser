@@ -52,6 +52,7 @@
 (check-expect (type-token "16.aaLL]")        SPINE-DATA)
 (check-expect (type-token "4a 4aaa")         SPINE-DATA)
 (check-expect (type-token ".")               NULL-SPINE-DATA)
+(check-expect (type-token "!")               LOCAL-COMMENT)
 (check-expect (type-token "! Local comment") LOCAL-COMMENT)
 (check-expect (type-token "*cue")            #f)
 (check-error  (type-token "4aa\t4aaa"))
