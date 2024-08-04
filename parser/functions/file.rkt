@@ -99,3 +99,10 @@
           (define (zeros repeat)
             (make-string repeat #\0))]
     (build-list number strings->filename)))
+
+; build-paths
+; String (listof String) -> (listof String)
+; produces a list of paths
+
+(define (build-paths path filenames)
+    (map (λ (filename) (string-append path filename)) filenames))
