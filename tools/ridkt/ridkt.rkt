@@ -11,7 +11,8 @@
          racket/local
          "../../parser/data-definitions/data-definitions.rkt"
          (only-in "../../parser/functions/file.rkt" path->hfile)
-         "../../parser/functions/predicates.rkt")
+         "../../parser/functions/predicates.rkt"
+         "../../parser/functions/type.rkt")
 
 (define references      (make-parameter #f))
 (define global          (make-parameter #f))
@@ -145,7 +146,8 @@
           (define (empty-interpretation? split)
             (cond [(empty? split) #t]
                   [(not (string=? NULL-INTERPRETATION
-                                  (token-type (first split))))
+                                  (type-token-as-str
+                                    (token-token (first split)))))
                         #f]
                   [else
                     (empty-interpretation? (rest split))]))]
@@ -181,7 +183,8 @@
           (define (null-data-record? split)
             (cond [(empty? split) #t]
                   [(not (string=? NULL-SPINE-DATA
-                                  (token-type (first split))))
+                                  (type-token-as-str
+                                    (token-token (first split)))))
                         #f]
                   [else
                     (null-data-record? (rest split))]))]
@@ -198,9 +201,10 @@
             (cond [(empty? lor) -1] ; records use zero-based indexing
                   [(and (string=? TOKEN (record-type (first lor)))
                         (string=? EXCLUSIVE-INTERPRETATION
-                                  (token-type
-                                    (first
-                                      (record-split (first lor))))))
+                                  (type-token-as-str
+                                    (token-token
+                                      (first
+                                        (record-split (first lor)))))))
                    (record-record-number (first lor))]
                   [else
                     (find-first-exclusive-record-number (rest lor))]))
