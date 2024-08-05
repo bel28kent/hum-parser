@@ -70,7 +70,7 @@
                   [(part-number? token)       PART-NUMBER]
                   [else
                     #f]))]
-    (if (false? (regexp-match #px"^!?[^!\t]*$" token))
+    (if (false? (regexp-match #px"(^=[^\t]*$)|(^!?[^!\t]*$)" token))
         (raise-argument-error 'type-token
                               "str with no tabs and 0 or 1 bang"
                               token)
