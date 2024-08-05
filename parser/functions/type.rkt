@@ -7,6 +7,8 @@
 (require racket/bool
          racket/local
          racket/string
+         (only-in lang/htdp-advanced
+                  boolean->string)
          "../data-definitions/data-definitions.rkt"
          "predicates.rkt")
 
@@ -81,3 +83,13 @@
               [(local-comment-token? token)      LOCAL-COMMENT]
               [else
                 #f]))))
+
+; type-token-as-str
+; String -> String
+; produce the type of the token as a string
+
+(define (type-token-as-str token)
+  (local [(define type (type-token token))]
+    (cond [(string? type) type]
+          [else
+            (boolean->string type)])))
