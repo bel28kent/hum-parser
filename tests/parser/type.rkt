@@ -73,10 +73,10 @@
 (check-expect (type-token ".")               NULL-SPINE-DATA)
 (check-expect (type-token "!")               LOCAL-COMMENT)
 (check-expect (type-token "! Local comment") LOCAL-COMMENT)
-(check-exn    #rx"str with no tabs and 0 or 1 bang"
+(check-exn    #rx"str with no tabs and optional bang to start"
               (λ ()
                  (type-token "4aa\t4aaa")))
-(check-exn    #rx"str with no tabs and 0 or 1 bang"
+(check-exn    #rx"str with no tabs and optional bang to start"
               (λ ()
                  (type-token "!!!COM: Bach, Johann Sebastian")))
 
@@ -131,10 +131,10 @@
 (check-expect (type-token-as-str ".")               NULL-SPINE-DATA)
 (check-expect (type-token-as-str "!")               LOCAL-COMMENT)
 (check-expect (type-token-as-str "! Local comment") LOCAL-COMMENT)
-(check-exn    #rx"str with no tabs and 0 or 1 bang"
+(check-exn    #rx"str with no tabs and optional bang to start"
               (λ ()
                  (type-token-as-str "4aa\t4aaa")))
-(check-exn    #rx"str with no tabs and 0 or 1 bang"
+(check-exn    #rx"str with no tabs and optional bang to start"
               (λ ()
                  (type-token-as-str "!!!COM: Bach, Johann Sebastian")))
 

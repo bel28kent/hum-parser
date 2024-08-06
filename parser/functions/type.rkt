@@ -77,9 +77,9 @@
                   [(form-marker? token)       FORM-MARKER]
                   [else
                     #f]))]
-    (if (false? (regexp-match #px"(^=[^\t]*$)|(^!?[^!\t]*$)" token))
+    (if (false? (regexp-match #px"(^=[^\t]*$)|(^!$|^!?[^!\t][^\t]*$)" token))
         (raise-argument-error 'type-token
-                              "str with no tabs and 0 or 1 bang"
+                              "str with no tabs and optional bang to start"
                               token)
         (cond [(exclusive-interpretation? token) EXCLUSIVE-INTERPRETATION]
               [(tandem-interpretation? token)    (type-tandem token)]
