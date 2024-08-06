@@ -197,6 +197,13 @@
 (define (tuplet? token)
   (not (false? (regexp-match #px"^\\*X?tuplet$" token))))
 
+; tremolo?
+; String -> Boolean
+; produces true if string matches "^\\*X?tremolo$"
+
+(define (tremolo? token)
+  (not (false? (regexp-match #px"^\\*X?tremolo$" token))))
+
 ; spine-data?
 ; String -> Boolean
 ; produce true if string is not METADATA and is not another TOKEN type

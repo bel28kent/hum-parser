@@ -48,6 +48,7 @@
 (define METRONOME-MARKING        "MetronomeMarking")
 (define CUE-SIZED-NOTES          "CueSizedNotes")
 (define TUPLET                   "Tuplet")
+(define TREMOLO                  "Tremolo")
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  METADATA
@@ -128,6 +129,7 @@
 ;  - MetronomeMarking
 ;  - CueSizedNotes
 ;  - Tuplet
+;  - Tremolo
 ;  - #f
 ;  Represents a token starting with TANDEM-TAG, or false if unknown
 
@@ -178,6 +180,9 @@
 
 ; Tuplet is "Tuplet"
 ;  Represents a token that matches "^\\*X?tuplet$"
+
+; Tremolo is "Tremolo"
+;  Represents a token that matches "^\\*X?tremolo$"
 
 ; Measure is "Measure"
 ;  Represents a token starting with MEASURE-TAG
