@@ -49,6 +49,7 @@
 (define CUE-SIZED-NOTES          "CueSizedNotes")
 (define TUPLET                   "Tuplet")
 (define TREMOLO                  "Tremolo")
+(define PEDAL-MARKING            "PedalMarking")
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  METADATA
@@ -130,6 +131,7 @@
 ;  - CueSizedNotes
 ;  - Tuplet
 ;  - Tremolo
+;  - PedalMarking
 ;  - #f
 ;  Represents a token starting with TANDEM-TAG, or false if unknown
 
@@ -183,6 +185,9 @@
 
 ; Tremolo is "Tremolo"
 ;  Represents a token that matches "^\\*X?tremolo$"
+
+; PedalMarking is "PedalMarking"
+;  Represents a token that matches "^\\*X?ped"
 
 ; Measure is "Measure"
 ;  Represents a token starting with MEASURE-TAG

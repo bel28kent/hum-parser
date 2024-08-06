@@ -204,6 +204,13 @@
 (define (tremolo? token)
   (not (false? (regexp-match #px"^\\*X?tremolo$" token))))
 
+; pedal-marking?
+; String -> Boolean
+; produces true if string matches "^\\*X?ped"
+
+(define (pedal-marking? token)
+  (not (false? (regexp-match #px"^\\*X?ped" token))))
+
 ; spine-data?
 ; String -> Boolean
 ; produce true if string is not METADATA and is not another TOKEN type

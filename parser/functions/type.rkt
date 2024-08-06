@@ -72,6 +72,7 @@
                   [(cue-sized-notes? token)   CUE-SIZED-NOTES]
                   [(tuplet? token)            TUPLET]
                   [(tremolo? token)           TREMOLO]
+                  [(pedal-marking? token)     PEDAL-MARKING]
                   [else
                     #f]))]
     (if (false? (regexp-match #px"(^=[^\t]*$)|(^!?[^!\t]*$)" token))
