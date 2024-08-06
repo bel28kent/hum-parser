@@ -49,6 +49,7 @@ where `TandemInterpretation` is one of:
 	- Ottava
 	- GroupAttribution
 	- PartNumber
+	- MetronomeMarking
 	- #f
 ```
 Given the extensibility of Humdrum, the false subclass `#f` represents unknown

@@ -68,6 +68,7 @@
                   [(ottava? token)            OTTAVA]
                   [(group-attribution? token) GROUP-ATTRIBUTION]
                   [(part-number? token)       PART-NUMBER]
+                  [(metronome-marking? token) METRONOME-MARKING]
                   [else
                     #f]))]
     (if (false? (regexp-match #px"(^=[^\t]*$)|(^!?[^!\t]*$)" token))

@@ -121,10 +121,10 @@
 
 ; time-sig?
 ; String -> Boolean
-; produce true if string starts with "*M" or *met"
+; produce true if string starts with "(^\\*met.*$)|(^\\*M[\\d]+/[\\d]+$)"
 
 (define (time-sig? token)
-  (not (false? (regexp-match #px"\\*(M|met)" token))))
+  (not (false? (regexp-match #px"(^\\*met.*$)|(^\\*M[\\d]+/[\\d]+$)" token))))
 
 ; key-sig?
 ; String -> Boolean
@@ -175,6 +175,13 @@
 
 (define (part-number? token)
   (not (false? (regexp-match #px"^\\*part[[:digit:]]+$" token))))
+
+; metronome-marking?
+; String -> Boolean
+; produce true if string matches "^\\*MM[\\d]+$"
+
+(define (metronome-marking? token)
+  (not (false? (regexp-match #px"^\\*MM[\\d]+$" token))))
 
 ; spine-data?
 ; String -> Boolean

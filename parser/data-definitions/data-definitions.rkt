@@ -45,6 +45,7 @@
 (define OTTAVA                   "Ottava")
 (define GROUP-ATTRIBUTION        "GroupAttribution")
 (define PART-NUMBER              "PartNumber")
+(define METRONOME-MARKING        "MetronomeMarking")
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  METADATA
@@ -122,6 +123,7 @@
 ;  - Ottava
 ;  - GroupAttribution
 ;  - PartNumber
+;  - MetronomeMarking
 ;  - #f
 ;  Represents a token starting with TANDEM-TAG, or false if unknown
 
@@ -138,10 +140,10 @@
 ;  Represents a token that equals TANDEM-TAG
 
 ; Clef is "Clef"
-;  Represents a token that begins with "*clef"
+;  Represents a token that begins with "\\*clef"
 
 ; TimeSignature is "TimeSignature"
-;  Represents a token that begins with "*M"
+;  Represents a token that matches "(^\\*met.*$)|(^\\*M[\\d]+/[\\d]+$)"
 
 ; KeySignature is "KeySignature"
 ;  Represents a token that matches "\\*k\\[.*\\]"
@@ -163,6 +165,9 @@
 
 ; PartNumber is "PartNumber"
 ;  Represents a token that matches "^\\*part[[:digit:]]+$"
+
+; MetronomeMarking is "MetronomeMarking"
+;  Represents a token that matches "^\\*MM[\\d]+$"
 
 ; Measure is "Measure"
 ;  Represents a token starting with MEASURE-TAG
