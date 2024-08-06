@@ -218,6 +218,13 @@
 (define (pedal-marking? token)
   (not (false? (regexp-match #px"^\\*X?ped" token))))
 
+; form-marker?
+; String -> Boolean
+; produces true if string matches "^\\*>.*$"
+
+(define (form-marker? token)
+  (not (false? (regexp-match #px"^\\*>.*$" token))))
+
 ; spine-data?
 ; String -> Boolean
 ; produce true if string is not METADATA and is not another TOKEN type

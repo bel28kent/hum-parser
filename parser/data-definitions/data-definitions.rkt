@@ -51,6 +51,7 @@
 (define TUPLET                   "Tuplet")
 (define TREMOLO                  "Tremolo")
 (define PEDAL-MARKING            "PedalMarking")
+(define FORM-MARKER              "FormMarker")
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  METADATA
@@ -134,6 +135,7 @@
 ;  - Tuplet
 ;  - Tremolo
 ;  - PedalMarking
+;  - FormMarker
 ;  - #f
 ;  Represents a token starting with TANDEM-TAG, or false if unknown
 
@@ -193,6 +195,9 @@
 
 ; PedalMarking is "PedalMarking"
 ;  Represents a token that matches "^\\*X?ped"
+
+; FormMarker is "FormMarker"
+;  Represents a token that matches "^\\*>.*$"
 
 ; Measure is "Measure"
 ;  Represents a token starting with MEASURE-TAG

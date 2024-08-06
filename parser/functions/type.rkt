@@ -74,6 +74,7 @@
                   [(tuplet? token)            TUPLET]
                   [(tremolo? token)           TREMOLO]
                   [(pedal-marking? token)     PEDAL-MARKING]
+                  [(form-marker? token)       FORM-MARKER]
                   [else
                     #f]))]
     (if (false? (regexp-match #px"(^=[^\t]*$)|(^!?[^!\t]*$)" token))
