@@ -47,6 +47,7 @@
 (define PART-NUMBER              "PartNumber")
 (define METRONOME-MARKING        "MetronomeMarking")
 (define CUE-SIZED-NOTES          "CueSizedNotes")
+(define TUPLET                   "Tuplet")
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  METADATA
@@ -126,6 +127,7 @@
 ;  - PartNumber
 ;  - MetronomeMarking
 ;  - CueSizedNotes
+;  - Tuplet
 ;  - #f
 ;  Represents a token starting with TANDEM-TAG, or false if unknown
 
@@ -173,6 +175,9 @@
 
 ; CueSizedNotes is "CueSizedNotes"
 ;  Represents a token that matches "^\\*X?cue$"
+
+; Tuplet is "Tuplet"
+;  Represents a token that matches "^\\*X?tuplet$"
 
 ; Measure is "Measure"
 ;  Represents a token starting with MEASURE-TAG

@@ -51,6 +51,7 @@ where `TandemInterpretation` is one of:
 	- PartNumber
 	- MetronomeMarking
         - CueSizedNotes
+        - Tuplet
 	- #f
 ```
 Given the extensibility of Humdrum, the false subclass `#f` represents unknown

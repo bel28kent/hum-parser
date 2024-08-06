@@ -70,6 +70,7 @@
                   [(part-number? token)       PART-NUMBER]
                   [(metronome-marking? token) METRONOME-MARKING]
                   [(cue-sized-notes? token)   CUE-SIZED-NOTES]
+                  [(tuplet? token)            TUPLET]
                   [else
                     #f]))]
     (if (false? (regexp-match #px"(^=[^\t]*$)|(^!?[^!\t]*$)" token))

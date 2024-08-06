@@ -190,6 +190,13 @@
 (define (cue-sized-notes? token)
   (not (false? (regexp-match #px"^\\*X?cue$" token))))
 
+; tuplet?
+; String -> Boolean
+; produces true if string matches "^\\*X?tuplet$"
+
+(define (tuplet? token)
+  (not (false? (regexp-match #px"^\\*X?tuplet$" token))))
+
 ; spine-data?
 ; String -> Boolean
 ; produce true if string is not METADATA and is not another TOKEN type
