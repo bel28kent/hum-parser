@@ -44,6 +44,7 @@ where `TandemInterpretation` is one of:
 	- TimeSignature
 	- KeySignature
 	- KeyLabel
+	- CancelKeySignature
 	- StaffNumber
 	- InstrumentClass
 	- Ottava

@@ -63,6 +63,7 @@
                   [(time-sig? token)          TIME-SIG]
                   [(key-sig? token)           KEY-SIG]
                   [(key-label? token)         KEY-LABEL]
+                  [(key-cancel? token)        KEY-CANCEL]
                   [(staff-number? token)      STAFF-NUMBER]
                   [(instrument-class? token)  INSTRUMENT-CLASS]
                   [(ottava? token)            OTTAVA]

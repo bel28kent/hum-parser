@@ -141,6 +141,13 @@
   (local [(define matches (regexp-match* #px"\\*([a-gA-G]|X)(-|#)?:" token))]
     (not (empty? matches))))
 
+; key-label?
+; String -> Boolean
+; produce true if string equals "*kcancel"
+
+(define (key-cancel? token)
+  (string=? "*kcancel" token))
+
 ; staff-number?
 ; String -> Boolean
 ; produce true if string matches "\\*staff[0-9]+"

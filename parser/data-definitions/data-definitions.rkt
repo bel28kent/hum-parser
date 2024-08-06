@@ -40,6 +40,7 @@
 (define TIME-SIG                 "TimeSignature")
 (define KEY-SIG                  "KeySignature")
 (define KEY-LABEL                "KeyLabel")
+(define KEY-CANCEL               "CancelKeySignature")
 (define STAFF-NUMBER             "StaffNumber")
 (define INSTRUMENT-CLASS         "InstrumentClass")
 (define OTTAVA                   "Ottava")
@@ -122,6 +123,7 @@
 ;  - TimeSignature
 ;  - KeySignature
 ;  - KeyLabel
+;  - CancelKeySignature
 ;  - StaffNumber
 ;  - InstrumentClass
 ;  - Ottava
@@ -158,6 +160,9 @@
 
 ; KeyLabel is "KeyLabel"
 ;  Represents a token that matches "\\*([a-gA-G]|X)(-|#)?:"
+
+; CancelKeySignature is "CancelKeySignature"
+;  Represents a token that equals "*kcancel"
 
 ; StaffNumber is "StaffNumber"
 ;  Represents a token that matches "\\*staff[0-9]+"
