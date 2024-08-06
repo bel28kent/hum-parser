@@ -27,6 +27,9 @@
 (define LOCAL-COMMENT            "LocalComment")
 (define TOKEN                    "Token")
 
+(define KERN                     "Kern")
+(define DYNAM                    "Dynam")
+
 (define EXCLUSIVE-INTERPRETATION "ExclusiveInterpretation")
 (define MEASURE                  "Measure")
 (define SPINE-DATA               "SpineData")
@@ -234,13 +237,19 @@
 (define RECORD-LC-EX
         (list "! Adagio\t!\t! Adagio\t!\t! Adagio\t!\t! Adagio\t!"))
 
-(struct global-spine (tokens spine-number) #:transparent)
-; GlobalSpine is (global-spine (listof (listof Token)) Natural)
+; SpineType is one of:
+;  - Kern
+;  - Dynam
+;  Represents the representation scheme of the spine
+
+(struct global-spine (type tokens spine-number) #:transparent)
+; GlobalSpine is (global-spine SpineType (listof (listof Token)) Natural)
 ;  Represents a singe global column of a Humdrum file.
 ;  CONSTRAINT: spine-number >= 0
 
 (define GLOBAL-SPINE-EX
-        (global-spine (list (list (token "**kern"  EXCLUSIVE-INTERPRETATION 0))
+        (global-spine KERN
+                      (list (list (token "**kern"  EXCLUSIVE-INTERPRETATION 0))
                             (list (token "*clefG2" CLEF                     1))
                             (list (token "4a"      SPINE-DATA               2)))
                       0))

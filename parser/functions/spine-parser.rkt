@@ -10,7 +10,8 @@
          "abstract.rkt"
          (only-in "extract-spine-arity.rkt"
                   extract-spine-arity)
-         "split-and-gather.rkt")
+         "split-and-gather.rkt"
+         "type.rkt")
 
 (provide (all-defined-out))
 
@@ -147,8 +148,9 @@
                   [else
                    (lololot->logs (rest lololot)
                                   (cons (global-spine
-                                         (first lololot)
-                                         counter)
+                                          (type-spine (first lololot))
+                                          (first lololot)
+                                          counter)
                                         logs)
                                   (add1 counter))]))]
     (lololot->logs lololot empty 0)))
@@ -178,17 +180,18 @@
                                 ;
                                 (cond [(empty? lolot) (reverse los)]
                                       [else
-                                       (lolot-iterator (rest lolot)
-                                                       (cons
-                                                         (gather
-                                                           (foldr
-                                                             (λ (f r)
-                                                                (cons
-                                                                  (token-token f)
-                                                                  r))
-                                                             empty
-                                                             (first lolot)))
-                                                         los))]))]
+                                       (lolot-iterator
+                                         (rest lolot)
+                                           (cons
+                                             (gather
+                                               (foldr
+                                                 (λ (f r)
+                                                    (cons
+                                                      (token-token f)
+                                                      r))
+                                                 empty
+                                                 (first lolot)))
+                                             los))]))]
                         (lolot-iterator lolot empty)))]
               (lolot-iterator lolot)))]
     (logs-iterator logs)))

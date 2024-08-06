@@ -248,4 +248,12 @@
 (check-expect (local-comment-token? "! Local comment") #t)
 (check-expect (local-comment-token? "*8va")            #f)
 
+; kern?
+(check-expect (kern? (token "**kern" EXCLUSIVE-INTERPRETATION 0))  #t)
+(check-expect (kern? (token "**dynam" EXCLUSIVE-INTERPRETATION 0)) #f)
+
+; dynam?
+(check-expect (dynam? (token "**dynam" EXCLUSIVE-INTERPRETATION 0)) #t)
+(check-expect (dynam? (token "**kern" EXCLUSIVE-INTERPRETATION 0))  #f)
+
 (test)

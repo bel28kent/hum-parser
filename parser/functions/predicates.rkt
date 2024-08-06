@@ -250,3 +250,17 @@
 
 (define (local-comment-token? token)
   (not (false? (regexp-match #px"!.*" token))))
+
+; kern?
+; Token -> Boolean
+; produce true if token-token equals "**kern"
+
+(define (kern? token)
+  (string=? "**kern" (token-token token)))
+
+; dynam?
+; Token -> Boolean
+; produce true if token-token equals "**dynam"
+
+(define (dynam? token)
+  (string=? "**dynam" (token-token token)))

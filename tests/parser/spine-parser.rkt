@@ -24,45 +24,47 @@
 
 ; spine-parser
 (check-expect (spine-parser berg-hfile)
-              (list (global-spine (list
-                                   (list
-                                    (token "**pc" EXCLUSIVE-INTERPRETATION 5))
-                                   (list (token "*X:" KEY-LABEL 6))
-                                   (list (token "0" SPINE-DATA 7))
-                                   (list (token "1" SPINE-DATA 8))
-                                   (list (token "3" SPINE-DATA 9))
-                                   (list (token "8" SPINE-DATA 10))
-                                   (list (token "4" SPINE-DATA 11))
-                                   (list (token "9" SPINE-DATA 12))
-                                   (list (token "10" SPINE-DATA 13))
-                                   (list (token "7" SPINE-DATA 14))
-                                   (list (token "6" SPINE-DATA 15))
-                                   (list (token "5" SPINE-DATA 16))
-                                   (list (token "11" SPINE-DATA 17))
-                                   (list (token "2" SPINE-DATA 18))
-                                   (list (token "*-" SPINE-TERMINATOR 19)))
+              (list (global-spine #f
+                                  (list
+                                    (list
+                                      (token "**pc" EXCLUSIVE-INTERPRETATION 5))
+                                    (list (token "*X:" KEY-LABEL 6))
+                                    (list (token "0" SPINE-DATA 7))
+                                    (list (token "1" SPINE-DATA 8))
+                                    (list (token "3" SPINE-DATA 9))
+                                    (list (token "8" SPINE-DATA 10))
+                                    (list (token "4" SPINE-DATA 11))
+                                    (list (token "9" SPINE-DATA 12))
+                                    (list (token "10" SPINE-DATA 13))
+                                    (list (token "7" SPINE-DATA 14))
+                                    (list (token "6" SPINE-DATA 15))
+                                    (list (token "5" SPINE-DATA 16))
+                                    (list (token "11" SPINE-DATA 17))
+                                    (list (token "2" SPINE-DATA 18))
+                                    (list (token "*-" SPINE-TERMINATOR 19)))
                                   0)
-                    (global-spine (list
-                                   (list
-                                    (token "**kern"
-                                           EXCLUSIVE-INTERPRETATION
-                                           5))
-                                   (list (token "*X:" KEY-LABEL 6))
-                                   (list (token "F" SPINE-DATA 7))
-                                   (list (token "F#" SPINE-DATA 8))
-                                   (list (token "G#" SPINE-DATA 9))
-                                   (list (token "C#" SPINE-DATA 10))
-                                   (list (token "A" SPINE-DATA 11))
-                                   (list (token "D" SPINE-DATA 12))
-                                   (list (token "E-" SPINE-DATA 13))
-                                   (list (token "C" SPINE-DATA 14))
-                                   (list (token "B" SPINE-DATA 15))
-                                   (list (token "B-" SPINE-DATA 16))
-                                   (list (token "E" SPINE-DATA 17))
-                                   (list (token "G" SPINE-DATA 18))
-                                   (list (token "*-" SPINE-TERMINATOR 19)))
+                    (global-spine KERN
+                                  (list
+                                    (list
+                                      (token "**kern"
+                                             EXCLUSIVE-INTERPRETATION
+                                             5))
+                                    (list (token "*X:" KEY-LABEL 6))
+                                    (list (token "F" SPINE-DATA 7))
+                                    (list (token "F#" SPINE-DATA 8))
+                                    (list (token "G#" SPINE-DATA 9))
+                                    (list (token "C#" SPINE-DATA 10))
+                                    (list (token "A" SPINE-DATA 11))
+                                    (list (token "D" SPINE-DATA 12))
+                                    (list (token "E-" SPINE-DATA 13))
+                                    (list (token "C" SPINE-DATA 14))
+                                    (list (token "B" SPINE-DATA 15))
+                                    (list (token "B-" SPINE-DATA 16))
+                                    (list (token "E" SPINE-DATA 17))
+                                    (list (token "G" SPINE-DATA 18))
+                                    (list (token "*-" SPINE-TERMINATOR 19)))
                                   1)))
-
+ 
 ; unwrap
 (check-expect (unwrap berg-hfile)
               (list (list (token "**pc" EXCLUSIVE-INTERPRETATION 5)
@@ -167,18 +169,24 @@
 ; lololot->logs
 (check-expect (lololot->logs (tokens-by-spine (list (list KERN-TOKEN))
                                               (list (list 1))))
-              (list (global-spine (list (list KERN-TOKEN)) 0)))
+              (list (global-spine KERN (list (list KERN-TOKEN)) 0)))
 (check-expect (lololot->logs (tokens-by-spine (list
                                                 (list KERN-TOKEN KERN-TOKEN))
                                               (list (list 1) (list 1))))
-              (list (global-spine (list (list KERN-TOKEN)) 0)
-                    (global-spine (list (list KERN-TOKEN)) 1)))
+              (list (global-spine KERN (list (list KERN-TOKEN)) 0)
+                    (global-spine KERN (list (list KERN-TOKEN)) 1)))
 
 ; logs->lolos
-(check-expect (logs->lolos (list (global-spine (list (list KERN-TOKEN)) 0)))
+(check-expect (logs->lolos (list (global-spine KERN
+                                               (list (list KERN-TOKEN))
+                                               0)))
               (list (list "**kern")))
-(check-expect (logs->lolos (list (global-spine (list (list KERN-TOKEN)) 0)
-                                 (global-spine (list (list KERN-TOKEN)) 1)))
+(check-expect (logs->lolos (list (global-spine KERN
+                                               (list (list KERN-TOKEN))
+                                               0)
+                                 (global-spine KERN
+                                               (list (list KERN-TOKEN))
+                                               1)))
               (list (list "**kern") (list "**kern")))
 
 (test)

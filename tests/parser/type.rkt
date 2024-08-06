@@ -22,6 +22,23 @@
 (check-expect (type-record "!\t! In some editions A#")      LOCAL-COMMENT)
 (check-expect (type-record "4a\t4aa\tf")                    TOKEN)
 
+; type-spine
+(check-expect (type-spine (list (list (token "**kern" EXCLUSIVE-INTERPRETATION 0))
+                                (list (token "4a" SPINE-DATA 1))
+                                (list (token "==" MEASURE 2))
+                                (list (token "*-" SPINE-TERMINATOR 3))))
+              KERN)
+(check-expect (type-spine (list (list (token "**dynam" EXCLUSIVE-INTERPRETATION 0))
+                                (list (token "f" SPINE-DATA 1))
+                                (list (token "==" MEASURE 2))
+                                (list (token "*-" SPINE-TERMINATOR 3))))
+              DYNAM)
+(check-expect (type-spine (list (list (token "**test" EXCLUSIVE-INTERPRETATION 0))
+                                (list (token "test" SPINE-DATA 1))
+                                (list (token "==" MEASURE 2))
+                                (list (token "*-" SPINE-TERMINATOR 3))))
+              #f)
+
 ; type-token
 (check-expect (type-token "**kern")          EXCLUSIVE-INTERPRETATION)
 (check-expect (type-token "*^")              SPINE-SPLIT)

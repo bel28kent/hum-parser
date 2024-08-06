@@ -6,6 +6,7 @@
 
 (require racket/bool
          racket/local
+         racket/list
          racket/string
          (only-in lang/htdp-advanced
                   boolean->string)
@@ -42,6 +43,21 @@
     (if (false? metadata)
         TOKEN
         metadata)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  SPINE FUNCTIONS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; type-spine
+; (listof (listof Token)) -> SpineType or false
+; produce the type of the spine or false if unknown
+
+(define (type-spine lolot)
+  (local [(define first-token (first (first lolot)))]
+    (cond [(kern? first-token) KERN]
+          [(dynam? first-token) DYNAM]
+          [else
+            #f])))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  TOKEN FUNCTIONS
