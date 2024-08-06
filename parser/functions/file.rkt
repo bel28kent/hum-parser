@@ -26,6 +26,15 @@
   (call-with-input-file path
                         (λ (in) (read-file empty in)))))
 
+; write-file
+; (listof String) String -> #<void>
+; writes list to file at given path
+
+(define (write-file los path)
+  (local [(define (write-file los out)
+            (foldl (λ (f r) (displayln f out)) (void) los))]
+    (call-with-output-file path (λ (out) (write-file los out)))))
+
 ; path->hfile
 ; String -> HumdrumFile
 ; produces the HumdrumFile at the given path
@@ -64,15 +73,6 @@
 (define (hfile->los hfile)
   (local [(define records (hfile-records hfile))]
     (foldr (λ (f r) (cons (record-record f) r)) empty records)))
-
-; write-file
-; (listof String) String -> #<void>
-; writes list to file at given path
-
-(define (write-file los path)
-  (local [(define (write-file los out)
-            (foldl (λ (f r) (displayln f out)) (void) los))]
-    (call-with-output-file path (λ (out) (write-file los out)))))
 
 ; build-filenames
 ; String String Natural -> (listof String)
