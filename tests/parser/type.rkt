@@ -51,6 +51,8 @@
 (check-expect (type-token "*part1")          PART-NUMBER)
 (check-expect (type-token "*part20")         PART-NUMBER)
 (check-expect (type-token "*MM60")           METRONOME-MARKING)
+(check-expect (type-token "*cue")            CUE-SIZED-NOTES)
+(check-expect (type-token "*Xcue")           CUE-SIZED-NOTES)
 (check-expect (type-token "=4||")            MEASURE)
 (check-expect (type-token "=75:|!|:")        MEASURE)
 (check-expect (type-token "16.aaLL]")        SPINE-DATA)
@@ -58,7 +60,6 @@
 (check-expect (type-token ".")               NULL-SPINE-DATA)
 (check-expect (type-token "!")               LOCAL-COMMENT)
 (check-expect (type-token "! Local comment") LOCAL-COMMENT)
-(check-expect (type-token "*cue")            #f)
 (check-exn    #rx"str with no tabs and 0 or 1 bang"
               (λ ()
                  (type-token "4aa\t4aaa")))
@@ -95,6 +96,8 @@
 (check-expect (type-token-as-str "*part1")          PART-NUMBER)
 (check-expect (type-token-as-str "*part20")         PART-NUMBER)
 (check-expect (type-token-as-str "*MM60")           METRONOME-MARKING)
+(check-expect (type-token-as-str "*cue")            CUE-SIZED-NOTES)
+(check-expect (type-token-as-str "*Xcue")           CUE-SIZED-NOTES)
 (check-expect (type-token-as-str "=4||")            MEASURE)
 (check-expect (type-token-as-str "=75:|!|:")        MEASURE)
 (check-expect (type-token-as-str "16.aaLL]")        SPINE-DATA)
@@ -102,7 +105,6 @@
 (check-expect (type-token-as-str ".")               NULL-SPINE-DATA)
 (check-expect (type-token-as-str "!")               LOCAL-COMMENT)
 (check-expect (type-token-as-str "! Local comment") LOCAL-COMMENT)
-(check-expect (type-token-as-str "*cue")            "#false")
 (check-exn    #rx"str with no tabs and 0 or 1 bang"
               (λ ()
                  (type-token-as-str "4aa\t4aaa")))

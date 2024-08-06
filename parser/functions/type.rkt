@@ -69,6 +69,7 @@
                   [(group-attribution? token) GROUP-ATTRIBUTION]
                   [(part-number? token)       PART-NUMBER]
                   [(metronome-marking? token) METRONOME-MARKING]
+                  [(cue-sized-notes? token)   CUE-SIZED-NOTES]
                   [else
                     #f]))]
     (if (false? (regexp-match #px"(^=[^\t]*$)|(^!?[^!\t]*$)" token))

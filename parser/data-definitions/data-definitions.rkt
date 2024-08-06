@@ -46,6 +46,7 @@
 (define GROUP-ATTRIBUTION        "GroupAttribution")
 (define PART-NUMBER              "PartNumber")
 (define METRONOME-MARKING        "MetronomeMarking")
+(define CUE-SIZED-NOTES          "CueSizedNotes")
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  METADATA
@@ -124,6 +125,7 @@
 ;  - GroupAttribution
 ;  - PartNumber
 ;  - MetronomeMarking
+;  - CueSizedNotes
 ;  - #f
 ;  Represents a token starting with TANDEM-TAG, or false if unknown
 
@@ -168,6 +170,9 @@
 
 ; MetronomeMarking is "MetronomeMarking"
 ;  Represents a token that matches "^\\*MM[\\d]+$"
+
+; CueSizedNotes is "CueSizedNotes"
+;  Represents a token that matches "^\\*X?cue$"
 
 ; Measure is "Measure"
 ;  Represents a token starting with MEASURE-TAG

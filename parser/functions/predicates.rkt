@@ -183,6 +183,13 @@
 (define (metronome-marking? token)
   (not (false? (regexp-match #px"^\\*MM[\\d]+$" token))))
 
+; cue-sized-notes?
+; String -> Boolean
+; produces true if string matches "^\\*X?cue$"
+
+(define (cue-sized-notes? token)
+  (not (false? (regexp-match #px"^\\*X?cue$" token))))
+
 ; spine-data?
 ; String -> Boolean
 ; produce true if string is not METADATA and is not another TOKEN type
