@@ -239,6 +239,7 @@
 ;(define ABOVE-STAFF              "AboveStaff")
 ;(define BELOW-STAFF              "BelowStaff")
 ;(define CENTER-STAFF             "CenterStaff")
+;(define LIGATURE-BRACKET         "LigatureBracket")
 
 ; spine-data?
 (check-expect (spine-data? (token-token MUSIC-TOKEN-EX))        #t)

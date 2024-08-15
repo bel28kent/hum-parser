@@ -96,6 +96,7 @@
                   [(above-staff? token)       ABOVE-STAFF]
                   [(below-staff? token)       BELOW-STAFF]
                   [(center-staff? token)      CENTER-STAFF]
+                  [(ligature-bracket? token)  LIGATURE-BRACKET]
                   [else
                     #f]))]
     (if (false? (regexp-match #px"(^=[^\t]*$)|(^!$|^!?[^!\t][^\t]*$)" token))

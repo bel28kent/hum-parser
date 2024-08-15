@@ -260,6 +260,13 @@
 (define (center-staff? token)
   (not (false? (regexp-match #px"^\\*center" token))))
 
+; ligature-bracket?
+; String -> Boolean
+; produces true if string matches "^\\*X?lig$"
+
+(define (ligature-bracket? token)
+  (not (false? (regexp-match #px"^\\*X?lig$" token))))
+
 ; spine-data?
 ; String -> Boolean
 ; produce true if string is not METADATA and is not another TOKEN type

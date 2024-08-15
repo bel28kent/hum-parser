@@ -60,6 +60,7 @@
 (define ABOVE-STAFF              "AboveStaff")
 (define BELOW-STAFF              "BelowStaff")
 (define CENTER-STAFF             "CenterStaff")
+(define LIGATURE-BRACKET         "LigatureBracket")
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  METADATA
@@ -149,6 +150,7 @@
 ;  - AboveStaff
 ;  - BelowStaff
 ;  - CenterStaff
+;  - LigatureBracket
 ;  - #f
 ;  Represents a token starting with TANDEM-TAG, or false if unknown
 
@@ -226,6 +228,9 @@
 
 ; CenterStaff is "CenterStaff"
 ;  Represents a token that matches "^\\*center"
+
+; LigatureBracket is "LigatureBracket"
+; Represents a token that matches "^\\*X?lig$"
 
 ; Measure is "Measure"
 ;  Represents a token starting with MEASURE-TAG
