@@ -253,6 +253,13 @@
 (define (below-staff? token)
   (not (false? (regexp-match #px"^\\*below" token))))
 
+; center-staff?
+; String -> Boolean
+; produces true if string matches "^\\*center"
+
+(define (center-staff? token)
+  (not (false? (regexp-match #px"^\\*center" token))))
+
 ; spine-data?
 ; String -> Boolean
 ; produce true if string is not METADATA and is not another TOKEN type

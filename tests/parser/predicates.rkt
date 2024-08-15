@@ -238,6 +238,7 @@
 ;(define FLIP-SUBSPINES           "FlipSubspines")
 ;(define ABOVE-STAFF              "AboveStaff")
 ;(define BELOW-STAFF              "BelowStaff")
+;(define CENTER-STAFF             "CenterStaff")
 
 ; spine-data?
 (check-expect (spine-data? (token-token MUSIC-TOKEN-EX))        #t)

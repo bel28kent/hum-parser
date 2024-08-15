@@ -59,6 +59,7 @@
 (define FLIP-SUBSPINES           "FlipSubspines")
 (define ABOVE-STAFF              "AboveStaff")
 (define BELOW-STAFF              "BelowStaff")
+(define CENTER-STAFF             "CenterStaff")
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  METADATA
@@ -147,6 +148,7 @@
 ;  - FlipSubspines
 ;  - AboveStaff
 ;  - BelowStaff
+;  - CenterStaff
 ;  - #f
 ;  Represents a token starting with TANDEM-TAG, or false if unknown
 
@@ -221,6 +223,9 @@
 
 ; BelowStaff is "BelowStaff"
 ;  Represents a token that matches "^\\*below"
+
+; CenterStaff is "CenterStaff"
+;  Represents a token that matches "^\\*center"
 
 ; Measure is "Measure"
 ;  Represents a token starting with MEASURE-TAG

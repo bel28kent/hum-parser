@@ -95,6 +95,7 @@
                   [(flip-subspines? token)    FLIP-SUBSPINES]
                   [(above-staff? token)       ABOVE-STAFF]
                   [(below-staff? token)       BELOW-STAFF]
+                  [(center-staff? token)      CENTER-STAFF]
                   [else
                     #f]))]
     (if (false? (regexp-match #px"(^=[^\t]*$)|(^!$|^!?[^!\t][^\t]*$)" token))
