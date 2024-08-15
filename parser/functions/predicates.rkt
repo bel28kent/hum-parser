@@ -225,6 +225,13 @@
 (define (form-marker? token)
   (not (false? (regexp-match #px"^\\*>.*$" token))))
 
+; bracket-tuplet?
+; String -> Boolean
+; produces true if string matches "^\\*X?brackettup$"
+
+(define (bracket-tuplet? token)
+  (not (false? (regexp-match #px"^\\*X?brackettup$" token))))
+
 ; spine-data?
 ; String -> Boolean
 ; produce true if string is not METADATA and is not another TOKEN type

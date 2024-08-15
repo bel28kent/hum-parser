@@ -23,17 +23,23 @@
 (check-expect (type-record "4a\t4aa\tf")                    TOKEN)
 
 ; type-spine
-(check-expect (type-spine (list (list (token "**kern" EXCLUSIVE-INTERPRETATION 0))
+(check-expect (type-spine (list (list (token "**kern"
+                                             EXCLUSIVE-INTERPRETATION
+                                             0))
                                 (list (token "4a" SPINE-DATA 1))
                                 (list (token "==" MEASURE 2))
                                 (list (token "*-" SPINE-TERMINATOR 3))))
               KERN)
-(check-expect (type-spine (list (list (token "**dynam" EXCLUSIVE-INTERPRETATION 0))
+(check-expect (type-spine (list (list (token "**dynam"
+                                             EXCLUSIVE-INTERPRETATION
+                                             0))
                                 (list (token "f" SPINE-DATA 1))
                                 (list (token "==" MEASURE 2))
                                 (list (token "*-" SPINE-TERMINATOR 3))))
               DYNAM)
-(check-expect (type-spine (list (list (token "**test" EXCLUSIVE-INTERPRETATION 0))
+(check-expect (type-spine (list (list (token "**test"
+                                             EXCLUSIVE-INTERPRETATION
+                                             0))
                                 (list (token "test" SPINE-DATA 1))
                                 (list (token "==" MEASURE 2))
                                 (list (token "*-" SPINE-TERMINATOR 3))))
@@ -83,6 +89,8 @@
 (check-expect (type-token "*>A1")            FORM-MARKER)
 (check-expect (type-token "*>[A,A,B]")       FORM-MARKER)
 (check-expect (type-token "*>norep[A,A2,B]") FORM-MARKER)
+(check-expect (type-token "*brackettup")     BRACKET-TUPLET)
+(check-expect (type-token "*Xbrackettup")    BRACKET-TUPLET)
 (check-expect (type-token "=4||")            MEASURE)
 (check-expect (type-token "=75:|!|:")        MEASURE)
 (check-expect (type-token "16.aaLL]")        SPINE-DATA)
@@ -141,6 +149,8 @@
 (check-expect (type-token-as-str "*>A1")            FORM-MARKER)
 (check-expect (type-token-as-str "*>[A,A,B]")       FORM-MARKER)
 (check-expect (type-token-as-str "*>norep[A,A2,B]") FORM-MARKER)
+(check-expect (type-token-as-str "*brackettup")     BRACKET-TUPLET)
+(check-expect (type-token-as-str "*Xbrackettup")    BRACKET-TUPLET)
 (check-expect (type-token-as-str "=4||")            MEASURE)
 (check-expect (type-token-as-str "=75:|!|:")        MEASURE)
 (check-expect (type-token-as-str "16.aaLL]")        SPINE-DATA)

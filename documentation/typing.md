@@ -56,6 +56,7 @@ where `TandemInterpretation` is one of:
 	- Tremolo
 	- PedalMarking
 	- FormMarker
+	- BracketTuplet
 	- #f
 ```
 Given the extensibility of Humdrum, the false subclass `#f` represents unknown

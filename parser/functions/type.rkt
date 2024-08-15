@@ -91,6 +91,7 @@
                   [(tremolo? token)           TREMOLO]
                   [(pedal-marking? token)     PEDAL-MARKING]
                   [(form-marker? token)       FORM-MARKER]
+                  [(bracket-tuplet? token)    BRACKET-TUPLET]
                   [else
                     #f]))]
     (if (false? (regexp-match #px"(^=[^\t]*$)|(^!$|^!?[^!\t][^\t]*$)" token))
