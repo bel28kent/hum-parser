@@ -92,6 +92,7 @@
                   [(pedal-marking? token)     PEDAL-MARKING]
                   [(form-marker? token)       FORM-MARKER]
                   [(bracket-tuplet? token)    BRACKET-TUPLET]
+                  [(flip-subspines? token)    FLIP-SUBSPINES]
                   [else
                     #f]))]
     (if (false? (regexp-match #px"(^=[^\t]*$)|(^!$|^!?[^!\t][^\t]*$)" token))

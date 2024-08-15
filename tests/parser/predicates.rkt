@@ -228,6 +228,15 @@
 (check-expect (part-number? "*Xtremolo") #f)
 
 
+;(define METRONOME-MARKING        "MetronomeMarking")
+;(define CUE-SIZED-NOTES          "CueSizedNotes")
+;(define TUPLET                   "Tuplet")
+;(define TREMOLO                  "Tremolo")
+;(define PEDAL-MARKING            "PedalMarking")
+;(define FORM-MARKER              "FormMarker")
+;(define BRACKET-TUPLET           "BracketTuplet")
+;(define FLIP-SUBSPINES           "FlipSubspines")
+
 ; spine-data?
 (check-expect (spine-data? (token-token MUSIC-TOKEN-EX))        #t)
 (check-expect (spine-data? MEASURE-TAG)                         #f)

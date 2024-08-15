@@ -56,6 +56,7 @@
 (define PEDAL-MARKING            "PedalMarking")
 (define FORM-MARKER              "FormMarker")
 (define BRACKET-TUPLET           "BracketTuplet")
+(define FLIP-SUBSPINES           "FlipSubspines")
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  METADATA
@@ -141,6 +142,7 @@
 ;  - PedalMarking
 ;  - FormMarker
 ;  - BracketTuplet
+;  - FlipSubspines
 ;  - #f
 ;  Represents a token starting with TANDEM-TAG, or false if unknown
 
@@ -206,6 +208,9 @@
 
 ; BracketTuplet is "BracketTuplet"
 ;  Represents a token that matches "^\\*X?brackettup$"
+
+; FlipSubspines is "FlipSubspines"
+;  Represents a token that matches "^\\*X?flip$"
 
 ; Measure is "Measure"
 ;  Represents a token starting with MEASURE-TAG
