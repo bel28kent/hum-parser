@@ -93,6 +93,8 @@
                   [(form-marker? token)       FORM-MARKER]
                   [(bracket-tuplet? token)    BRACKET-TUPLET]
                   [(flip-subspines? token)    FLIP-SUBSPINES]
+                  [(above-staff? token)       ABOVE-STAFF]
+                  [(below-staff? token)       BELOW-STAFF]
                   [else
                     #f]))]
     (if (false? (regexp-match #px"(^=[^\t]*$)|(^!$|^!?[^!\t][^\t]*$)" token))

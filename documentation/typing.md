@@ -58,6 +58,8 @@ where `TandemInterpretation` is one of:
 	- FormMarker
 	- BracketTuplet
 	- FlipSubspines
+	- AboveStaff
+	- BelowStaff
 	- #f
 ```
 Given the extensibility of Humdrum, the false subclass `#f` represents unknown

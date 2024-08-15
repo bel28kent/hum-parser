@@ -57,6 +57,8 @@
 (define FORM-MARKER              "FormMarker")
 (define BRACKET-TUPLET           "BracketTuplet")
 (define FLIP-SUBSPINES           "FlipSubspines")
+(define ABOVE-STAFF              "AboveStaff")
+(define BELOW-STAFF              "BelowStaff")
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  METADATA
@@ -143,6 +145,8 @@
 ;  - FormMarker
 ;  - BracketTuplet
 ;  - FlipSubspines
+;  - AboveStaff
+;  - BelowStaff
 ;  - #f
 ;  Represents a token starting with TANDEM-TAG, or false if unknown
 
@@ -211,6 +215,12 @@
 
 ; FlipSubspines is "FlipSubspines"
 ;  Represents a token that matches "^\\*X?flip$"
+
+; AboveStaff is "AboveStaff"
+;  Represents a token that matches "^\\*above"
+
+; BelowStaff is "BelowStaff"
+;  Represents a token that matches "^\\*below"
 
 ; Measure is "Measure"
 ;  Represents a token starting with MEASURE-TAG

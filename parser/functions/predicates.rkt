@@ -239,6 +239,20 @@
 (define (flip-subspines? token)
   (not (false? (regexp-match #px"^\\*X?flip$" token))))
 
+; above-staff?
+; String -> Boolean
+; produces true if string matches "^\\*above"
+
+(define (above-staff? token)
+  (not (false? (regexp-match #px"^\\*above" token))))
+
+; below-staff?
+; String -> Boolean
+; produces true if string matches "^\\*below"
+
+(define (below-staff? token)
+  (not (false? (regexp-match #px"^\\*below" token))))
+
 ; spine-data?
 ; String -> Boolean
 ; produce true if string is not METADATA and is not another TOKEN type
