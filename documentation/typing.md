@@ -62,6 +62,7 @@ where `TandemInterpretation` is one of:
 	- BelowStaff
 	- CenterStaff
 	- LigatureBracket
+	- RhythmicScalingFactor
 	- #f
 ```
 Given the extensibility of Humdrum, the false subclass `#f` represents unknown

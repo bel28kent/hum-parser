@@ -267,6 +267,13 @@
 (define (ligature-bracket? token)
   (not (false? (regexp-match #px"^\\*X?lig$" token))))
 
+; rhythmic-scaling-factor?
+; String -> Boolean
+; produces true if string matches "^*rscale" 
+
+(define (rhythmic-scaling-factor? token)
+  (not (false? (regexp-match #px"^\\*rscale" token))))
+
 ; spine-data?
 ; String -> Boolean
 ; produce true if string is not METADATA and is not another TOKEN type

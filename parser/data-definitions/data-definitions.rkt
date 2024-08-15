@@ -61,6 +61,7 @@
 (define BELOW-STAFF              "BelowStaff")
 (define CENTER-STAFF             "CenterStaff")
 (define LIGATURE-BRACKET         "LigatureBracket")
+(define RHYTHMIC-SCALING-FACTOR  "RhythmicScalingFactor")
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  METADATA
@@ -151,6 +152,7 @@
 ;  - BelowStaff
 ;  - CenterStaff
 ;  - LigatureBracket
+;  - RhythmicScalingFactor
 ;  - #f
 ;  Represents a token starting with TANDEM-TAG, or false if unknown
 
@@ -230,7 +232,10 @@
 ;  Represents a token that matches "^\\*center"
 
 ; LigatureBracket is "LigatureBracket"
-; Represents a token that matches "^\\*X?lig$"
+;  Represents a token that matches "^\\*X?lig$"
+
+; RhythmicScalingFactor is "RhythmicScalingFactor"
+;  Represents a token that matches "^*rscale" 
 
 ; Measure is "Measure"
 ;  Represents a token starting with MEASURE-TAG

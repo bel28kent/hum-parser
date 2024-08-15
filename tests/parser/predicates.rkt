@@ -240,6 +240,7 @@
 ;(define BELOW-STAFF              "BelowStaff")
 ;(define CENTER-STAFF             "CenterStaff")
 ;(define LIGATURE-BRACKET         "LigatureBracket")
+;(define RHYTHMIC-SCALING-FACTOR  "RhythmicScalingFactor")
 
 ; spine-data?
 (check-expect (spine-data? (token-token MUSIC-TOKEN-EX))        #t)
