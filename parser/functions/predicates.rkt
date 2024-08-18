@@ -185,10 +185,10 @@
 
 ; metronome-marking?
 ; String -> Boolean
-; produce true if string matches "^\\*MM[\\d]+$"
+; produce true if string matches "^\\*MM[\\d]+\\.?[\\d]*$"
 
 (define (metronome-marking? token)
-  (not (false? (regexp-match #px"^\\*MM[\\d]+$" token))))
+  (not (false? (regexp-match #px"^\\*MM[\\d]+\\.?[\\d]*$" token))))
 
 ; cue-sized-notes?
 ; String -> Boolean

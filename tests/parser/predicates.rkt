@@ -229,7 +229,7 @@
 (check-expect (part-number? "*Xtremolo") #f)
 
 
-;(define METRONOME-MARKING        "MetronomeMarking")
+;(define METRONOME-MARKING        "MetronomeMarking") *MM66.4
 ;(define CUE-SIZED-NOTES          "CueSizedNotes")
 ;(define TUPLET                   "Tuplet")
 ;(define TREMOLO                  "Tremolo")

@@ -199,7 +199,7 @@
 ;  Represents a token that matches "^\\*part[[:digit:]]+$"
 
 ; MetronomeMarking is "MetronomeMarking"
-;  Represents a token that matches "^\\*MM[\\d]+$"
+;  Represents a token that matches "^\\*MM[\\d]+\\.?[\\d]*$"
 
 ; CueSizedNotes is "CueSizedNotes"
 ;  Represents a token that matches "^\\*X?cue$"
