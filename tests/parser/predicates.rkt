@@ -244,6 +244,8 @@
 ;(define CENTER-STAFF             "CenterStaff")
 ;(define LIGATURE-BRACKET         "LigatureBracket")
 ;(define RHYTHMIC-SCALING-FACTOR  "RhythmicScalingFactor")
+;(define TASTO-SOLO
+;(define END-TASTO-SOLO
 
 ; spine-data?
 (check-expect (spine-data? (token-token MUSIC-TOKEN-EX))        #t)

@@ -62,6 +62,8 @@
 (define CENTER-STAFF             "CenterStaff")
 (define LIGATURE-BRACKET         "LigatureBracket")
 (define RHYTHMIC-SCALING-FACTOR  "RhythmicScalingFactor")
+(define TASTO-SOLO               "TastoSolo")
+(define END-TASTO-SOLO           "EndTastoSolo")
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  METADATA
@@ -153,6 +155,8 @@
 ;  - CenterStaff
 ;  - LigatureBracket
 ;  - RhythmicScalingFactor
+;  - TastoSolo
+;  - EndTastoSolo
 ;  - #f
 ;  Represents a token starting with TANDEM-TAG, or false if unknown
 
@@ -235,7 +239,13 @@
 ;  Represents a token that matches "^\\*X?lig$"
 
 ; RhythmicScalingFactor is "RhythmicScalingFactor"
-;  Represents a token that matches "^*rscale" 
+;  Represents a token that matches "^\\*rscale" 
+
+; TastoSolo is "TastoSolo"
+;  Represents a token that matches "\\*solo"
+
+; EndTastoSolo is "EndTastoSolo"
+;  Represents a token that matches "\\*accomp"
 
 ; Measure is "Measure"
 ;  Represents a token starting with MEASURE-TAG

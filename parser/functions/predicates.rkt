@@ -270,10 +270,24 @@
 
 ; rhythmic-scaling-factor?
 ; String -> Boolean
-; produces true if string matches "^*rscale" 
+; produces true if string matches "^\\*rscale" 
 
 (define (rhythmic-scaling-factor? token)
   (not (false? (regexp-match #px"^\\*rscale" token))))
+
+; tasto-solo?
+; String -> Boolean
+; produces true if string matches  "\\*solo"
+
+(define (tasto-solo? token)
+  (not (false? (regexp-match #px"\\*solo" token))))
+
+; end-tasto-solo?
+; String -> Boolean
+; produces true if string matches "\\*accomp"
+
+(define (end-tasto-solo? token)
+  (not (false? (regexp-match #px"\\*accomp" token))))
 
 ; spine-data?
 ; String -> Boolean

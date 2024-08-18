@@ -98,6 +98,8 @@
                   [(center-staff? token)            CENTER-STAFF]
                   [(ligature-bracket? token)        LIGATURE-BRACKET]
                   [(rhythmic-scaling-factor? token) RHYTHMIC-SCALING-FACTOR]
+                  [(tasto-solo? token)              TASTO-SOLO]
+                  [(end-tasto-solo? token)          END-TASTO-SOLO]
                   [else
                     #f]))]
     (if (false? (regexp-match #px"(^=[^\t]*$)|(^!$|^!?[^!\t][^\t]*$)" token))
