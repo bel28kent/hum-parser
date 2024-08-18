@@ -198,6 +198,7 @@
 (check-expect (staff-number? "*staff1/2") #t)
 
 ; instrument-class?
+(check-expect (instrument-class? "*I")        #t)
 (check-expect (instrument-class? "*Ipiano")   #t)
 (check-expect (instrument-class? "*Icello")   #t)
 (check-expect (instrument-class? "*clefC3")   #f)

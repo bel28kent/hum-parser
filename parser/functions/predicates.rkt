@@ -157,10 +157,10 @@
 
 ; instrument-class?
 ; String -> Boolean
-; produce true if string matches "^\\*I.+$"
+; produce true if string matches "^\\*I.*$"
 
 (define (instrument-class? token)
-  (not (false? (regexp-match #px"^\\*I.+$" token))))
+  (not (false? (regexp-match #px"^\\*I.*$" token))))
 
 ; ottava?
 ; String -> Boolean

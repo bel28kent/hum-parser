@@ -187,7 +187,7 @@
 ;  Represents a token that matches "\\*staff[0-9]+"
 
 ; InstrumentClass is "InstrumentClass"
-;  Represents a token that matches "^\\*I.+$"
+;  Represents a token that matches "^\\*I.*$"
 
 ; Ottava is "Ottava"
 ;  Represents a token that matches "^\\*X?8.+$"
