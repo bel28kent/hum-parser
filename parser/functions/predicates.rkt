@@ -114,10 +114,10 @@
 
 ; clef?
 ; String -> Boolean
-; produce true if string starts with "*clef"
+; produce true if string starts with "^\\*m?clef"
 
 (define (clef? token)
-  (not (false? (regexp-match #px"\\*clef" token))))
+  (not (false? (regexp-match #px"^\\*m?clef" token))))
 
 ; time-sig?
 ; String -> Boolean

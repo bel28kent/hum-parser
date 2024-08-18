@@ -141,10 +141,11 @@
 (check-expect (measure? (token-token MUSIC-TOKEN-EX))        #f)
 
 ; clef?
-(check-expect (clef? "*Ipiano")    #f)
+(check-expect (clef? "*mclefF3")   #t)
 (check-expect (clef? "*clefC3")    #t)
 (check-expect (clef? "*clefF4")    #t)
 (check-expect (clef? "*clefG2")    #t)
+(check-expect (clef? "*Ipiano")    #f)
 (check-expect (clef? "*M3/4")      #f)
 (check-expect (clef? "*k[f#c#g#]") #f)
 (check-expect (clef? TANDEM-TAG)   #f)

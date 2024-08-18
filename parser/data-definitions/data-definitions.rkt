@@ -169,7 +169,7 @@
 ;  Represents a token that equals TANDEM-TAG
 
 ; Clef is "Clef"
-;  Represents a token that begins with "\\*clef"
+;  Represents a token that begins with "^\\*m?clef"
 
 ; TimeSignature is "TimeSignature"
 ;  Represents a token that matches "(^\\*met.*$)|(^\\*M[\\d]+/[\\d]+$)"
