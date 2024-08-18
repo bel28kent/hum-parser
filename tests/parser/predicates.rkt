@@ -156,6 +156,7 @@
 (check-expect (time-sig? "*M3/4")      #t)
 (check-expect (time-sig? "*M4/4")      #t)
 (check-expect (time-sig? "*met(c)")    #t)
+(check-expect (time-sig? "*mmet(c)")   #t)
 (check-expect (time-sig? "*k[f#c#g#]") #f)
 (check-expect (time-sig? TANDEM-TAG)   #f)
 

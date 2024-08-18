@@ -121,10 +121,11 @@
 
 ; time-sig?
 ; String -> Boolean
-; produce true if string starts with "(^\\*met.*$)|(^\\*M[\\d]+/[\\d]+$)"
+; produce true if string starts with "(^\\*m{1,2}et.*$)|(^\\*M[\\d]+/[\\d]+$)"
 
 (define (time-sig? token)
-  (not (false? (regexp-match #px"(^\\*met.*$)|(^\\*M[\\d]+/[\\d]+$)" token))))
+  (not
+    (false? (regexp-match #px"(^\\*m{1,2}et.*$)|(^\\*M[\\d]+/[\\d]+$)" token))))
 
 ; key-sig?
 ; String -> Boolean

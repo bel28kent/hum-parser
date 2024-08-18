@@ -172,7 +172,7 @@
 ;  Represents a token that begins with "^\\*m?clef"
 
 ; TimeSignature is "TimeSignature"
-;  Represents a token that matches "(^\\*met.*$)|(^\\*M[\\d]+/[\\d]+$)"
+;  Represents a token that matches "(^\\*m{1,2}et.*$)|(^\\*M[\\d]+/[\\d]+$)"
 
 ; KeySignature is "KeySignature"
 ;  Represents a token that matches "\\*k\\[.*\\]"
