@@ -23,8 +23,8 @@
               (if (eof-object? next-line)
                   (reverse lolos)
                   (read-file (cons next-line lolos) in))))]
-  (call-with-input-file path
-                        (λ (in) (read-file empty in)))))
+    (call-with-input-file path
+                          (λ (in) (read-file empty in)))))
 
 ; write-file
 ; (listof String) String -> #<void>
@@ -105,4 +105,4 @@
 ; produces a list of paths
 
 (define (build-paths path filenames)
-    (map (λ (filename) (string-append path filename)) filenames))
+  (map (λ (filename) (string-append path filename)) filenames))
