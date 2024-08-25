@@ -55,4 +55,4 @@
         [else
           (if (empty? (rest los))
               (string-append (first los) (gather (rest los)))
-              (string-append (first los) "\t" (gather (rest los))))]))
+              (string-append (first los) SEPARATOR (gather (rest los))))]))
