@@ -52,7 +52,6 @@
 
 (define (gather los)
   (cond [(empty? los) ""]
+        [(empty? (rest los)) (string-append (first los) (gather (rest los)))]
         [else
-          (if (empty? (rest los))
-              (string-append (first los) (gather (rest los)))
-              (string-append (first los) SEPARATOR (gather (rest los))))]))
+          (string-append (first los) SEPARATOR (gather (rest los)))]))
