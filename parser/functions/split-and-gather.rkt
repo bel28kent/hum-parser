@@ -39,11 +39,10 @@
           ;; produces substring of string from first character up to SEPARATOR
           (define (next-field string)
             (cond [(string=? string "") string]
+                  [(string=? (substring string 0 1) SEPARATOR) ""]
                   [else
-                   (if (string=? (substring string 0 1) SEPARATOR)
-                       ""
-                       (string-append (substring string 0 1)
-                                      (next-field (substring string 1))))]))]
+                    (string-append (substring string 0 1)
+                                   (next-field (substring string 1)))]))]
     (splitter string empty)))
 
 ; gather
