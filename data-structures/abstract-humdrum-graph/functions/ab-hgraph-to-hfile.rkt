@@ -6,26 +6,42 @@
 ;;        to a HumdrumFile
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+#|
+  This function only assembles data in the given AbstractHumdrumGraph. Non-token records filtered
+  out when AbstractHumdrumGraph was created are not inserted, so resultant HumdrumFile may be
+  smaller than original.
+|#
+
 (require racket/list
          racket/local
          "../../../parser/data-definitions/data-definitions.rkt"
+         "../../../parser/functions/type.rkt"
+         "../../../parser/functions/split-and-gather.rkt"
          "../data-definitions/data-definitions.rkt")
 
 (provide (all-defined-out))
 
 ; ab-graph->hfile
-; AbstractHumdrumGraph (listof Record) -> HumdrumFile
+; AbstractHumdrumGraph -> HumdrumFile
 ; converts the graph to a HumdrumFile
 
-(define (ab-hgraph->hfile ab-hgraph removed_records)
-  (hfile empty))
+(define (ab-hgraph->hfile ab-hgraph)
+  (hfile
+    (lolot->lor
+      (ab-hgraph->lolot ab-hgraph))))
 
 ; lolot->lor
-; (listof (listof Token)) (listof Record) -> (listof Record)
+; (listof (listof Token)) -> (listof Record)
 ; converts the token lists to a (listof Record)
 
-(define (lolot->lor lolot removed_records)
-  empty)
+(define (lolot->lor lolot)
+  (local [(define (lot->r lot)
+            (local [(define r (gather (map token-token lot)))]
+              (record r
+                      (type-record r)
+                      lot
+                      (token-record-number (first lot)))))]
+    (map lot->r lolot)))
 
 ; ab-graph->lolot
 ; AbstractHumdrumGraph -> (listof (listof Token))
