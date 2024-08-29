@@ -1,15 +1,15 @@
 #lang racket/base
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; hum-parser: tools: autowedge
 ;;    complete cresc. and dim. wedges with parens
-;; CONSTRAINT: assumes wedges never begin before split or after merge
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; CONSTRAINT: assumes wedges never begin before split or end after merge
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require racket/bool
          racket/cmdline
-         racket/local
          racket/list
+         racket/local
          "../../hum-parser.rkt")
 
 ; composition
