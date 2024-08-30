@@ -52,32 +52,28 @@
           (define (fn-for-root root)
                     ; acc. (listof (listof Node)). the rest of each branch.
                     ; rec. (listof Token). the nodes at one level.
-                    ; lor. (listof Record). the records from previous cuts.
-            (local [(define (iterator branches acc rec lor)
-                      (cond [(and (empty? branches) (empty? acc)) (reverse lor)]
+                    ; lolot. (listof (listof Token)). the (listof Token) from previous cuts.
+            (local [(define (iterator branches acc rec lolot)
+                      (cond [(and (empty? branches) (empty? acc)) (reverse
+                                                                    (cons (reverse rec) lolot))]
                             [(and (empty? branches)
                                   (not (empty? acc))) (iterator (reverse acc)
                                                                 empty
-                                                                (cons (reverse rec) lor))]
+                                                                empty
+                                                                (cons (reverse rec) lolot))]
                             [else
                               (local [(define fof (first (first branches)))
-
-                                      (define result
-                                              (cond [(leaf? fof)
-                                                     (fn-for-leaf fof)]
-                                                    [(parent? fof)
-                                                     (fn-for-leaf
-                                                       (parent-token fof))]))]
+                                      (define t (cond [(leaf? fof) (leaf-token fof)]
+                                                      [(parent-token fof)]))
+                                      (define rof (rest (first branches)))]
                                 (iterator (rest branches)
-                                          (if (parent? fof)
-                                              (cons (rest (parent-right fof))
-                                                (cons (rest (parent-left fof))
-                                                  acc))
-                                              (cons (rest (first branches)) acc))
-                                          (cons fof rec)
-                                          lor))]))]
-              (iterator (root-branches root) empty empty empty)))
-
-          (define (fn-for-leaf leaf)
-            (leaf-token leaf))]
+                                          (cond [(parent? fof) (cons (parent-right fof)
+                                                                 (cons (append (parent-left fof)
+                                                                               rof)
+                                                                   acc))]
+                                                [(not (empty? rof)) (cons rof acc)]
+                                                [acc])
+                                          (cons t rec)
+                                          lolot))]))]
+              (iterator (root-branches root) empty empty empty)))]
     (fn-for-root (abstract-humdrum-graph-root ab-hgraph))))
