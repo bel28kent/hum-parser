@@ -6,8 +6,7 @@
 ;; CONSTRAINT: assumes wedges never begin before split or end after merge
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require racket/bool
-         racket/cmdline
+(require racket/cmdline
          racket/list
          racket/local
          "../../hum-parser.rkt")
@@ -35,9 +34,10 @@
           (define (fn-for-root root)
             (local [(define (iterator branches new-branches)
                       (cond [(empty? branches) (root (reverse new-branches))]
-                            [else
-                              (iterator (rest branches)
-                                        (cons (if (string=? DYNAM (spine-type (first branches)))
+                            [(iterator (rest branches)
+                                       (cons (if (string=? "**dynam" (token-token
+                                                                       (leaf-token
+                                                                         (first (first branches)))))
                                                   (fn-for-lon (first branches))
                                                   (first branches))
                                               new-branches))]))]
@@ -66,6 +66,14 @@
                               (paired? (rest lon))]))]
               (and (regexp-match? #px">|<" (token-token (leaf-token leaf)))
                    (paired? lon))))
+
+          ; Leaf -> Boolean
+          (define (is-angle? leaf)
+            (regexp-match? #px"<|>" (token-token (leaf-token leaf))))
+
+          ; Leaf -> Boolean
+          (define (is-left? leaf)
+            (string=? "<" (token-token (leaf-token leaf))))
 
           ; (listof Node) -> (listof Node)
           (define (fn-for-lon branch)
