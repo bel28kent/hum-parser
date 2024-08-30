@@ -74,6 +74,34 @@
   (local [(define records (hfile-records hfile))]
     (foldr (λ (f r) (cons (record-record f) r)) empty records)))
 
+; hfile-hash-join
+; HumdrumFile HumdrumFile -> HumdrumFile
+; produces a composite of the two HumdrumFiles
+; CONSTRAINT: Assumes that composite will have the dimensions as the output of path->hfile
+
+(define (hfile-hash-join pre-hfile post-hfile)
+  (local [(define pre (hfile-records pre-hfile))
+          (define post (hfile-records post-hfile))
+
+          (define (not-token-record r)
+            (cond [(string=? TOKEN (record-type r))
+                   (raise-argument-error 'hfile-hash-join "not a token record" 0 r)]))
+
+          (define (token-record r)
+            (cond [(not (string=? TOKEN (record-type r)))
+                   (raise-argument-error 'hfile-hash-join "token record" 1 r)]))
+
+          (define (hash-join records)
+            (local [(define records-hash (apply hash
+                                                (foldr (λ (f rnr) (cons (record-record-number f)
+                                                                    (cons f rnr)))
+                                                       empty
+                                                       records)))]
+              (build-list (length records) (λ (n) (hash-ref records-hash n)))))]
+    (begin (for-each not-token-record pre)
+           (for-each token-record post)
+           (hash-join (append pre post)))))
+
 ; build-filenames
 ; String String Natural -> (listof String)
 ; produces a list of numbered filenames
