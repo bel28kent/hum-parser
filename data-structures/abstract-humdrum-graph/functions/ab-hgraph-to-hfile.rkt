@@ -21,7 +21,7 @@
 
 (provide (all-defined-out))
 
-; ab-graph->hfile
+; ab-hgraph->hfile
 ; AbstractHumdrumGraph -> HumdrumFile
 ; converts the graph to a HumdrumFile
 

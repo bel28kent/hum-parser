@@ -17,13 +17,14 @@
 ; displays the file's data with cresc. and dim. wedges completed
 
 (define (composition path)
-  (local [(define path-hfile (path->hfile path))]
+  (local [(define path-hfile (path->hfile path))
+          (define path-pre (hfile (filter (λ (r) (not
+                                                   (string=? TOKEN (record-type r))))
+                                          (hfile-records path-hfile))))]
     (map displayln (hfile->los
-                     ; ??? merge non-token records of path-hfile with output of ab-hgraph->hfile
-                       (ab-hgraph->hfile
-                         (autowedge
-                           (hfile->ab-hgraph
-                             path-hfile htree)))))))
+                     (hfile-hash-join path-pre (ab-hgraph->hfile
+                                                 (autowedge
+                                                   (hfile->ab-hgraph path-hfile htree))))))))
 
 ; autowedge
 ; HumdrumTree -> HumdrumTree
