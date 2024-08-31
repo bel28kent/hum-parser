@@ -33,14 +33,11 @@
   (local [; Root -> Root
           (define (fn-for-root root)
             (local [(define (iterator branches new-branches)
-                      (cond [(empty? branches) (reverse new-branches)]
-                            [(iterator (rest branches)
-                                       (cons (if (string=? "**dynam" (token-token
-                                                                       (leaf-token
-                                                                         (first (first branches)))))
-                                                 (fn-for-lon (first branches))
-                                                 (first branches))
-                                             new-branches))]))]
+                      (local [(define f (if (empty? branches) empty (first branches)))]
+                        (cond [(empty? branches) (reverse new-branches)]
+                              [(string=? "**dynam" (token-token (leaf-token (first f))))
+                               (iterator (rest branches) (cons (fn-for-lon f) new-branches))]
+                              [(iterator (rest branches) (cons f new-branches))])))]
               (iterator (root-branches root) empty)))
 
           ; Leaf -> Boolean
@@ -81,6 +78,10 @@
           (define (is-left? leaf)
             (string=? "<" (token-token (leaf-token leaf))))
 
+          ; Leaf -> Boolean
+          (define (is-square? leaf)
+            (regexp-match? #px"\\[|\\]" (token-token (leaf-token leaf))))
+
           ; (listof Node) -> (listof Node)
           (define (fn-for-lon branch)
             (local [(define (fn-for-lon branch angle? left?)
@@ -90,14 +91,19 @@
                               (define r (if (empty? branch)
                                             empty
                                             (rest branch)))
+                              (define n? (if (not (empty? f))
+                                             (not-angle-or-null? f)
+                                             #f))
                               (define p? (if (not (empty? f))
                                              (is-paired? f r)
                                              #f))]
                         (cond [(empty? branch) empty]
-                              [(leaf? f) (cond [(or (not-angle-or-null? f)
+                              [(leaf? f) (cond [(or (is-square? f)
+                                                    (and n? (not angle?))
                                                     (and (is-angle? f) (not p?))
                                                     (and (null-token? f) (not angle?)))
                                                 (cons f (fn-for-lon r #f #f))]
+                                               [n? (cons f (fn-for-lon r angle? left?))]
                                                [p? (cons f (fn-for-lon r #t (is-left? f)))]
                                                [(cons (fn-for-leaf f left?)
                                                       (fn-for-lon r angle? left?))])]
