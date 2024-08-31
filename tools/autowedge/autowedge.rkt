@@ -11,6 +11,8 @@
          racket/local
          "../../hum-parser.rkt")
 
+(provide (all-defined-out))
+
 ; composition
 ; String -> #<void>
 ; displays the file's data with cresc. and dim. wedges completed
@@ -23,93 +25,102 @@
     (map displayln (hfile->los
                      (hfile-hash-join path-pre (ab-hgraph->hfile
                                                  (autowedge
-                                                   (hfile->ab-hgraph path-hfile htree))))))))
-
+                                                   (hfile->ab-hgraph path-hfile ab-hgraph))))))))
 ; autowedge
-; HumdrumTree -> HumdrumTree
+; AbstractHumdrumGraph -> AbstractHumdrumGraph
 ; produces the humdrum tree with paired cresc. and dim. wedges completed
 
-(define (autowedge htree)
-  (local [; Root -> Root
-          (define (fn-for-root root)
-            (local [(define (iterator branches new-branches)
-                      (cond [(empty? branches) (root (reverse new-branches))]
-                            [(iterator (rest branches)
-                                       (cons (if (string=? "**dynam" (token-token
-                                                                       (leaf-token
-                                                                         (first (first branches)))))
-                                                  (fn-for-lon (first branches))
-                                                  (first branches))
-                                              new-branches))]))]
-              (iterator (root-branches root) empty)))
+(define (autowedge graph)
+  (ab-hgraph
+    (root
+      (local [; Root -> Root
+              (define (fn-for-root root)
+                (local [(define (iterator branches new-branches)
+                          (cond [(empty? branches) (reverse new-branches)]
+                                [(iterator (rest branches)
+                                           (cons (if (string=? "**dynam" (token-token
+                                                                           (leaf-token
+                                                                             (first
+                                                                               (first branches)))))
+                                                      (fn-for-lon (first branches))
+                                                      (first branches))
+                                                  new-branches))]))]
+                  (iterator (root-branches root) empty)))
 
-          ; Leaf -> Boolean
-          ; produce true if leaf is NOT one of ">", "<", "."
-          (define (not-angle-or-null? leaf)
-            (local [(define str_1 (token-token (leaf-token leaf)))
+              ; Leaf -> Boolean
+              ; produce true if leaf is NOT one of ">", "<", "."
+              (define (not-angle-or-null? leaf)
+                (local [(define str_1 (token-token (leaf-token leaf)))
 
-                    (define (str=? str_2)
-                      (string=? str_1 str_2))]
-              (and (not (or (str=? ">") (str=? "<")))
-                   (not (str=? ".")))))
+                        (define (str=? str_2)
+                          (string=? str_1 str_2))]
+                  (and (not (or (str=? ">") (str=? "<")))
+                       (not (str=? ".")))))
 
-          ; Leaf (listof Node) -> Boolean
-          ; produce true if leaf is angle and is paired with a square
-          (define (is-paired? leaf lon)
-            (local [(define (paired? lon)
-                      (cond [(empty? lon) #f]
-                            [(not (regexp-match? #px"[\\[\\]\\.]" (token-token
-                                                                    (leaf-token (first lon))))) #f]
-                            [(regexp-match? #px"[\\[|\\]]" (token-token
-                                                             (leaf-token (first lon)))) #t]
-                            [else
-                              (paired? (rest lon))]))]
-              (and (regexp-match? #px">|<" (token-token (leaf-token leaf)))
-                   (paired? lon))))
+              ; Leaf -> Boolean
+              ; produce true if "."
+              (define (null-token? leaf)
+                (string=? "." (token-token (leaf-token leaf))))
 
-          ; Leaf -> Boolean
-          (define (is-angle? leaf)
-            (regexp-match? #px"<|>" (token-token (leaf-token leaf))))
+              ; Leaf (listof Node) -> Boolean
+              ; produce true if leaf is angle and is paired with a square
+              (define (is-paired? f lon)
+                (local [(define (paired? lon)
+                          (cond [(empty? lon) #f]
+                                [(not (regexp-match? #px"[\\[\\]\\.=]" (token-token
+                                                                         (leaf-token (first lon)))))
+                                 #f]
+                                [(regexp-match? #px"[\\[|\\]]" (token-token
+                                                                 (leaf-token (first lon))))
+                                 #t]
+                                [else
+                                  (paired? (rest lon))]))]
+                  (and (regexp-match? #px"<|>" (token-token (leaf-token f))) (paired? lon))))
 
-          ; Leaf -> Boolean
-          (define (is-left? leaf)
-            (string=? "<" (token-token (leaf-token leaf))))
+              ; Leaf -> Boolean
+              (define (is-angle? leaf)
+                (regexp-match? #px"<|>" (token-token (leaf-token leaf))))
 
-          ; (listof Node) -> (listof Node)
-          (define (fn-for-lon branch)
-            (local [(define (fn-for-lon branch angle? left?)
-                      (cond [(empty? branch) empty]
-                            [(leaf? (first branch))
-                             (cond [(or (not-angle-or-null? (first branch))
-                                        (not (is-paired? (first branch) (rest branch))))
-                                    (cons (first branch)
-                                          (fn-for-lon (rest branch) #f #f))]
-                                   [(is-angle? (first branch))
-                                    (cons (first branch)
-                                          (fn-for-lon (rest branch)
-                                                      #t (is-left? (first branch))))]
-                                   [else
-                                     (cons (fn-for-leaf (first branch) left?)
-                                                        (fn-for-lon (rest branch) angle? left?))])]
-                            [else
-                              (cons (parent (fn-for-token (parent-token (first branch)))
-                                            (fn-for-lon (parent-left (first branch))
-                                                        #f #f)
-                                            (fn-for-lon (parent-right (first branch))
-                                                        #f #f))
-                                    (fn-for-lon (rest branch) #f #f))]))]
-              (fn-for-lon branch #f #f)))
+              ; Leaf -> Boolean
+              (define (is-left? leaf)
+                (string=? "<" (token-token (leaf-token leaf))))
 
-          (define (fn-for-leaf leaf left?)
-            (if left?
-                (fn-for-token (leaf-token leaf) "(")
-                (fn-for-token (leaf-token leaf) ")")))
+              ; (listof Node) -> (listof Node)
+              (define (fn-for-lon branch)
+                (local [(define (fn-for-lon branch angle? left?)
+                          (local [(define f (if (empty? branch)
+                                                empty
+                                                (first branch)))
+                                  (define r (if (empty? branch)
+                                                empty
+                                                (rest branch)))
+                                  (define p? (if (not (empty? f))
+                                                 (is-paired? f r)
+                                                 #f))]
+                            (cond [(empty? branch) empty]
+                                  [(leaf? f) (cond [(or (not-angle-or-null? f)
+                                                        (and (is-angle? f) (not p?))
+                                                        (and (null-token? f) (not angle?)))
+                                                    (cons f (fn-for-lon r #f #f))]
+                                                   [p? (cons f (fn-for-lon r) #t (is-left? f))]
+                                                   [(cons (fn-for-leaf f left?)
+                                                          (fn-for-lon r angle? left?))])]
+                                  [(cons (parent (parent-token f)
+                                                 (fn-for-lon (parent-left f) #f #f)
+                                                 (fn-for-lon (parent-right f) #f #f))
+                                         (fn-for-lon r #f #f))])))]
+                  (fn-for-lon branch #f #f)))
 
-          (define (fn-for-token token paren)
-            (token paren
-                   (token-type token)
-                   (token-record-number token)))]
-        (htree (fn-for-root (abstract-humdrum-graph-root htree)))))
+              (define (fn-for-leaf l left?)
+                (if left?
+                    (leaf (fn-for-token (leaf-token l) "("))
+                    (leaf (fn-for-token (leaf-token l) ")"))))
+
+              (define (fn-for-token t paren)
+                (token paren
+                       SPINE-DATA
+                       (token-record-number t)))]
+    (fn-for-root (abstract-humdrum-graph-root graph))))))
 
 (define autowedge-cmd
   (command-line

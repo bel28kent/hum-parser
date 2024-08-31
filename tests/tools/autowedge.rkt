@@ -1,0 +1,71 @@
+#lang racket/base
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; hum-parser: tools: autowedge
+;;    tests for autowedge
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require test-engine/racket-tests
+         "../../hum-parser.rkt"
+         "../../tools/autowedge/autowedge.rkt")
+
+(define wedge-tree (hfile->ab-hgraph (path->hfile "data/wedge.krn") htree))
+
+; autowedge
+(check-expect (autowedge wedge-tree)
+              (ab-hgraph (root (list (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
+                                           (leaf (token "4a" SPINE-DATA 1))
+                                           (leaf (token "4a" SPINE-DATA 2))
+                                           (leaf (token "4a" SPINE-DATA 3))
+                                           (leaf (token "4a" SPINE-DATA 4))
+                                           (leaf (token "=2" MEASURE 5))
+                                           (leaf (token "4a" SPINE-DATA 6))
+                                           (leaf (token "4a" SPINE-DATA 7))
+                                           (leaf (token "4a" SPINE-DATA 8))
+                                           (leaf (token "4a" SPINE-DATA 9))
+                                           (leaf (token "=3" MEASURE 10))
+                                           (leaf (token "4a" SPINE-DATA 11))
+                                           (leaf (token "4a" SPINE-DATA 12))
+                                           (leaf (token "4a" SPINE-DATA 13))
+                                           (leaf (token "4a" SPINE-DATA 14))
+                                           (leaf (token "=4" MEASURE 15))
+                                           (leaf (token "4a" SPINE-DATA 16))
+                                           (leaf (token "4a" SPINE-DATA 17))
+                                           (leaf (token "4a" SPINE-DATA 18))
+                                           (leaf (token "4a" SPINE-DATA 19))
+                                           (leaf (token "=5" MEASURE 20))
+                                           (leaf (token "4a" SPINE-DATA 21))
+                                           (leaf (token "4a" SPINE-DATA 22))
+                                           (leaf (token "4a" SPINE-DATA 23))
+                                           (leaf (token "4a" SPINE-DATA 24))
+                                           (leaf (token "==" MEASURE 25))
+                                           (leaf (token "*-" SPINE-TERMINATOR 26)))
+                                     (list (leaf (token "**dynam" EXCLUSIVE-INTERPRETATION 0))
+                                           (leaf (token "f" SPINE-DATA 1))
+                                           (leaf (token ">" SPINE-DATA 2))
+                                           (leaf (token ")" SPINE-DATA 3))
+                                           (leaf (token ")" SPINE-DATA 4))
+                                           (leaf (token "=2" MEASURE 5))
+                                           (leaf (token "]" SPINE-DATA 6))
+                                           (leaf (token "<" SPINE-DATA 7))
+                                           (leaf (token "." NULL-SPINE-DATA 8))
+                                           (leaf (token "." NULL-SPINE-DATA 9))
+                                           (leaf (token "=3" MEASURE 10))
+                                           (leaf (token "p" SPINE-DATA 11))
+                                           (leaf (token "." NULL-SPINE-DATA 12))
+                                           (leaf (token "<" SPINE-DATA 13))
+                                           (leaf (token "[" SPINE-DATA 14))
+                                           (leaf (token "=4" MEASURE 15))
+                                           (leaf (token "." NULL-SPINE-DATA 16))
+                                           (leaf (token ">" SPINE-DATA 17))
+                                           (leaf (token "." NULL-SPINE-DATA 18))
+                                           (leaf (token "." NULL-SPINE-DATA 19))
+                                           (leaf (token "=5" MEASURE 20))
+                                           (leaf (token "<" SPINE-DATA 21))
+                                           (leaf (token "(" SPINE-DATA 22))
+                                           (leaf (token "(" SPINE-DATA 23))
+                                           (leaf (token "[" SPINE-DATA 24))
+                                           (leaf (token "==" MEASURE 25))
+                                           (leaf (token "*-" SPINE-TERMINATOR 26)))))))
+
+(test)
