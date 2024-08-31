@@ -63,7 +63,7 @@ bin:
 ####################
 ##  tools
 
-tools: ridkt hum-type spine-arity visualize-htree
+tools: ridkt hum-type spine-arity visualize-htree autowedge
 
 ridkt:
 	@echo "Making ridkt executable"
@@ -81,11 +81,15 @@ visualize-htree:
 	@echo "Making visualize-htree executable"
 	@raco exe tools/visualize-htree/visualize-htree.rkt
 
+autowedge:
+	@echo "Making autowedge executable"
+	@raco exe tools/autowedge/autowedge.rkt
+
 ####################
 ##  move
 
 move: ridkt-move hum-type-move spine-arity-move \
-      visualize-htree-move
+      visualize-htree-move autowedge-move
 
 ridkt-move:
 	@echo "Moving ridkt executable to hum-parser/bin"
@@ -103,12 +107,16 @@ visualize-htree-move:
 	@echo "Moving visualize-htree executable to hum-parser/bin"
 	@mv tools/visualize-htree/visualize-htree $(BINDIR)
 
+autowedge-move:
+	@echo "Moving autowedge executable to hum-parser/bin"
+	@mv tools/autowedge/autowedge $(BINDIR)
+
 ####################
 ##  uninstall
 
 uninstall: un-ridkt un-hum-type \
            un-spine-arity un-visualize-htree \
-           un-bin
+           un-autowedge un-bin
 
 un-ridkt:
 	@echo "Uninstalling ridkt executable"
@@ -125,6 +133,10 @@ un-spine-arity:
 un-visualize-htree:
 	@echo "Uninstalling visualize-htree executable"
 	@rm bin/visualize-htree
+
+un-autowedge:
+	@echo "Uninstalling autowedge executable"
+	@rm bin/autowedge
 
 un-bin:
 	@echo "Uninstalling hum-parser/bin"
