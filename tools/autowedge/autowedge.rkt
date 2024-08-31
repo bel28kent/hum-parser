@@ -63,7 +63,7 @@
           (define (is-paired? f lon)
             (local [(define (paired? lon)
                       (cond [(empty? lon) #f]
-                            [(not (regexp-match? #px"[\\[\\]\\.=]" (token-token
+                            [(not (regexp-match? #px"[\\[\\]\\.=\\*!]" (token-token
                                                                      (leaf-token (first lon)))))
                              #f]
                             [(regexp-match? #px"[\\[|\\]]" (token-token
