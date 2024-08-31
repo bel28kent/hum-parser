@@ -100,7 +100,7 @@
               (build-list (length records) (λ (n) (hash-ref records-hash n)))))]
     (begin (for-each not-token-record pre)
            (for-each token-record post)
-           (hash-join (append pre post)))))
+           (hfile (hash-join (append pre post))))))
 
 ; build-filenames
 ; String String Natural -> (listof String)
