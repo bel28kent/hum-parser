@@ -102,7 +102,7 @@
                                                         (and (is-angle? f) (not p?))
                                                         (and (null-token? f) (not angle?)))
                                                     (cons f (fn-for-lon r #f #f))]
-                                                   [p? (cons f (fn-for-lon r) #t (is-left? f))]
+                                                   [p? (cons f (fn-for-lon r #t (is-left? f)))]
                                                    [(cons (fn-for-leaf f left?)
                                                           (fn-for-lon r angle? left?))])]
                                   [(cons (parent (parent-token f)
