@@ -40,39 +40,35 @@
                               [(iterator (rest branches) (cons f new-branches))])))]
               (iterator (root-branches root) empty)))
 
-          ; Node -> Boolean
+          ; Leaf -> Boolean
           ; produce true if leaf is NOT one of ">", "<", "."
-          (define (not-angle-or-null? node)
-            (cond [(parent? node) #t]
-                  [else
-                    (local [(define str_1 (token-token (leaf-token node)))
+          (define (not-angle-or-null? leaf)
+            (local [(define str_1 (token-token (leaf-token leaf)))
 
-                            (define (str=? str_2)
-                              (regexp-match? str_2 str_1))]
-                      (and (not (or (str=? ">") (str=? "<")))
-                           (not (str=? "\\."))))]))
+                    (define (str=? str_2)
+                      (regexp-match? str_2 str_1))]
+              (and (not (or (str=? ">") (str=? "<")))
+                   (not (str=? "\\.")))))
 
           ; Leaf -> Boolean
           ; produce true if "."
           (define (null-token? leaf)
             (string=? "." (token-token (leaf-token leaf))))
 
-          ; Node (listof Node) -> Boolean
+          ; Leaf (listof Node) -> Boolean
           ; produce true if leaf is angle and is paired with a square
           (define (is-paired? f lon)
-            (cond [(parent? f) #f]
-                  [else
-                    (local [(define (paired? lon)
-                              (cond [(empty? lon) #f]
-                                    [(not (regexp-match? #px"[\\[\\]\\.=\\*!]"
-                                                         (token-token (leaf-token (first lon)))))
-                                     #f]
-                                    [(regexp-match? #px"[\\[|\\]]"
-                                                    (token-token (leaf-token (first lon))))
-                                     #t]
-                                    [else
-                                      (paired? (rest lon))]))]
-                      (and (regexp-match? #px"<|>" (token-token (leaf-token f))) (paired? lon)))]))
+            (local [(define (paired? lon)
+                      (cond [(empty? lon) #f]
+                            [(not (regexp-match? #px"[\\[\\]\\.=\\*!]"
+                                                 (token-token (leaf-token (first lon)))))
+                             #f]
+                            [(regexp-match? #px"[\\[|\\]]"
+                                            (token-token (leaf-token (first lon))))
+                             #t]
+                            [else
+                              (paired? (rest lon))]))]
+              (and (regexp-match? #px"<|>" (token-token (leaf-token f))) (paired? lon))))
 
           ; Leaf -> Boolean
           (define (is-angle? leaf)
@@ -95,10 +91,10 @@
                               (define r (if (empty? branch)
                                             empty
                                             (rest branch)))
-                              (define n? (if (not (empty? f))
+                              (define n? (if (and (leaf? f) (not (empty? f)))
                                              (not-angle-or-null? f)
                                              #f))
-                              (define p? (if (not (empty? f))
+                              (define p? (if (and (leaf? f) (not (empty? f)))
                                              (is-paired? f r)
                                              #f))]
                         (cond [(empty? branch) empty]
