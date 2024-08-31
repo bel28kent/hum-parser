@@ -123,9 +123,8 @@
                    SPINE-DATA
                    (token-record-number t)))]
     (ab-hgraph (root (fn-for-root (abstract-humdrum-graph-root graph))))))
-#|
+
 (define autowedge-cmd
   (command-line
     #:args (filename)
     (composition filename)))
-|#
