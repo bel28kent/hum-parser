@@ -46,9 +46,9 @@
             (local [(define str_1 (token-token (leaf-token leaf)))
 
                     (define (str=? str_2)
-                      (string=? str_1 str_2))]
+                      (regexp-match? str_2 str_1))]
               (and (not (or (str=? ">") (str=? "<")))
-                   (not (str=? ".")))))
+                   (not (str=? "\\.")))))
 
           ; Leaf -> Boolean
           ; produce true if "."
@@ -76,7 +76,7 @@
 
           ; Leaf -> Boolean
           (define (is-left? leaf)
-            (string=? "<" (token-token (leaf-token leaf))))
+            (regexp-match? "<" (token-token (leaf-token leaf))))
 
           ; Leaf -> Boolean
           (define (is-square? leaf)
@@ -123,8 +123,9 @@
                    SPINE-DATA
                    (token-record-number t)))]
     (ab-hgraph (root (fn-for-root (abstract-humdrum-graph-root graph))))))
-
+#|
 (define autowedge-cmd
   (command-line
     #:args (filename)
     (composition filename)))
+|#
