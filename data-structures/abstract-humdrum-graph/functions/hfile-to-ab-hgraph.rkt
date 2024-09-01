@@ -48,53 +48,37 @@
 
                     (define (fn-for-lolot lolot parent? left? spine-num)
                       (local [(define first-token (if (not (empty? lolot))
-                                                      (get-token
-                                                        (first lolot)
-                                                        spine-num)
+                                                      (get-token (first lolot) spine-num)
                                                       empty))]
                         (cond [(empty? lolot) empty]
                               [(string=? "*^" (token-token first-token))
-                               (local [(define left (fn-for-lolot (rest lolot)
-                                                                  #t #t
-                                                                  spine-num))
+                               (local [(define left (fn-for-lolot (rest lolot) #t #t spine-num))
 
-                                       (define right (fn-for-lolot
-                                                       (rest lolot)
-                                                       #t #f
-                                                       (add1 spine-num)))]
+                                       (define right (fn-for-lolot (rest lolot) #t #f
+                                                                   (add1 spine-num)))]
                                  (list* (parent first-token
                                                 left
                                                 right)
-                                        (fn-for-lolot (trim-original original
-                                                                     left
-                                                                     right)
+                                        (fn-for-lolot (trim-original original left right)
                                                       #f #f
                                                       spine-num)))]
-                              [(string=? "*v" (token-token first-token))
-                               (list (leaf first-token))]
+                              [(string=? "*v" (token-token first-token)) (list (leaf first-token))]
                               [left? (list* (leaf first-token)
-                                            (fn-for-lolot (rest lolot)
-                                                          #t #t
-                                                          spine-num))]
+                                            (fn-for-lolot (rest lolot) #t #t spine-num))]
                               [(and parent? (not left?))
-                               (cond [(splits-to-left?
-                                        (token-token first-token)
-                                        (first lolot)
-                                        spine-num)
+                               (cond [(splits-to-left? (token-token first-token)
+                                                       (first lolot)
+                                                       spine-num)
                                       (list* (leaf first-token)
                                              (fn-for-lolot (rest lolot)
                                                            #t #f
                                                            (add1 spine-num)))]
                                      [else
                                        (list* (leaf first-token)
-                                              (fn-for-lolot (rest lolot)
-                                                            #t #f
-                                                            spine-num))])]
+                                              (fn-for-lolot (rest lolot) #t #f spine-num))])]
                               [else
                                 (list* (leaf first-token)
-                                       (fn-for-lolot (rest lolot)
-                                                     #f #f
-                                                     spine-num))])))]
+                                       (fn-for-lolot (rest lolot) #f #f spine-num))])))]
               (fn-for-lolot lolot #f #f 1)))]
     (type (root (fn-for-logs spines)))))
 
