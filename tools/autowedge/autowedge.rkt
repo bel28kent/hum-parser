@@ -60,6 +60,7 @@
           (define (is-paired? f lon)
             (local [(define (paired? lon)
                       (cond [(empty? lon) #f]
+                            [(parent? (first lon)) #f]
                             [(not (regexp-match? #px"[\\[\\]\\.=\\*!]"
                                                  (token-token (leaf-token (first lon)))))
                              #f]
@@ -91,10 +92,10 @@
                               (define r (if (empty? branch)
                                             empty
                                             (rest branch)))
-                              (define n? (if (and (leaf? f) (not (empty? f)))
+                              (define n? (if (leaf? f)
                                              (not-angle-or-null? f)
                                              #f))
-                              (define p? (if (and (leaf? f) (not (empty? f)))
+                              (define p? (if (leaf? f)
                                              (is-paired? f r)
                                              #f))]
                         (cond [(empty? branch) empty]

@@ -10,6 +10,7 @@
          "../../tools/autowedge/autowedge.rkt")
 
 (define wedge-tree (hfile->ab-hgraph (path->hfile "data/wedge.krn") htree))
+(define parent-tree (hfile->ab-hgraph (path->hfile "data/parent.krn") htree))
 
 ; autowedge
 (check-expect (autowedge wedge-tree)
@@ -67,5 +68,25 @@
                                            (leaf (token "[" SPINE-DATA 24))
                                            (leaf (token "==" MEASURE 25))
                                            (leaf (token "*-" SPINE-TERMINATOR 26)))))))
+(check-expect (autowedge parent-tree)
+              (ab-hgraph (root (list (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
+                                           (parent (token "*^" SPINE-SPLIT 1)
+                                                   (list (leaf (token "4a" SPINE-DATA 2))
+                                                         (leaf (token "*" NULL-INTERPRETATION 3))
+                                                         (leaf (token "*v" SPINE-JOIN 4)))
+                                                   (list (leaf (token "4aa" SPINE-DATA 2))
+                                                         (leaf (token "*" NULL-INTERPRETATION 3))
+                                                         (leaf (token "*v" SPINE-JOIN 4))))
+                                           (leaf (token "==" MEASURE 5))
+                                           (leaf (token "*-" SPINE-TERMINATOR 6)))
+                                     (list (leaf (token "**dynam" EXCLUSIVE-INTERPRETATION 0))
+                                           (parent (token "*^" SPINE-SPLIT 1)
+                                                   (list (leaf (token "p" SPINE-DATA 2))
+                                                         (leaf (token "*v" SPINE-JOIN 3)))
+                                                   (list (leaf (token "pp" SPINE-DATA 2))
+                                                         (leaf (token "*v" SPINE-JOIN 3))))
+                                           (leaf (token "*" NULL-INTERPRETATION 4))
+                                           (leaf (token "==" MEASURE 5))
+                                           (leaf (token "*-" SPINE-TERMINATOR 6)))))))
 
 (test)
