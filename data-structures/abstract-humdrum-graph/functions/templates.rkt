@@ -39,31 +39,22 @@
                     ; acc. (listof (listof Node)). the rest of each branch.
             (local [(define (iterator branches acc)
                       (cond [(and (empty? branches) (empty? acc)) ...]
-                            [(and (empty? branches)
-                                  (not (empty? acc))) (iterator
-                                                        (reverse acc)
-                                                        empty)]
+                            [(and (empty? branches) (not (empty? acc))) (iterator ...
+                                                                                  (reverse acc)
+                                                                                  empty)]
                             [else
                               (local [(define fof (first (first branches)))
 
                                       (define result
-                                              (cond [(leaf? fof)
-                                                     (fn-for-leaf fof)]
+                                              (cond [(leaf? fof) (fn-for-leaf fof)]
                                                     [(parent? fof)
-                                                     (fn-for-leaf
-                                                       (parent-token fof))]))]
+                                                     (fn-for-token (parent-token fof))]))]
                                 (... result
                                      (iterator (rest branches)
                                                (if (parent? fof)
-                                                   (cons
-                                                     (parent-right fof)
-                                                       (cons
-                                                         (parent-left fof)
-                                                           acc))
-                                                   (cons
-                                                     (rest
-                                                       (first branches))
-                                                     acc)))))]))]
+                                                   (cons (parent-right fof)
+                                                     (cons (parent-left fof) acc))
+                                                   (cons (rest (first branches)) acc)))))]))]
               (iterator (root-branches root) empty)))
 
           (define (fn-for-leaf leaf)
