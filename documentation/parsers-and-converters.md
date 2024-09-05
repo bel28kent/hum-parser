@@ -41,3 +41,26 @@ graph and (2) to allow for unwrapping and re-wrapping data in different types
 when necessary.
 
 ## Testing
+Tests for parsers and converters must cover enough cases to ensure that any
+syntactically and semantically valid Humdrum data can be parsed. Spines are the
+main challenge, as they create the arbitrary size of Humdrum data.
+
+All parser and converters must pass two types of tests: count tests and order
+tests. Count tests ensure that the parser or converter works regardless of the
+number of spines and regardless of the number of spine splits and joins. Order
+tests ensure that the  parser or converter works regardless of the order
+of spine splits or spine joins.
+
+Count tests should cover all cases from empty to 3 spines. For each spine, count
+tests should further cover all cases from no spine splits to 3 spine splits in
+all spines.
+
+Order tests should cover all cases of spine splits and spine joins. These
+include:
+```
+	- spine splits immediately following exclusive interpretation
+	- spine joins immediately before "=="
+	- spine splits successively
+	- spine joins successively
+	- spine splits are separated
+	- spine joins are separated
