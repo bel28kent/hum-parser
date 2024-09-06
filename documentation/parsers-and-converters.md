@@ -42,8 +42,9 @@ when necessary.
 
 ## Testing
 Tests for parsers and converters must cover enough cases to ensure that any
-syntactically and semantically valid Humdrum data can be parsed. Spines are the
-main challenge, as they create the arbitrary size of Humdrum data.
+syntactically and semantically valid Humdrum data can be parsed correctly.
+Spines are the main challenge, as they create the arbitrary size of Humdrum
+data.
 
 All parser and converters must pass two types of tests: count tests and order
 tests. Count tests ensure that the parser or converter works regardless of the
