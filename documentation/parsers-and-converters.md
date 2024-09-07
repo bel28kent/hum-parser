@@ -65,3 +65,21 @@ include:
 	- spine joins successively
 	- spine splits are separated
 	- spine joins are separated
+	- spine splits are not effected by order, i.e. these are both valid:
+		*^
+		*	*^
+
+		AND
+
+		*^
+		*^	*
+	- spine joins are not effected by order assuming the Humdrum data passes
+          semantic validation. I.e. these are both valid if the rhythmic
+	  durations match for joined spines:
+		*	*v	*v
+		*v	*v
+
+		AND
+
+		*v	*v	*
+		*v	*v
