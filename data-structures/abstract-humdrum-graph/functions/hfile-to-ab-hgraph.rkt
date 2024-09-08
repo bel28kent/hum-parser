@@ -51,6 +51,7 @@
                                                       (get-token (first lolot) spine-num)
                                                       empty))]
                         (cond [(empty? lolot) empty]
+                              ; splits-to-left? can also happend here because simultaneous
                               [(string=? "*^" (token-token first-token))
                                (local [(define left (fn-for-lolot (rest lolot) #t #t spine-num))
 
@@ -66,6 +67,7 @@
                               [left? (list* (leaf first-token)
                                             (fn-for-lolot (rest lolot) #t #t spine-num))]
                               [(and parent? (not left?))
+                                     ; joins-to-left? (fn-for-lolot ... (sub1 spine-num))
                                (cond [(splits-to-left? (token-token first-token)
                                                        (first lolot)
                                                        spine-num)
