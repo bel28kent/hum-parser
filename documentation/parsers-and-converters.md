@@ -8,8 +8,7 @@ templates to be derived which largely automate traversal of the structures.
 The programmer can then focus on the purpose of the function at each point
 in the structure, without having to code additional logic for traversal.
 Because trees and graphs handle arbitrary data by design, these structures
-work for all Humdrum files, from the most simple to the most complex; the
-programmer does not need to create new data types for each Humdrum file.
+work for all Humdrum files, from the most simple to the most complex.
 While trees and graphs are quite abstract, their 2D nature bypasses the
 struggles of cramming Humdrum data into 1D lists and hashes.
 
@@ -22,7 +21,7 @@ files comprise functions related to parsing:
 ```
 These functions are parsers:
 ```
-	- path->hfile (String -> HumdrumFile)
+	- path->hfile  (String -> HumdrumFile)
 	- spine-parser (HumdrumFile -> (listof GlobalSpine))
 ```
 Parsers provide basic facilities for getting Humdrum data into `hum-parser`.
@@ -39,6 +38,22 @@ or comments.
 Converters serve two purposes: (1) to map parsed Humdrum data onto a tree or
 graph and (2) to allow for unwrapping and re-wrapping data in different types
 when necessary.
+
+These files comprise converters:
+```
+	- data-structures/abstract-humdrum-graph/functions/ab-hgraph-to-hfile.rkt
+	- data-structures/abstract-humdrum-graph/functions/hfile-to-ab-hgraph.rkt
+	- parser/functions/file.rkt
+	- parser/functions/spine-parser.rkt
+```
+These functions are converters:
+```
+	- ab-hgraph->hfile (AbstractHumdrumGraph -> HumdrumFile)
+	- lolot->lor       ((listof (listof Token)) -> (listof Record))
+	- ab-hgraph->lolot (AbstractHumdrumGraph -> (listof (listof Token)))
+	- hfile->ab-hgraph (HumdrumFile -> AbstractHumdrumGraph)
+	- branch->lot      ((listof Node) -> (listof Token))
+```
 
 ## Testing
 Tests for parsers and converters must cover enough cases to ensure that any
@@ -74,7 +89,7 @@ include:
 		*^
 		*^	*
 	- spine joins are not effected by order assuming the Humdrum data passes
-          semantic validation. I.e. these are both valid if the rhythmic
+	  semantic validation. I.e. these are both valid if the rhythmic
 	  durations match for joined spines:
 		*	*v	*v
 		*v	*v
@@ -83,3 +98,4 @@ include:
 
 		*v	*v	*
 		*v	*v
+```
