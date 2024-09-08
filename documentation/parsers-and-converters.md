@@ -77,7 +77,7 @@ include:
 	- spine joins successively
 	- spine splits are separated
 	- spine joins are separated
-	- spine splits are unordered, i.e. these are both valid:
+	- spine splits are unordered and can be simultaneous, i.e. these are all valid:
 		*^
 		*	*^
 
@@ -85,6 +85,11 @@ include:
 
 		*^
 		*^	*
+		
+		AND
+		
+		*^
+		*^	*^
 	- spine joins are unordered (assuming the Humdrum data passes
 	  semantic validation, i.e. these are both valid if the rhythmic
 	  durations match for joined spines):
