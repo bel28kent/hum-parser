@@ -9,8 +9,6 @@ The programmer can then focus on the purpose of the function at each point
 in the structure, without having to code additional logic for traversal.
 Because trees and graphs handle arbitrary data by design, these structures
 work for all Humdrum files, from the most simple to the most complex.
-While trees and graphs are quite abstract, their 2D nature bypasses the
-struggles of cramming Humdrum data into 1D lists and hashes.
 
 ## Parsers
 Parsing resources are contained in the `parser` subdirectory. The following
@@ -57,11 +55,10 @@ These functions are converters:
 
 ## Testing
 Tests for parsers and converters must cover enough cases to ensure that any
-syntactically and semantically valid Humdrum data can be parsed correctly.
-Spines are the main challenge, as they create the arbitrary size of Humdrum
-data.
+syntactically valid Humdrum data can be parsed correctly. Spines are the main
+challenge, as they create the arbitrary size of Humdrum data.
 
-All parser and converters must pass two types of tests: count tests and order
+All parsers and converters must pass two types of tests: count tests and order
 tests. Count tests ensure that the parser or converter works regardless of the
 number of spines and regardless of the number of spine splits and joins. Order
 tests ensure that the  parser or converter works regardless of the order
@@ -80,7 +77,7 @@ include:
 	- spine joins successively
 	- spine splits are separated
 	- spine joins are separated
-	- spine splits are not effected by order, i.e. these are both valid:
+	- spine splits are unordered, i.e. these are both valid:
 		*^
 		*	*^
 
@@ -88,9 +85,9 @@ include:
 
 		*^
 		*^	*
-	- spine joins are not effected by order assuming the Humdrum data passes
-	  semantic validation. I.e. these are both valid if the rhythmic
-	  durations match for joined spines:
+	- spine joins are unordered (assuming the Humdrum data passes
+	  semantic validation, i.e. these are both valid if the rhythmic
+	  durations match for joined spines):
 		*	*v	*v
 		*v	*v
 
