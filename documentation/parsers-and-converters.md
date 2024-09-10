@@ -90,6 +90,11 @@ include:
 		
 		*^
 		*^	*^
+		
+		AND
+		
+		**kern	**kern
+		*^	*^
 	- spine joins are unordered (assuming the Humdrum data passes
 	  semantic validation, i.e. these are both valid if the rhythmic
 	  durations match for joined spines):
