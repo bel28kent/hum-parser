@@ -66,7 +66,8 @@ of spine splits or spine joins.
 
 Count tests should cover all cases from empty to 3 spines. For each spine, count
 tests should further cover all cases from no spine splits to 3 spine splits in
-all spines.
+all spines. Spines are split and joined only once on a record. Spines are ordered
+from left to right; spine joins are ordered from right to left.
 
 Order tests should cover all cases of spine splits and spine joins. These
 include:
