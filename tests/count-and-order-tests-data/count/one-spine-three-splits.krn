@@ -1,9 +1,10 @@
-**kern	**kern
-*clefG2	*clefG2
-*k[]	*k[]
-*a:	*a:
-*M3/4	*M3/4
-*^	*
+**kern
+*clefG2
+*k[]
+*a:
+*M3/4
+*^
+*	*^
 *	*	*^
 4c	4c	4c	4c
 4c	4c	4c	4c
@@ -17,6 +18,7 @@
 4c	4c	4c	4c
 4c	4c	4c	4c
 *	*	*v	*v
-*v	*v	*
-==	==
-*-	*-
+*	*v	*v
+*v	*v
+==
+*-
