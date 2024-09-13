@@ -73,7 +73,7 @@ Order tests should cover all cases of spine splits and spine joins. These
 include:
 ```
 	- spine splits immediately following exclusive interpretation
-	- spine joins immediately before "=="
+	- spine joins immediately before "*-"
 	- spine splits successively
 	- spine joins successively
 	- spine splits are separated

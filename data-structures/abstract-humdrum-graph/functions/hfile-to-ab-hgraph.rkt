@@ -19,9 +19,7 @@
 
 #|
     ASSUMPTIONS:
-        1a. All subspines merge into one spine before termination.
-        1b. All spines terminate correctly; i.e., the last two tokens in all
-            spines are "==" and "*-".
+        1. All subspines merge into one spine before termination.
         2. When a "*v" is encountered it immediately terminates the subspine.
            (Overlapping left and right subspines when there is more than one
            spine split creates too many corner cases.)
