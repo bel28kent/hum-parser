@@ -1,3 +1,7 @@
+#lang racket/base
+
+(require test-engine/racket-tests)
+
 **kern	**kern	**kern
 *clefG2	*clefG2	*clefG2
 *k[]	*k[]	*k[]

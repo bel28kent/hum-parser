@@ -1,3 +1,7 @@
+#lang racket/base
+
+(require test-engine/racket-tests)
+
 **kern
 *^
 *^	*^
