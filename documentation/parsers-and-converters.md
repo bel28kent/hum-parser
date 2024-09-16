@@ -78,7 +78,9 @@ include:
 	- spine joins successively
 	- spine splits are separated
 	- spine joins are separated
-	- spine splits are unordered and can be simultaneous, i.e. these are all valid:
+	- spine splits are unordered and can be simultaneous, i.e. the following are all valid. The
+	  spine splits to and joins to the right case is identical to the spine joins successively
+	  case, so the same file is used for both tests.
 		*^
 		*	*^
 
