@@ -2,7 +2,7 @@
 
 (require test-engine/racket-tests)
 
-(check-expect (path->hfile ) )
+(check-expect (path->hfile "../../data/order/spine-splits-left-joins-right.krn") )
 (check-expect (spine-parser ) )
 (check-expect (ab-hgraph->hfile ) )
 (check-expect (lolot->lor ) )

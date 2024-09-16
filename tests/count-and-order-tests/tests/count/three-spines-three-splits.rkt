@@ -2,7 +2,7 @@
 
 (require test-engine/racket-tests)
 
-(check-expect (path->hfile ) )
+(check-expect (path->hfile "../../data/count/three-spines-three-splits.krn") )
 (check-expect (spine-parser ) )
 (check-expect (ab-hgraph->hfile ) )
 (check-expect (lolot->lor ) )
