@@ -1,6 +1,12 @@
 #lang racket/base
 
-(require test-engine/racket-tests)
+(require "../../../../parser/data-definitions/data-definitions.rkt"
+         "../../../../parser/functions/file.rkt"
+         "../../../../parser/functions/spine-parser.rkt"
+         "../../../../data-structures/abstract-humdrum-graph/data-definitions/data-definitions.rkt"
+         "../../../../data-structures/abstract-humdrum-graph/functions/ab-hgraph-to-hfile.rkt"
+         "../../../../data-structures/abstract-humdrum-graph/functions/hfile-to-ab-hgraph.rkt"
+         test-engine/racket-tests)
 
 (check-expect (path->hfile "../../data/count/one-spine-three-splits.krn") )
 (check-expect (spine-parser ) )
