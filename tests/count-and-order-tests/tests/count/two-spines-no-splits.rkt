@@ -6,7 +6,8 @@
          "../../../../data-structures/abstract-humdrum-graph/data-definitions/data-definitions.rkt"
          "../../../../data-structures/abstract-humdrum-graph/functions/ab-hgraph-to-hfile.rkt"
          "../../../../data-structures/abstract-humdrum-graph/functions/hfile-to-ab-hgraph.rkt"
-         test-engine/racket-tests)
+         test-engine/racket-tests
+         racket/list)
 
 (check-expect (path->hfile "../../data/count/two-spines-no-splits.krn") )
 (check-expect (spine-parser ) )
@@ -15,6 +16,7 @@
 (check-expect (ab-hgraph->lolot ) )
 (check-expect (hfile->ab-hgraph ) )
 (check-expect (branch->lot ) )
+#|
 **kern	**kern
 *clefG2	*clefG2
 *k[]	*k[]
@@ -33,5 +35,6 @@
 4c	4c
 ==	==
 *-	*-
+|#
 
 (test)
