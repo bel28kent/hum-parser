@@ -6,8 +6,7 @@
          "../../../../data-structures/abstract-humdrum-graph/data-definitions/data-definitions.rkt"
          "../../../../data-structures/abstract-humdrum-graph/functions/ab-hgraph-to-hfile.rkt"
          "../../../../data-structures/abstract-humdrum-graph/functions/hfile-to-ab-hgraph.rkt"
-         test-engine/racket-tests
-         racket/list) ;TODO remove
+         test-engine/racket-tests)
 
 (check-expect (path->hfile "../../data/count/two-spines-no-splits.krn")
               (hfile (list (record "**kern\t**kern"
