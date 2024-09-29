@@ -59,8 +59,7 @@
                                                 left
                                                 right)
                                         (fn-for-lolot (trim-original original left right)
-                                                      #f #f
-                                                      spine-num)))]
+                                                      #f #f spine-num)))]
                               [(string=? "*v" (token-token first-token)) (list (leaf first-token))]
                               [left? (list* (leaf first-token)
                                             (fn-for-lolot (rest lolot) #t #t spine-num))]
@@ -70,9 +69,12 @@
                                                        (first lolot)
                                                        spine-num)
                                       (list* (leaf first-token)
-                                             (fn-for-lolot (rest lolot)
-                                                           #t #f
-                                                           (add1 spine-num)))]
+                                             (fn-for-lolot (rest lolot) #t #f (add1 spine-num)))]
+                                     [(joins-to-left? (token-token first-token)
+                                                      (first lolot)
+                                                      spine-num)
+                                      (list* (leaf first-token)
+                                             (fn-for-lolot (rest lolot) #t #f (sub1 spine-num)))]
                                      [else
                                        (list* (leaf first-token)
                                               (fn-for-lolot (rest lolot) #t #f spine-num))])]
@@ -124,9 +126,31 @@
                         (splits-to-left? (rest lot)
                                          (add1 counter)))]))]
     (if (or (spine-split? first-token-str)
-            (spine-join? first-token-str)
+            (spine-join? first-token-str) ; TODO: why is this case here? splits and joins cannot happen on the same record
             (null-interpretation? first-token-str))
         (splits-to-left? lot 1)
+        #f)))
+
+; joins-to-left?
+; String (listof Token) Natural -> Boolean
+; produces true if there is a spine join to the left of this token
+
+(define (joins-to-left? first-token-str lot spine-num)
+  (local [(define (joins-to-left? lot counter)
+            (cond [(empty? lot) (raise-result-error
+                                 'joins-to-left?
+                                 "reached empty before this spine"
+                                 0
+                                 lot
+                                 spine-num)]
+                  [(= counter spine-num) #f]
+                  [else
+                   (if (spine-join? (token-token (first lot)))
+                       #t
+                       (joins-to-left? (rest lot)
+                                        (add1 counter)))]))]
+    (if (null-interpretation? first-token-str)
+        (joins-to-left? lot 1)
         #f)))
 
 ; trim-original
