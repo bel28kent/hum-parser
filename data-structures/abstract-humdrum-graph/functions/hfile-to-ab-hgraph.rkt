@@ -158,9 +158,14 @@
 ; produces the original list of tokens with parent contents removed
 
 (define (trim-original original left right)
-  (local [(define record-index (token-record-number
-                                     (leaf-token
-                                       (first (reverse right)))))
+  (local [(define index-of-last (token-record-number
+                                 (leaf-token
+                                  (first (reverse right)))))
+
+          (define record-index (if (not (= (length left)
+                                           (length right)))
+                                   (- index-of-last 1)
+                                   index-of-last))
 
           (define (trim-original original)
             (cond [(empty? original)
@@ -171,11 +176,11 @@
                                        left
                                        right)]
                   [(= record-index (token-record-number
-                                     (first (first original))))
+                                    (first (first original))))
                    (handle-join (rest original) left right)]
                   [else
-                    (trim-original (rest original))]))]
-    (trim-original original)))
+                   (trim-original (rest original))]))]
+(trim-original original)))
 
 ; handle-join
 ; (listof Token) (listof Token) (listof Token) -> (listof Token)
