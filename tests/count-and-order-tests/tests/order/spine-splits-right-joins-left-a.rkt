@@ -9,7 +9,7 @@
          test-engine/racket-tests
          racket/list) ; TODO remove
 
-(check-expect (path->hfile "../../data/order/spine-splits-right-joins-left.krn")
+(check-expect (path->hfile "../../data/order/spine-splits-right-joins-left-a.krn")
               (hfile (list (record "**kern" TOKEN
                                    (list (token "**kern" EXCLUSIVE-INTERPRETATION 0))
                                    0)
@@ -47,7 +47,7 @@
                            (record "*-" TOKEN
                                    (list (token "*-" SPINE-TERMINATOR 8))
                                    8))))
-(check-expect (spine-parser (path->hfile "../../data/order/spine-splits-right-joins-left.krn"))
+(check-expect (spine-parser (path->hfile "../../data/order/spine-splits-right-joins-left-a.krn"))
               (list (global-spine KERN
                                   (list (list (token "**kern" EXCLUSIVE-INTERPRETATION 0))
                                         (list (token "*^" SPINE-SPLIT 1))
@@ -89,7 +89,7 @@
                                                                         (leaf (token "*v" SPINE-JOIN 7))))
                                                           (leaf (token "*v" SPINE-JOIN 7))))
                                             (leaf (token "*-" SPINE-TERMINATOR 8)))))))
-              (path->hfile "../../data/order/spine-splits-right-joins-left.krn"))
+              (path->hfile "../../data/order/spine-splits-right-joins-left-a.krn"))
 (check-expect (lolot->lor (list (list (token "**kern" EXCLUSIVE-INTERPRETATION 0))
                                 (list (token "*^" SPINE-SPLIT 1))
                                 (list (token "*" NULL-INTERPRETATION 2)
@@ -185,7 +185,7 @@
                     (list (token "*v" SPINE-JOIN 7)
                           (token "*v" SPINE-JOIN 7))
                     (list (token "*-" SPINE-TERMINATOR 8))))
-(check-expect (hfile->ab-hgraph (path->hfile "../../data/order/spine-splits-right-joins-left.krn")
+(check-expect (hfile->ab-hgraph (path->hfile "../../data/order/spine-splits-right-joins-left-a.krn")
                                 ab-hgraph)
               (ab-hgraph (root (list (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
                                            (parent (token "*^" SPINE-SPLIT 1)
