@@ -44,6 +44,8 @@
           (define (fn-for-lolot lolot)
             (local [(define original lolot)
 
+                    (define left-join-record-number (make-parameter -1))
+
                     (define (fn-for-lolot lolot parent? left? spine-num)
                       (local [(define first-token (if (not (empty? lolot))
                                                       (get-token (first lolot) spine-num)
@@ -58,8 +60,17 @@
                                  (list* (parent first-token
                                                 left
                                                 right)
-                                        (fn-for-lolot (trim-original original left right)
-                                                      #f #f spine-num)))]
+                                        (fn-for-lolot (trim-original original
+                                                                     left
+                                                                     right
+                                                                     (left-join-record-number))
+                                                      #f #f
+                                                      (begin (left-join-record-number -1)
+                                                             (cond [(or (= spine-num 1)
+                                                                        (= (length left)
+                                                                           (length right)))
+                                                                    spine-num]
+                                                                   [(- spine-num 1)])))))]
                               [(string=? "*v" (token-token first-token)) (list (leaf first-token))]
                               [left? (list* (leaf first-token)
                                             (fn-for-lolot (rest lolot) #t #t spine-num))]
@@ -73,8 +84,12 @@
                                      [(joins-to-left? (token-token first-token)
                                                       (first lolot)
                                                       spine-num)
-                                      (list* (leaf first-token)
-                                             (fn-for-lolot (rest lolot) #t #f (sub1 spine-num)))]
+                                      (begin (left-join-record-number
+                                              (token-record-number first-token))
+                                             (list* (leaf first-token)
+                                                    (fn-for-lolot (rest lolot)
+                                                                  #t #f
+                                                                  (sub1 spine-num))))]
                                      [else
                                        (list* (leaf first-token)
                                               (fn-for-lolot (rest lolot) #t #f spine-num))])]
@@ -154,18 +169,15 @@
         #f)))
 
 ; trim-original
-; (listof Token) (listof Token) (listof Token) -> (listof Token)
+; (listof Token) (listof Token) (listof Token) Number -> (listof Token)
 ; produces the original list of tokens with parent contents removed
 
-(define (trim-original original left right)
-  (local [(define index-of-last (token-record-number
-                                 (leaf-token
-                                  (first (reverse right)))))
-
-          (define record-index (if (not (= (length left)
-                                           (length right)))
-                                   (- index-of-last 1)
-                                   index-of-last))
+(define (trim-original original left right left-join-record-number)
+  (local [(define record-index (if (positive? left-join-record-number)
+                                   left-join-record-number
+                                   (token-record-number
+                                    (leaf-token
+                                     (first (reverse right))))))
 
           (define (trim-original original)
             (cond [(empty? original)
@@ -180,7 +192,7 @@
                    (handle-join (rest original) left right)]
                   [else
                    (trim-original (rest original))]))]
-(trim-original original)))
+    (trim-original original)))
 
 ; handle-join
 ; (listof Token) (listof Token) (listof Token) -> (listof Token)
