@@ -137,14 +137,14 @@
 ;;  Represents link between a token and its next(s).
 ;;  CONSTRAINT: (length (listof Token)) is 1 || 2.
 
-(struct token (token type record-number) #:transparent)
-; Token is (token String TokenType Natural))
+(struct token (token type record-number field-index) #:transparent)
+; Token is (token String TokenType Natural Natural))
 ;  Represents a single piece of data from a Spine.
 ;  CONSTRAINT: record-number >= 0
 
-(define EXCLUSIVE-TOKEN-EX  (token "**kern"  EXCLUSIVE-INTERPRETATION 5))
-(define TANDEM-TOKEN-EX     (token "*clefG2" CLEF                     6))
-(define MUSIC-TOKEN-EX      (token "4a"      SPINE-DATA               7))
+(define EXCLUSIVE-TOKEN-EX  (token "**kern"  EXCLUSIVE-INTERPRETATION 5 0))
+(define TANDEM-TOKEN-EX     (token "*clefG2" CLEF                     6 0))
+(define MUSIC-TOKEN-EX      (token "4a"      SPINE-DATA               7 0))
 
 (struct token-node (token addresses) #:transparent)
 ; Represents a token with its nexts.
@@ -329,9 +329,9 @@
 
 (define GLOBAL-SPINE-EX
         (global-spine KERN
-                      (list (list (token "**kern"  EXCLUSIVE-INTERPRETATION 0))
-                            (list (token "*clefG2" CLEF                     1))
-                            (list (token "4a"      SPINE-DATA               2)))
+                      (list (list (token "**kern"  EXCLUSIVE-INTERPRETATION 0 0))
+                            (list (token "*clefG2" CLEF                     1 0))
+                            (list (token "4a"      SPINE-DATA               2 0)))
                       0))
 
 ;;;;;;;;;;;;;;;;;;;;
@@ -357,55 +357,55 @@
                         2)
                 (record "**kern"
                         TOKEN
-                        (list (token "**kern" EXCLUSIVE-INTERPRETATION 3))
+                        (list (token "**kern" EXCLUSIVE-INTERPRETATION 3 0))
                         3)
                 (record "*M4/4"
                         TOKEN
-                        (list (token "*M4/4" TIME-SIG 4))
+                        (list (token "*M4/4" TIME-SIG 4 0))
                         4)
                 (record "*MM[Moderato]"
                         TOKEN
-                        (list (token "*MM[Moderato]" #f 5))
+                        (list (token "*MM[Moderato]" #f 5 0))
                         5)
                 (record "4f#"
                         TOKEN
-                        (list (token "4f#" SPINE-DATA 6))
+                        (list (token "4f#" SPINE-DATA 6 0))
                         6)
                 (record "=1"
                         TOKEN
-                        (list (token "=1" MEASURE 7))
+                        (list (token "=1" MEASURE 7 0))
                         7)
                 (record "4a"
                         TOKEN
-                        (list (token "4a" SPINE-DATA 8))
+                        (list (token "4a" SPINE-DATA 8 0))
                         8)
                 (record "8a"
                         TOKEN
-                        (list (token "8a" SPINE-DATA 9))
+                        (list (token "8a" SPINE-DATA 9 0))
                         9)
                 (record "[8a"
                         TOKEN
-                        (list (token "[8a" SPINE-DATA 10))
+                        (list (token "[8a" SPINE-DATA 10 0))
                         10)
                 (record "8a]"
                         TOKEN
-                        (list (token "8a]" SPINE-DATA 11))
+                        (list (token "8a]" SPINE-DATA 11 0))
                         11)
                 (record "8a"
                         TOKEN
-                        (list (token "8a" SPINE-DATA 12))
+                        (list (token "8a" SPINE-DATA 12 0))
                         12)
                 (record "4a"
                         TOKEN
-                        (list (token "4a" SPINE-DATA 13))
+                        (list (token "4a" SPINE-DATA 13 0))
                         13)
                 (record "===="
                         TOKEN
-                        (list (token "====" MEASURE 14))
+                        (list (token "====" MEASURE 14 0))
                         14)
                 (record "*-"
                         TOKEN
-                        (list (token "*-" SPINE-TERMINATOR 15))
+                        (list (token "*-" SPINE-TERMINATOR 15 0))
                         15))))
 
 (struct spine-arity (global lolon) #:transparent)
