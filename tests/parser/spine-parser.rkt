@@ -11,14 +11,14 @@
          "../../parser/functions/spine-parser.rkt"
          test-engine/racket-tests)
 
-(define KERN-TOKEN  (token "**kern" "ExclusiveInterpretation" 0))
-(define CLEF-G2     (token "*clefG2" "Clef" 1))
-(define CLEF-F4     (token "*clefF4" "Clef" 1))
-(define SPLIT-TOKEN (token "*^" "SpineSplit" 1))
-(define NULL        (token "*" "NullInterpretation" 1))
-(define LEFT-SPLIT  (token "4a" "SpineData" 2))
-(define RIGHT-SPLIT (token "4aa" "SpineData" 2))
-(define 4AAA        (token "4aaa" "SpineData" 2))
+(define KERN-TOKEN  (token "**kern" "ExclusiveInterpretation" 0 0))
+(define CLEF-G2     (token "*clefG2" "Clef" 1 0))
+(define CLEF-F4     (token "*clefF4" "Clef" 1 0))
+(define SPLIT-TOKEN (token "*^" "SpineSplit" 1 0))
+(define NULL        (token "*" "NullInterpretation" 1 0))
+(define LEFT-SPLIT  (token "4a" "SpineData" 2 0))
+(define RIGHT-SPLIT (token "4aa" "SpineData" 2 0))
+(define 4AAA        (token "4aaa" "SpineData" 2 0))
 
 (define berg-hfile (path->hfile "data/berg01.pc"))
 
