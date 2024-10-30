@@ -137,15 +137,17 @@
 ;;  Represents link between a token and its next(s).
 ;;  CONSTRAINT: (length (listof Token)) is 1 || 2.
 
-(struct token (token type record-number addresses) #:transparent)
-; Token is (token String TokenType Natural TokenAddress))
+(struct token (token type record-number) #:transparent)
+; Token is (token String TokenType Natural))
 ;  Represents a single piece of data from a Spine.
 ;  CONSTRAINT: record-number >= 0
 
-; TODO: update examples with addresses
 (define EXCLUSIVE-TOKEN-EX  (token "**kern"  EXCLUSIVE-INTERPRETATION 5))
 (define TANDEM-TOKEN-EX     (token "*clefG2" CLEF                     6))
 (define MUSIC-TOKEN-EX      (token "4a"      SPINE-DATA               7))
+
+(struct token-node (token addresses) #:transparent)
+; Represents a token with its nexts.
 
 ; TokenType is one of:
 ;  - ExclusiveInterpretation
