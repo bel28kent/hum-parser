@@ -104,12 +104,45 @@
 ;;    TOKEN is part of one-and-only-one Record,
 ;;    and one-and-only-one GlobalSpine. TOKEN
 ;;    is separated from others by SEPARATOR.
+;;
+;;    A token is linked to its next token(s),
+;;    or false:
+;;        - If the token is a spine terminator, then
+;;          it has no next token to point to, so it
+;;          has false for its address.
+;;        - If the token is not a spine split or spine
+;;          join, then it is singly linked to the token
+;;          with the same field index, but on the next
+;;          record.
+;;        - If the token is a spine join, then it is
+;;          singly linked, but to what token depends on
+;;          its neighbor. If this spine join has one
+;;          spine join to the right, then this join is
+;;          linked to the token with the same field index,
+;;          but on the next record. If this spine join
+;;          has no spine join to the left, then this join
+;;          is linked to the token whose field index is
+;;          one less than this token's field index, but
+;;          on the next record.
+;;        - If the token is a spine split it is doubly
+;;          linked to the token with the same field
+;;          index, but on the next record, and to the
+;;          token with one greater than the same field
+;;          index, but on the next record.
 
-(struct token (token type record-number) #:transparent)
-; Token is (token String TokenType Natural)
-;  Represents a single piece of data from a Spine
+; TODO: test
+;; TokenAddress is one of:
+;;  - (listof Token)
+;;  - #f
+;;  Represents link between a token and its next(s).
+;;  CONSTRAINT: (length (listof Token)) is 1 || 2.
+
+(struct token (token type record-number addresses) #:transparent)
+; Token is (token String TokenType Natural TokenAddress))
+;  Represents a single piece of data from a Spine.
 ;  CONSTRAINT: record-number >= 0
 
+; TODO: update examples with addresses
 (define EXCLUSIVE-TOKEN-EX  (token "**kern"  EXCLUSIVE-INTERPRETATION 5))
 (define TANDEM-TOKEN-EX     (token "*clefG2" CLEF                     6))
 (define MUSIC-TOKEN-EX      (token "4a"      SPINE-DATA               7))
