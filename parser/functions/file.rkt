@@ -41,32 +41,35 @@
 
 (define (path->hfile path)
   (local [(define los (read-file path))
+          (define record-number -1)
 
-          (define (los->lor los record-number)
+          (define (los->lor los)
             (cond [(empty? los) empty]
                   [else
-                    (cons (str->record (first los) record-number)
-                          (los->lor (rest los) (add1 record-number)))]))
+                   (cons (str->record (first los))
+                         (begin (set! record-number (add1 record-number))
+                                (los->lor (rest los))))]))
 
-          (define (str->record str record-number)
+          (define (str->record str)
             (record str
                     (type-record str)
                     (if (or (reference? str) (global-comment? str))
-                            (list str)
-                            (los->lot (split str) record-number))
+                        (list str)
+                        (los->lot (split str)))
                     record-number))
 
-          (define (los->lot los record-number)
+          (define (los->lot los)
             (local [(define (los->lot los field-index)
                       (cond [(empty? los) empty]
                             [else
-                             (cons (str->token (first los) record-number field-index)
+                             (cons (str->token (first los) field-index)
                                    (los->lot (rest los) (add1 field-index)))]))]
               (los->lot los 0)))
 
-          (define (str->token str record-number field-index)
+          (define (str->token str field-index)
             (token str (type-token str) record-number field-index))]
-    (hfile (los->lor los 0))))
+    (hfile (begin (set! record-number 0)
+                  (los->lor los)))))
 
 ; hfile->los
 ; HumdrumFile -> (listof String)
