@@ -57,13 +57,15 @@
                     record-number))
 
           (define (los->lot los record-number)
-            (cond [(empty? los) empty]
-                  [else
-                    (cons (str->token (first los) record-number)
-                          (los->lot (rest los) record-number))]))
+            (local [(define (los->lot los field-index)
+                      (cond [(empty? los) empty]
+                            [else
+                             (cons (str->token (first los) record-number field-index)
+                                   (los->lot (rest los) (add1 field-index)))]))]
+              (los->lot los 0)))
 
-          (define (str->token str record-number)
-            (token str (type-token str) record-number))]
+          (define (str->token str record-number field-index)
+            (token str (type-token str) record-number field-index))]
     (hfile (los->lor los 0))))
 
 ; hfile->los
