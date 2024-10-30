@@ -25,24 +25,27 @@
 ; type-spine
 (check-expect (type-spine (list (list (token "**kern"
                                              EXCLUSIVE-INTERPRETATION
+                                             0
                                              0))
-                                (list (token "4a" SPINE-DATA 1))
-                                (list (token "==" MEASURE 2))
-                                (list (token "*-" SPINE-TERMINATOR 3))))
+                                (list (token "4a" SPINE-DATA 1 0))
+                                (list (token "==" MEASURE 2 0))
+                                (list (token "*-" SPINE-TERMINATOR 3 0))))
               KERN)
 (check-expect (type-spine (list (list (token "**dynam"
                                              EXCLUSIVE-INTERPRETATION
+                                             0
                                              0))
-                                (list (token "f" SPINE-DATA 1))
-                                (list (token "==" MEASURE 2))
-                                (list (token "*-" SPINE-TERMINATOR 3))))
+                                (list (token "f" SPINE-DATA 1 0))
+                                (list (token "==" MEASURE 2 0))
+                                (list (token "*-" SPINE-TERMINATOR 3 0))))
               DYNAM)
 (check-expect (type-spine (list (list (token "**test"
                                              EXCLUSIVE-INTERPRETATION
+                                             0
                                              0))
-                                (list (token "test" SPINE-DATA 1))
-                                (list (token "==" MEASURE 2))
-                                (list (token "*-" SPINE-TERMINATOR 3))))
+                                (list (token "test" SPINE-DATA 1 0))
+                                (list (token "==" MEASURE 2 0))
+                                (list (token "*-" SPINE-TERMINATOR 3 0))))
               #f)
 
 ; type-token

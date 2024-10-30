@@ -24,33 +24,33 @@
 (define LOCAL-EMPTY  (record "!\t!" LOCAL-COMMENT (list "!\t!") 0))
 (define EXCLUSIVE    (record "**kern\t**kern"
                              TOKEN
-                             (list (token "**kern" EXCLUSIVE-INTERPRETATION 2)
-                                   (token "**kern" EXCLUSIVE-INTERPRETATION 2))
+                             (list (token "**kern" EXCLUSIVE-INTERPRETATION 2 0)
+                                   (token "**kern" EXCLUSIVE-INTERPRETATION 2 1))
                              2))
 (define DUP-EXCLUSIVE (record "*\t**kern"
                               TOKEN
-                              (list (token "*" NULL-INTERPRETATION 5)
-                                    (token "**kern" EXCLUSIVE-INTERPRETATION 5))
+                              (list (token "*" NULL-INTERPRETATION 5 0)
+                                    (token "**kern" EXCLUSIVE-INTERPRETATION 5 1))
                               5))
 (define TANDEM        (record "*clefG2\t*clefG2"
                               TOKEN
-                              (list (token "*clefG2" CLEF 1)
-                                    (token "*clefG2" CLEF 1))
+                              (list (token "*clefG2" CLEF 1 0)
+                                    (token "*clefG2" CLEF 1 1))
                               1))
 (define NULL-INTERP   (record "*\t*"
                               TOKEN
-                              (list (token "*" NULL-INTERPRETATION 1)
-                                    (token "*" NULL-INTERPRETATION 1))
+                              (list (token "*" NULL-INTERPRETATION 1 0)
+                                    (token "*" NULL-INTERPRETATION 1 1))
                               1))
 (define SPINE         (record "4a\t4a"
                               TOKEN
-                              (list (token "4a" SPINE-DATA 1)
-                                    (token "4a" SPINE-DATA 1))
+                              (list (token "4a" SPINE-DATA 1 0)
+                                    (token "4a" SPINE-DATA 1 1))
                               1))
 (define NULL-SPINE    (record ".\t."
                               TOKEN
-                              (list (token "." NULL-SPINE-DATA 1)
-                                    (token "." NULL-SPINE-DATA 1))
+                              (list (token "." NULL-SPINE-DATA 1 0)
+                                    (token "." NULL-SPINE-DATA 1 1))
                               1))
 ; rid-global-comments
 (check-expect (rid-global-comments (list GLOBAL)) empty)

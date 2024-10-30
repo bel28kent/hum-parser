@@ -64,78 +64,78 @@
                                    4)
                            (record "**pc\t**kern"
                                    TOKEN
-                                   (list (token "**pc" EXCLUSIVE-INTERPRETATION 5)
-                                         (token "**kern" EXCLUSIVE-INTERPRETATION 5))
+                                   (list (token "**pc" EXCLUSIVE-INTERPRETATION 5 0)
+                                         (token "**kern" EXCLUSIVE-INTERPRETATION 5 1))
                                    5)
                            (record "*X:\t*X:"
                                    TOKEN
-                                   (list (token "*X:" KEY-LABEL 6)
-                                         (token "*X:" KEY-LABEL 6))
+                                   (list (token "*X:" KEY-LABEL 6 0)
+                                         (token "*X:" KEY-LABEL 6 1))
                                    6)
                            (record "0\tF"
                                    TOKEN
-                                   (list (token "0" SPINE-DATA 7)
-                                         (token "F" SPINE-DATA 7))
+                                   (list (token "0" SPINE-DATA 7 0)
+                                         (token "F" SPINE-DATA 7 1))
                                    7)
                            (record "1\tF#"
                                    TOKEN
-                                   (list (token "1" SPINE-DATA 8)
-                                         (token "F#" SPINE-DATA 8))
+                                   (list (token "1" SPINE-DATA 8 0)
+                                         (token "F#" SPINE-DATA 8 1))
                                    8)
                            (record "3\tG#"
                                    TOKEN
-                                   (list (token "3" SPINE-DATA 9)
-                                         (token "G#" SPINE-DATA 9))
+                                   (list (token "3" SPINE-DATA 9 0)
+                                         (token "G#" SPINE-DATA 9 1))
                                    9)
                            (record "8\tC#"
                                    TOKEN
-                                   (list (token "8" SPINE-DATA 10)
-                                         (token "C#" SPINE-DATA 10))
+                                   (list (token "8" SPINE-DATA 10 0)
+                                         (token "C#" SPINE-DATA 10 1))
                                    10)
                            (record "4\tA"
                                    TOKEN
-                                   (list (token "4" SPINE-DATA 11)
-                                         (token "A" SPINE-DATA 11))
+                                   (list (token "4" SPINE-DATA 11 0)
+                                         (token "A" SPINE-DATA 11 1))
                                    11)
                            (record "9\tD"
                                    TOKEN
-                                   (list (token "9" SPINE-DATA 12)
-                                         (token "D" SPINE-DATA 12))
+                                   (list (token "9" SPINE-DATA 12 0)
+                                         (token "D" SPINE-DATA 12 1))
                                    12)
                            (record "10\tE-"
                                    TOKEN
-                                   (list (token "10" SPINE-DATA 13)
-                                         (token "E-" SPINE-DATA 13))
+                                   (list (token "10" SPINE-DATA 13 0)
+                                         (token "E-" SPINE-DATA 13 1))
                                    13)
                            (record "7\tC"
                                    TOKEN
-                                   (list (token "7" SPINE-DATA 14)
-                                         (token "C" SPINE-DATA 14))
+                                   (list (token "7" SPINE-DATA 14 0)
+                                         (token "C" SPINE-DATA 14 1))
                                    14)
                            (record "6\tB"
                                    TOKEN
-                                   (list (token "6" SPINE-DATA 15)
-                                         (token "B" SPINE-DATA 15))
+                                   (list (token "6" SPINE-DATA 15 0)
+                                         (token "B" SPINE-DATA 15 1))
                                    15)
                            (record "5\tB-"
                                    TOKEN
-                                   (list (token "5" SPINE-DATA 16)
-                                         (token "B-" SPINE-DATA 16))
+                                   (list (token "5" SPINE-DATA 16 0)
+                                         (token "B-" SPINE-DATA 16 1))
                                    16)
                            (record "11\tE"
                                    TOKEN
-                                   (list (token "11" SPINE-DATA 17)
-                                         (token "E" SPINE-DATA 17))
+                                   (list (token "11" SPINE-DATA 17 0)
+                                         (token "E" SPINE-DATA 17 1))
                                    17)
                            (record "2\tG"
                                    TOKEN
-                                   (list (token "2" SPINE-DATA 18)
-                                         (token "G" SPINE-DATA 18))
+                                   (list (token "2" SPINE-DATA 18 0)
+                                         (token "G" SPINE-DATA 18 1))
                                    18)
                            (record "*-\t*-"
                                    TOKEN
-                                   (list (token "*-" SPINE-TERMINATOR 19)
-                                         (token "*-" SPINE-TERMINATOR 19))
+                                   (list (token "*-" SPINE-TERMINATOR 19 0)
+                                         (token "*-" SPINE-TERMINATOR 19 1))
                                    19)
                            (record "!!!YOR: Dave Headlam, The Music of Alban Berg (New Haven, CT: Yale University Press, 1996), p. 391"
                                    REFERENCE-RECORD
@@ -182,8 +182,8 @@
                             0)
                     (record "**pc\t**kern"
                             TOKEN
-                            (list (token "**pc" EXCLUSIVE-INTERPRETATION 1)
-                                  (token "**kern" EXCLUSIVE-INTERPRETATION 1))
+                            (list (token "**pc" EXCLUSIVE-INTERPRETATION 1 0)
+                                  (token "**kern" EXCLUSIVE-INTERPRETATION 1 1))
                             1))))
               (list "!!!COM: Berg, Alban" "**pc\t**kern"))
 
