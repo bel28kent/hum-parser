@@ -10,10 +10,10 @@
          "../../parser/functions/file.rkt"
          test-engine/racket-tests)
 
-(define TEST-TOKEN-1 (token "**kern" EXCLUSIVE-INTERPRETATION 3))
-(define TEST-TOKEN-2 (token "*^"     SPINE-SPLIT 3))
-(define TEST-TOKEN-3 (token "*v"     SPINE-JOIN 3))
-(define TEST-TOKEN-4 (token "4a"     SPINE-DATA 3))
+(define TEST-TOKEN-1 (token "**kern" EXCLUSIVE-INTERPRETATION 3 0))
+(define TEST-TOKEN-2 (token "*^"     SPINE-SPLIT 3 0))
+(define TEST-TOKEN-3 (token "*v"     SPINE-JOIN 3 0))
+(define TEST-TOKEN-4 (token "4a"     SPINE-DATA 3 0))
 
 (define TEST-RECORD-1 (record "**kern" TOKEN (list TEST-TOKEN-1) 3))
 (define TEST-RECORD-2 (record "*^"     TOKEN (list TEST-TOKEN-2) 3))
