@@ -5,21 +5,20 @@
 ;;    tests for ab-hgraph-to-hfile.rkt
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../../../parser/data-definitions/data-definitions.rkt"
-         "../../../parser/functions/file.rkt"
-         "../../../data-structures/abstract-humdrum-graph/data-definitions/data-definitions.rkt"
-         "../../../data-structures/abstract-humdrum-graph/functions/hfile-to-ab-hgraph.rkt"
-         "../../../data-structures/abstract-humdrum-graph/functions/ab-hgraph-to-hfile.rkt"
+(require "../../../../parser/data-definitions/data-definitions.rkt"
+         "../../../../parser/functions/file.rkt"
+         "../../../../parser/data-structures/humdrum-graph/data-definitions/data-definitions.rkt"
+         "../../../../parser/data-structures/humdrum-graph/functions/hfile-to-hgraph.rkt"
+         "../../../../parser/data-structures/humdrum-graph/functions/hgraph-to-hfile.rkt"
          test-engine/racket-tests)
 
-(define two-spines-both-split-ab-hgraph (hfile->ab-hgraph
-                                          (path->hfile "../data/two-spines-both-split.krn")
-                                          ab-hgraph))
+(define two-spines-both-split-hgraph (hfile->hgraph
+                                      (path->hfile "../data/two-spines-both-split.krn")))
 
-; ab-graph->hfile
-; AbstractHumdrumGraph -> HumdrumFile
+; hgraph->hfile
+; HumdrumGraph -> HumdrumFile
 ; converts the graph to a HumdrumFile
-(check-expect (ab-hgraph->hfile two-spines-both-split-ab-hgraph)
+(check-expect (hgraph->hfile two-spines-both-split-hgraph)
               (hfile (list (record "**kern\t**dynam"
                                    TOKEN
                                    (list (token "**kern" EXCLUSIVE-INTERPRETATION 0 0)
@@ -253,10 +252,10 @@
                                   (token "*-" SPINE-TERMINATOR 15 1))
                             15)))
 
-; ab-graph->lolot
-; AbstractHumdrumGraph -> (listof (listof Token))
+; hgraph->lolot
+; HumdrumGraph -> (listof (listof Token))
 ; converts the graph to a (listof (listof Token))
-(check-expect (ab-hgraph->lolot two-spines-both-split-ab-hgraph)
+(check-expect (hgraph->lolot two-spines-both-split-hgraph)
               (list (list (token "**kern" EXCLUSIVE-INTERPRETATION 0 0)
                           (token "**dynam" EXCLUSIVE-INTERPRETATION 0 1))
                     (list (token "*clefG2" CLEF 1 0)

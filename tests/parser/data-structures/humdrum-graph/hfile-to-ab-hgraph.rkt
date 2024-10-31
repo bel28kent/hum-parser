@@ -1,8 +1,8 @@
 #lang racket
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data-structures: AbstractHumdrumGraph
-;;   tests for hfile->ab-hgraph
+;; hum-parser: data-structures: HumdrumGraph
+;;   tests for hfile->hgraph
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require
