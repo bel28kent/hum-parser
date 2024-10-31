@@ -1,9 +1,8 @@
 #lang racket/base
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data structures: AbstractHumdrumGraph
-;;    hfile->ab-hgraph: Converts HumdrumFile to AbstractHumdrumGraph
-;;        or one of its subtypes
+;; hum-parser: data structures: HumdrumGraph
+;;    hfile->hgraph: Converts HumdrumFile to HumdrumGraph
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require racket/list
@@ -25,11 +24,11 @@ ASSUMPTIONS:
 spine split creates too many corner cases.)
 |#
 
-; hfile->ab-hgraph
-; HumdrumFile Type -> AbstractHumdrumGraph
-; converts the HumdrumFile to an AbstractHumdrumGraph or one of its subtypes
+; hfile->hgraph
+; HumdrumFile -> HumdrumGraph
+; converts the HumdrumFile to a HumdrumGraph
 
-(define (hfile->ab-hgraph hfile type)
+(define (hfile->hgraph hfile)
   (local [(define spines (spine-parser hfile))
 
           (define (fn-for-logs logs)
@@ -88,7 +87,7 @@ spine split creates too many corner cases.)
                                (list* (leaf first-token)
                                       (fn-for-lolot (rest lolot) #f #f spine-num))])))]
               (fn-for-lolot lolot #f #f 1)))]
-    (type (root (fn-for-logs spines)))))
+    (hgraph (root (fn-for-logs spines)))))
 
 ; get-token
 ; (listof Token) Natural -> Token
