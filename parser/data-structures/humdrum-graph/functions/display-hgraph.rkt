@@ -1,20 +1,20 @@
 #lang racket
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data structures: AbstractHumdrumGraph
-;;    display-ab-hgraph: prints each token in the graph
+;; hum-parser: data structures: HumdrumGraph
+;;    display-hgraph: prints each token in the graph
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require "../../../parser/data-definitions/data-definitions.rkt"
          "../data-definitions/data-definitions.rkt")
 
-(provide display-ab-hgraph)
+(provide display-hgraph)
 
-; display-ab-hgraph
-; AbstractHumdrumGraph -> (void)
+; display-hgraph
+; HumdrumGraph -> (void)
 ; prints each token in the graph to screen
 
-(define (display-ab-hgraph ab-hgraph)
+(define (display-hgraph hgraph)
   (local [(define (fn-for-root root)
             (local [(define (iterator branches factor)
                       (cond [(empty? branches) (void)]
@@ -84,4 +84,4 @@
 
           (define (indentation factor)
             (make-string factor #\tab))]
-    (fn-for-root (abstract-humdrum-graph-root ab-hgraph))))
+    (fn-for-root (humdrum-graph-root hgraph))))
