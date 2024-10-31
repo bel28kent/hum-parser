@@ -1,14 +1,13 @@
 #lang racket/base
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data-structures: AbstractHumdrumGraph
-;;    ab-hgraph-to-hfile: converts an AbstractHumdrumGraph
-;;        to a HumdrumFile
+;; hum-parser: data-structures: HumdrumGraph
+;;    hgraph-to-hfile: converts a HumdrumGraph to HumdrumFile
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 #|
-  This function only assembles data in the given AbstractHumdrumGraph. Non-token records filtered
-  out when AbstractHumdrumGraph was created are not inserted, so resultant HumdrumFile may be
+  This function only assembles data in the given HumdrumGraph. Non-token records filtered
+  out when the HumdrumGraph was created are not inserted, so resultant HumdrumFile may be
   smaller than original.
 |#
 
@@ -21,14 +20,14 @@
 
 (provide (all-defined-out))
 
-; ab-hgraph->hfile
-; AbstractHumdrumGraph -> HumdrumFile
+; hgraph->hfile
+; HumdrumGraph -> HumdrumFile
 ; converts the graph to a HumdrumFile
 
-(define (ab-hgraph->hfile ab-hgraph)
+(define (hgraph->hfile hgraph)
   (hfile
     (lolot->lor
-      (ab-hgraph->lolot ab-hgraph))))
+      (hgraph->lolot hgraph))))
 
 ; lolot->lor
 ; (listof (listof Token)) -> (listof Record)
@@ -43,11 +42,11 @@
                       (token-record-number (first lot)))))]
     (map lot->r lolot)))
 
-; ab-graph->lolot
-; AbstractHumdrumGraph -> (listof (listof Token))
+; hgraph->lolot
+; HumdrumGraph -> (listof (listof Token))
 ; converts the graph to a (listof (listof Token))
 
-(define (ab-hgraph->lolot ab-hgraph)
+(define (hgraph->lolot hgraph)
   (local [; Root -> (listof Record)
           (define (fn-for-root root)
                     ; acc. (listof (listof Node)). the rest of each branch.
@@ -76,4 +75,4 @@
                                           (cons t rec)
                                           lolot))]))]
               (iterator (root-branches root) empty empty empty)))]
-    (fn-for-root (abstract-humdrum-graph-root ab-hgraph))))
+    (fn-for-root (humdrum-graph-root hgraph))))
