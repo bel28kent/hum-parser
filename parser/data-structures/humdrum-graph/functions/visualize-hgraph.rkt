@@ -1,9 +1,9 @@
 #lang racket/base
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data structures: AbstractHumdrumGraph
-;;    visualize-ab-hgraph: provides definitions for
-;;        visualizing HumdrumTree and HumdrumGraph
+;; hum-parser: data structures: HumdrumGraph
+;;    visualize-hgraph: provides definitions for
+;;        visualizing HumdrumGraph
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require racket/list
