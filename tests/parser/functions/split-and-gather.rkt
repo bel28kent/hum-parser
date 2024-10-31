@@ -4,7 +4,7 @@
 ;;  hum-parser: tests for split and gather functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../../parser/functions/split-and-gather.rkt"
+(require "../../../parser/functions/split-and-gather.rkt"
          test-engine/racket-tests)
 
 ; split

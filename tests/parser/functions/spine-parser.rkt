@@ -5,10 +5,10 @@
 ;;    also tested in spine-parser-scriabin-test
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../../parser/data-definitions/data-definitions.rkt"
-         (only-in "../../parser/functions/file.rkt"
+(require "../../../parser/data-definitions/data-definitions.rkt"
+         (only-in "../../../parser/functions/file.rkt"
                   path->hfile)
-         "../../parser/functions/spine-parser.rkt"
+         "../../../parser/functions/spine-parser.rkt"
          test-engine/racket-tests)
 
 (define KERN-TOKEN  (token "**kern" "ExclusiveInterpretation" 0 0))
@@ -20,7 +20,7 @@
 (define RIGHT-SPLIT (token "4aa" "SpineData" 2 0))
 (define 4AAA        (token "4aaa" "SpineData" 2 0))
 
-(define berg-hfile (path->hfile "data/berg01.pc"))
+(define berg-hfile (path->hfile "../data/berg01.pc"))
 
 ; spine-parser
 (check-expect (spine-parser berg-hfile)

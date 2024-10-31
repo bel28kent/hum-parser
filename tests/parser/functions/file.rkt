@@ -4,11 +4,11 @@
 ;;  hum-parser: tests for file functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../../parser/data-definitions/data-definitions.rkt"
-         "../../parser/functions/file.rkt"
+(require "../../../parser/data-definitions/data-definitions.rkt"
+         "../../../parser/functions/file.rkt"
          test-engine/racket-tests)
 
-(define BERG-PATH "data/berg01.pc")
+(define BERG-PATH "../data/berg01.pc")
 
 ; read-file
 (check-expect (read-file BERG-PATH)

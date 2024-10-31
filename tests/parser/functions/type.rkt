@@ -4,8 +4,8 @@
 ;;  hum-parser: tests for type functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../../parser/data-definitions/data-definitions.rkt"
-         "../../parser/functions/type.rkt"
+(require "../../../parser/data-definitions/data-definitions.rkt"
+         "../../../parser/functions/type.rkt"
          test-engine/racket-tests
          (only-in rackunit
                   check-exn))

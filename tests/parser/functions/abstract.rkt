@@ -4,12 +4,12 @@
 ;;  hum-parser: tests for abstract functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../../parser/data-definitions/data-definitions.rkt"
-         "../../parser/functions/abstract.rkt"
-         "../../parser/functions/file.rkt"
+(require "../../../parser/data-definitions/data-definitions.rkt"
+         "../../../parser/functions/abstract.rkt"
+         "../../../parser/functions/file.rkt"
          test-engine/racket-tests)
 
-(define BERG-PATH "data/berg01.pc")
+(define BERG-PATH "../data/berg01.pc")
 
 ; tag=?
 (check-expect (tag=? "!!!COM: Scriabin, Alexander" 3 REFERENCE-TAG) #t)
