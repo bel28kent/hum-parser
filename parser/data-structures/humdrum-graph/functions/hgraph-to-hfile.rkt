@@ -13,9 +13,9 @@
 
 (require racket/list
          racket/local
-         "../../../parser/data-definitions/data-definitions.rkt"
-         "../../../parser/functions/type.rkt"
-         "../../../parser/functions/split-and-gather.rkt"
+         "../../../../parser/data-definitions/data-definitions.rkt"
+         "../../../../parser/functions/type.rkt"
+         "../../../../parser/functions/split-and-gather.rkt"
          "../data-definitions/data-definitions.rkt")
 
 (provide (all-defined-out))

@@ -5,7 +5,7 @@
 ;;    display-hgraph: prints each token in the graph
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require "../../../parser/data-definitions/data-definitions.rkt"
+(require "../../../../parser/data-definitions/data-definitions.rkt"
          "../data-definitions/data-definitions.rkt")
 
 (provide display-hgraph)

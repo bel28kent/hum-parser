@@ -8,7 +8,7 @@
 
 (require racket/list
          racket/local
-         "../../../parser/data-definitions/data-definitions.rkt"
+         "../../../../parser/data-definitions/data-definitions.rkt"
          "../data-definitions/data-definitions.rkt")
 
 (provide longest-string-in)

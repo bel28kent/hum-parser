@@ -5,7 +5,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require racket/list
-         "../../../parser/data-definitions/data-definitions.rkt")
+         "../../../data-definitions/data-definitions.rkt")
 
 (provide (all-defined-out))
 
