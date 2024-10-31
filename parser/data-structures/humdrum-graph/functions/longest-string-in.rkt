@@ -1,9 +1,9 @@
 #lang racket/base
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data structures: AbstractHumdrumGraph
+;; hum-parser: data structures: HumdrumGraph
 ;;    longest-string-in: Produces the longest token string
-;;        in the AbstractHumdrumGraph
+;;        in the HumdrumGraph
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require racket/list
@@ -14,10 +14,10 @@
 (provide longest-string-in)
 
 ; longest-string-in
-; AbstractHumdrumGraph -> String
+; HumdrumGraph -> String
 ; produces the longest token string in the tree
 
-(define (longest-string-in ab-hgraph)
+(define (longest-string-in hgraph)
   (local [(define (fn-for-root root)
             (local [(define (iterator branches longest)
                       (cond [(empty? branches) longest]
@@ -64,4 +64,4 @@
 
           (define (fn-for-token token)
             (token-token token))]
-    (fn-for-root (abstract-humdrum-graph-root ab-hgraph))))
+    (fn-for-root (humdrum-graph-root hgraph))))
