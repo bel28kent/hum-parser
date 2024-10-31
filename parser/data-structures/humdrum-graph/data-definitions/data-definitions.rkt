@@ -10,11 +10,12 @@
 (provide (all-defined-out))
 
 #|
-    A HumdrumGraph is a graph. A HumdrumGraph is best imagined as
-    trees with branches and nodes, though it allows for joins.
-    They are two-dimensional and afford vertical (depth-first)
-    and horizontal (breadth-first) traversal. In a musical context,
-    these are akin to melodic and harmonic analysis.
+    A HumdrumGraph is a directed graph. A HumdrumGraph is best
+    imagined as trees with branches and nodes, though it allows
+    for joins. They are two-dimensional and afford vertical
+    (depth-first) and horizontal (breadth-first) traversal. In
+    a musical context, these are akin to melodic and harmonic
+    analysis.
 
     A HumdrumGraph has an arbitrary number of branches. Each branch
     represents one global spine in a Humdrum file. Branches are
