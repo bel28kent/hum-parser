@@ -1,8 +1,8 @@
 #lang racket/base
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data structures: AbstractHumdrumGraph
-;;     counters: provides functions for counting tree structures
+;; hum-parser: data structures: HumdrumGraph
+;;     counters: provides functions for counting graph structures
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require racket/list
@@ -10,12 +10,12 @@
          "../data-definitions/data-definitions.rkt")
 
 ; abstract-counter
-; AbstractHumdrumGraph
+; HumdrumGraph
 ; (Natural -> Natural) (Natural ... -> Natural) (Natural Natural -> Natural) Natural Boolean
 ; -> (listof Natural)
-; produces a list of the number of X in the ab-hgraph
+; produces a list of the number of X in the hgraph
 
-(define (abstract-counter ab-hgraph comb1 comb2 comb3 base depth?)
+(define (abstract-counter hgraph comb1 comb2 comb3 base depth?)
   (local [(define (fn-for-root root)
             (foldr (λ (f rnr) (cons (fn-for-lon f) rnr)) empty (root-branches root)))
 
@@ -29,20 +29,20 @@
                            (if depth?
                                (fn-for-lon (parent-right first branch))
                                0))]))]
-    (fn-for-root (abstract-humdrum-graph-root ab-hgraph))))
+    (fn-for-root (humdrum-graph-root hgraph))))
 
 ; TODO: test
 ; node-counter
-; AbstractHumdrumGraph -> (listof Natural)
+; HumdrumGraph -> (listof Natural)
 ; produces a list of the number of nodes in each branch
 
-(define (node-counter ab-hgraph)
-  (abstract-counter ab-hgraph add1 (λ (comb3 right) (+ 1 comb3 right)) + 0 #t))
+(define (node-counter hgraph)
+  (abstract-counter hgraph add1 (λ (comb3 right) (+ 1 comb3 right)) + 0 #t))
 
 ; TODO: test
 ; branch-depths
-; AbstractHumdrumGraph -> (listof Natural)
+; HumdrumGraph -> (listof Natural)
 ; produces a list of the number of nodes in each branch
 
-(define (branch-depths ab-hgraph)
-  (abstract-counter ab-hgraph add1 (λ (comb3 right) (+ 1 comb3 right)) + 0 #f))
+(define (branch-depths hgraph)
+  (abstract-counter hgraph add1 (λ (comb3 right) (+ 1 comb3 right)) + 0 #f))
