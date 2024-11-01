@@ -3,9 +3,9 @@
 (require "../../../../parser/data-definitions/data-definitions.rkt"
          "../../../../parser/functions/file.rkt"
          "../../../../parser/functions/spine-parser.rkt"
-         "../../../../data-structures/abstract-humdrum-graph/data-definitions/data-definitions.rkt"
-         "../../../../data-structures/abstract-humdrum-graph/functions/ab-hgraph-to-hfile.rkt"
-         "../../../../data-structures/abstract-humdrum-graph/functions/hfile-to-ab-hgraph.rkt"
+         "../../../../parser/data-structures/humdrum-graph/data-definitions/data-definitions.rkt"
+         "../../../../parser/data-structures/humdrum-graph/functions/hgraph-to-hfile.rkt"
+         "../../../../parser/data-structures/humdrum-graph/functions/hfile-to-hgraph.rkt"
          test-engine/racket-tests)
 
 (check-expect (path->hfile "../../data/order/spine-splits-joins-immediately.krn")
@@ -37,19 +37,19 @@
                                         (list (token "*v" SPINE-JOIN 5) (token "*v" SPINE-JOIN 5))
                                         (list (token "*-" SPINE-TERMINATOR 6)))
                                   0)))
-(check-expect (ab-hgraph->hfile (ab-hgraph (root (list
-                                                  (list
-                                                   (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
-                                                   (parent (token "*^" SPINE-SPLIT 1)
-                                                           (list (leaf (token "4c" SPINE-DATA 2))
-                                                                 (leaf (token "4c" SPINE-DATA 3))
-                                                                 (leaf (token "4c" SPINE-DATA 4))
-                                                                 (leaf (token "*v" SPINE-JOIN 5)))
-                                                           (list (leaf (token "4c" SPINE-DATA 2))
-                                                                 (leaf (token "4c" SPINE-DATA 3))
-                                                                 (leaf (token "4c" SPINE-DATA 4))
-                                                                 (leaf (token "*v" SPINE-JOIN 5))))
-                                                   (leaf (token "*-" SPINE-TERMINATOR 6)))))))
+(check-expect (hgraph->hfile (hgraph (root (list
+                                            (list
+                                             (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
+                                             (parent (token "*^" SPINE-SPLIT 1)
+                                                     (list (leaf (token "4c" SPINE-DATA 2))
+                                                           (leaf (token "4c" SPINE-DATA 3))
+                                                           (leaf (token "4c" SPINE-DATA 4))
+                                                           (leaf (token "*v" SPINE-JOIN 5)))
+                                                     (list (leaf (token "4c" SPINE-DATA 2))
+                                                           (leaf (token "4c" SPINE-DATA 3))
+                                                           (leaf (token "4c" SPINE-DATA 4))
+                                                           (leaf (token "*v" SPINE-JOIN 5))))
+                                             (leaf (token "*-" SPINE-TERMINATOR 6)))))))
               (path->hfile "../../data/order/spine-splits-joins-immediately.krn"))
 (check-expect (lolot->lor (list (list (token "**kern" EXCLUSIVE-INTERPRETATION 0))
                                 (list (token "*^" SPINE-SPLIT 1))
@@ -73,19 +73,19 @@
                                                  (token "*v" SPINE-JOIN 5))
                             5)
                     (record "*-" TOKEN (list (token "*-" SPINE-TERMINATOR 6)) 6)))
-(check-expect (ab-hgraph->lolot (ab-hgraph (root (list
-                                                  (list
-                                                   (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
-                                                   (parent (token "*^" SPINE-SPLIT 1)
-                                                           (list (leaf (token "4c" SPINE-DATA 2))
-                                                                 (leaf (token "4c" SPINE-DATA 3))
-                                                                 (leaf (token "4c" SPINE-DATA 4))
-                                                                 (leaf (token "*v" SPINE-JOIN 5)))
-                                                           (list (leaf (token "4c" SPINE-DATA 2))
-                                                                 (leaf (token "4c" SPINE-DATA 3))
-                                                                 (leaf (token "4c" SPINE-DATA 4))
-                                                                 (leaf (token "*v" SPINE-JOIN 5))))
-                                                   (leaf (token "*-" SPINE-TERMINATOR 6)))))))
+(check-expect (hgraph->lolot (hgraph (root (list
+                                            (list
+                                             (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
+                                             (parent (token "*^" SPINE-SPLIT 1)
+                                                     (list (leaf (token "4c" SPINE-DATA 2))
+                                                           (leaf (token "4c" SPINE-DATA 3))
+                                                           (leaf (token "4c" SPINE-DATA 4))
+                                                           (leaf (token "*v" SPINE-JOIN 5)))
+                                                     (list (leaf (token "4c" SPINE-DATA 2))
+                                                           (leaf (token "4c" SPINE-DATA 3))
+                                                           (leaf (token "4c" SPINE-DATA 4))
+                                                           (leaf (token "*v" SPINE-JOIN 5))))
+                                             (leaf (token "*-" SPINE-TERMINATOR 6)))))))
               (list (list (token "**kern" EXCLUSIVE-INTERPRETATION 0))
                     (list (token "*^" SPINE-SPLIT 1))
                     (list (token "4c" SPINE-DATA 2) (token "4c" SPINE-DATA 2))
@@ -93,19 +93,18 @@
                     (list (token "4c" SPINE-DATA 4) (token "4c" SPINE-DATA 4))
                     (list (token "*v" SPINE-JOIN 5) (token "*v" SPINE-JOIN 5))
                     (list (token "*-" SPINE-TERMINATOR 6))))
-(check-expect (hfile->ab-hgraph (path->hfile "../../data/order/spine-splits-joins-immediately.krn")
-                                ab-hgraph)
-              (ab-hgraph (root (list (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
-                                           (parent (token "*^" SPINE-SPLIT 1)
-                                                   (list (leaf (token "4c" SPINE-DATA 2))
-                                                         (leaf (token "4c" SPINE-DATA 3))
-                                                         (leaf (token "4c" SPINE-DATA 4))
-                                                         (leaf (token "*v" SPINE-JOIN 5)))
-                                                   (list (leaf (token "4c" SPINE-DATA 2))
-                                                         (leaf (token "4c" SPINE-DATA 3))
-                                                         (leaf (token "4c" SPINE-DATA 4))
-                                                         (leaf (token "*v" SPINE-JOIN 5))))
-                                           (leaf (token "*-" SPINE-TERMINATOR 6)))))))
+(check-expect (hfile->hgraph (path->hfile "../../data/order/spine-splits-joins-immediately.krn"))
+              (hgraph (root (list (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
+                                        (parent (token "*^" SPINE-SPLIT 1)
+                                                (list (leaf (token "4c" SPINE-DATA 2))
+                                                      (leaf (token "4c" SPINE-DATA 3))
+                                                      (leaf (token "4c" SPINE-DATA 4))
+                                                      (leaf (token "*v" SPINE-JOIN 5)))
+                                                (list (leaf (token "4c" SPINE-DATA 2))
+                                                      (leaf (token "4c" SPINE-DATA 3))
+                                                      (leaf (token "4c" SPINE-DATA 4))
+                                                      (leaf (token "*v" SPINE-JOIN 5))))
+                                        (leaf (token "*-" SPINE-TERMINATOR 6)))))))
 (check-expect (branch->lot (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
                                  (parent (token "*^" SPINE-SPLIT 1)
                                          (list (leaf (token "4c" SPINE-DATA 2))

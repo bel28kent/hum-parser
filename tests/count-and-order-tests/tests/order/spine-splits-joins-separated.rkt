@@ -3,9 +3,9 @@
 (require "../../../../parser/data-definitions/data-definitions.rkt"
          "../../../../parser/functions/file.rkt"
          "../../../../parser/functions/spine-parser.rkt"
-         "../../../../data-structures/abstract-humdrum-graph/data-definitions/data-definitions.rkt"
-         "../../../../data-structures/abstract-humdrum-graph/functions/ab-hgraph-to-hfile.rkt"
-         "../../../../data-structures/abstract-humdrum-graph/functions/hfile-to-ab-hgraph.rkt"
+         "../../../../parser/data-structures/humdrum-graph/data-definitions/data-definitions.rkt"
+         "../../../../parser/data-structures/humdrum-graph/functions/hgraph-to-hfile.rkt"
+         "../../../../parser/data-structures/humdrum-graph/functions/hfile-to-hgraph.rkt"
          test-engine/racket-tests)
 
 (check-expect (path->hfile "../../data/order/spine-splits-joins-separated.krn")
@@ -52,8 +52,8 @@
                                               (token "*v" SPINE-JOIN 7 1))
                                         (list (token "*-" SPINE-TERMINATOR 8 0)))
                                   0)))
-(check-expect (ab-hgraph->hfile
-               (ab-hgraph (root (list (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
+(check-expect (hgraph->hfile
+               (hgraph (root (list (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
                                             (parent (token "*^" SPINE-SPLIT 1 0)
                                                     (list (leaf (token "4c" SPINE-DATA 2 0))
                                                           (leaf (token "*" NULL-INTERPRETATION 3 0))
@@ -111,8 +111,8 @@
                     (record "*v\t*v" TOKEN (list (token "*v" SPINE-JOIN 7 0)
                                                  (token "*v" SPINE-JOIN 7 1)) 7)
                     (record "*-" TOKEN (list (token "*-" SPINE-TERMINATOR 8 0)) 8)))
-(check-expect (ab-hgraph->lolot
-               (ab-hgraph (root (list (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
+(check-expect (hgraph->lolot
+               (hgraph (root (list (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
                                             (parent (token "*^" SPINE-SPLIT 1 0)
                                                     (list (leaf (token "4c" SPINE-DATA 2 0))
                                                           (leaf (token "*" NULL-INTERPRETATION 3 0))
@@ -146,10 +146,8 @@
                     (list (token "*v" SPINE-JOIN 7 0)
                           (token "*v" SPINE-JOIN 7 1))
                     (list (token "*-" SPINE-TERMINATOR 8 0))))
-(check-expect (hfile->ab-hgraph
-               (path->hfile "../../data/order/spine-splits-joins-separated.krn")
-               ab-hgraph)
-              (ab-hgraph (root (list (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
+(check-expect (hfile->hgraph (path->hfile "../../data/order/spine-splits-joins-separated.krn"))
+              (hgraph (root (list (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
                                            (parent (token "*^" SPINE-SPLIT 1 0)
                                                    (list (leaf (token "4c" SPINE-DATA 2 0))
                                                          (leaf (token "*" NULL-INTERPRETATION 3 0))
