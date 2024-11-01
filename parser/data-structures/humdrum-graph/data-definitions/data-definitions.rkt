@@ -62,31 +62,32 @@
 
 ; HumdrumGraph with one spine, no splits
 (define SIMPLE-AB-HGRAPH (hgraph (root (list (list
-                                              (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
-                                              (leaf (token "4a" SPINE-DATA 1))
-                                              (leaf (token "4b" SPINE-DATA 2)))))))
+                                              (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
+                                              (leaf (token "4a" SPINE-DATA 1 0))
+                                              (leaf (token "4b" SPINE-DATA 2 0)))))))
 
 ; HumdrumGraph with two spines, no splits
 (define HGRAPH-TWO-SPINES (hgraph (root (list (list
-                                               (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
-                                               (leaf (token "4a" SPINE-DATA 1))
-                                               (leaf (token "4b" SPINE-DATA 2)))
+                                               (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
+                                               (leaf (token "4a" SPINE-DATA 1 0))
+                                               (leaf (token "4b" SPINE-DATA 2 0)))
                                               (list
-                                               (leaf (token "**dynam" EXCLUSIVE-INTERPRETATION 0))
-                                               (leaf (token "f" #f 1))
-                                               (leaf (token "p" #f 2)))))))
+                                               (leaf
+                                                (token "**dynam" EXCLUSIVE-INTERPRETATION 0 0))
+                                               (leaf (token "f" #f 1 0))
+                                               (leaf (token "p" #f 2 0)))))))
 
 ; HumdrumGraph with one spine, splits
 (define HGRAPH-ONE-SPLITS (hgraph (root (list (list
-                                               (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0))
-                                               (leaf (token "4a" SPINE-DATA 1))
-                                               (parent (token "*^" SPINE-SPLIT 2)
-                                                       (list (leaf (token "4a" SPINE-DATA 3))
-                                                             (leaf (token "4a" SPINE-DATA 4))
-                                                             (leaf (token "*v" SPINE-JOIN 5)))
-                                                       (list (leaf (token "4aa" SPINE-DATA 3))
-                                                             (leaf (token "4aa" SPINE-DATA 4))
-                                                             (leaf (token "*v" SPINE-JOIN 5))))
-                                               (leaf (token "4a" SPINE-DATA 6))
-                                               (leaf (token "4b" SPINE-DATA 7))
-                                               (leaf (token "4c" SPINE-DATA 8)))))))
+                                               (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
+                                               (leaf (token "4a" SPINE-DATA 1 0))
+                                               (parent (token "*^" SPINE-SPLIT 2 0)
+                                                       (list (leaf (token "4a" SPINE-DATA 3 0))
+                                                             (leaf (token "4a" SPINE-DATA 4 0))
+                                                             (leaf (token "*v" SPINE-JOIN 5 0)))
+                                                       (list (leaf (token "4aa" SPINE-DATA 3 1))
+                                                             (leaf (token "4aa" SPINE-DATA 4 1))
+                                                             (leaf (token "*v" SPINE-JOIN 5 1))))
+                                               (leaf (token "4a" SPINE-DATA 6 0))
+                                               (leaf (token "4b" SPINE-DATA 7 0))
+                                               (leaf (token "4c" SPINE-DATA 8 0)))))))
