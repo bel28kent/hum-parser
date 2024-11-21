@@ -2,8 +2,8 @@
 The primary contribution of `hum-parser` is to offer built-in resources for
 parsing Humdrum files into data structures for which new programs can be
 written as expressively and efficiently as possible. These data structures,
-namely trees and graphs, accommodate the arbitrary size of Humdrum files
-(especially spines) in a recursive manner. This in turn allows for function
+namely graphs, accommodate the arbitrary size of Humdrum files (especially
+spines) in a recursive manner. This in turn allows for function
 templates to be derived which largely automate traversal of the structures.
 The programmer can then focus on the purpose of the function at each point
 in the structure, without having to code additional logic for traversal.
