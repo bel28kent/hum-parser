@@ -36,10 +36,12 @@ export PATH=/Applications/Racket\ vX\.XX/bin:$PATH
 
 ### Installing `hum-parser`
 After installing Racket, the `hum-parser` repository should be cloned in the 
-collects directory:
+`collects` directory:
 
 ```sh
 cd /Applications/Racket vX.XX/collects
+```
+```
 git clone https://github.com/bel28kent/hum-parser
 ```
 
@@ -62,13 +64,17 @@ To install the binaries for the command-line tools:
 
 ```sh
 cd /Applications/Racket vX.XX/collects/hum-parser
+```
+```
 make all
 ```
 
 ### Note on limitations of `hum-parser`
 
+### Documentation
+
 ### Future directions
 
-hum-parser may eventually be translated into Racket's sister language Typed
+`hum-parser` may eventually be translated into Racket's sister language Typed
 Racket to allow for type-checking of user-defined types such as `HumdrumFile`
 and `GlobalSpine`.
