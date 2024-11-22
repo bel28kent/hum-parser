@@ -2,15 +2,16 @@
 ## Racket expressions for parsing humdrum files
 
 `hum-parser` is a repository of data definitions, data structures, and functions
-for parsing [Humdrum](http://www.humdrum.org) files. `hum-parser` is written in
-the [Racket](https://docs.racket-lang.org) language.
+for parsing [Humdrum](http://www.humdrum.org) files.
+
+`hum-parser` is written in the [Racket](https://docs.racket-lang.org) language.
 
 `hum-parser` is able to parse a Humdrum file into records and spines, allowing
 the user to write these data into new files for use with other programs, or for
 use directly (i.e. without writing) with other parts of the `hum-parser`.
 
 The ultimate goal of `hum-parser` is to map spines on to
-[graph](https://en.wikipedia.org/wiki/Graph_(abstract_data_type) data
+[graph](https://en.wikipedia.org/wiki/Graph_(abstract_data_type)) data
 structures. Such structures enable the user to write new functions that traverse
 Humdrum data without having to worry about parsing records or spines.
 
