@@ -180,18 +180,9 @@
                                 ;
                                 (cond [(empty? lolot) (reverse los)]
                                       [else
-                                       (lolot-iterator
-                                         (rest lolot)
-                                           (cons
-                                             (gather
-                                               (foldr
-                                                 (λ (f r)
-                                                    (cons
-                                                      (token-token f)
-                                                      r))
-                                                 empty
-                                                 (first lolot)))
-                                             los))]))]
+                                       (lolot-iterator (rest lolot)
+                                                       (cons (gather (map token-token (first lolot)))
+                                                             los))]))]
                         (lolot-iterator lolot empty)))]
               (lolot-iterator lolot)))]
     (logs-iterator logs)))
