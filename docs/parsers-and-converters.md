@@ -32,8 +32,6 @@ Note that a GlobalSpine only contains data from Records typed as TOKEN, so a
 GlobalSpine will be smaller than a HumdrumFile if the latter contains references
 or comments.
 
-TODO: GlobalSpine should also contain data from Records typed as LOCAL-COMMENT
-
 ## Converters
 Converters serve two purposes: (1) to map parsed Humdrum data onto a graph and
 (2) to allow for the unwrapping and re-wrapping of data in different types

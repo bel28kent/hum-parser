@@ -21,9 +21,9 @@
 ; produces the spine arity from a list of token records
 
 (define (extract-spine-arity hfile)
-  (local [(define token-records (filter-type record-type
-                                             TOKEN
-                                             (hfile-records hfile)))]
+  (local [(define token-records (filter (λ (r) (or (string=? TOKEN (record-type r))
+                                                   (string=? LOCAL-COMMENT (record-type r))))
+                                        (hfile-records hfile)))]
     (spine-arity (length (record-split (first token-records)))
                  (lolon token-records))))
 

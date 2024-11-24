@@ -31,7 +31,9 @@
 (define (unwrap hfile)
   (local [(define records (hfile-records hfile))
 
-          (define token-records (filter-type record-type TOKEN records))]
+          (define token-records (filter (λ (r) (or (string=? TOKEN (record-type r))
+                                                   (string=? LOCAL-COMMENT (record-type r))))
+                                        records))]
     (foldr (λ (f r) (cons (record-split f) r)) empty token-records)))
 
 ; byrecord->byspine
