@@ -7,7 +7,7 @@ spines) in a recursive manner. This in turn allows for function
 templates to be derived which largely automate traversal of the structures.
 The programmer can then focus on the purpose of the function at each point
 in the structure, without having to code additional logic for traversal.
-Because trees and graphs handle arbitrary data by design, these structures
+Because graphs handle arbitrary data by design, these structures
 work for all Humdrum files, from the most simple to the most complex.
 
 ## Parsers
@@ -32,25 +32,27 @@ Note that a GlobalSpine only contains data from Records typed as TOKEN, so a
 GlobalSpine will be smaller than a HumdrumFile if the latter contains references
 or comments.
 
+TODO: GlobalSpine should also contain data from Records typed as LOCAL-COMMENT
+
 ## Converters
-Converters serve two purposes: (1) to map parsed Humdrum data onto a tree or
-graph and (2) to allow for unwrapping and re-wrapping data in different types
+Converters serve two purposes: (1) to map parsed Humdrum data onto a graph and
+(2) to allow for the unwrapping and re-wrapping of data in different types
 when necessary.
 
-These files comprise converters:
+These files comprise converters (all in the `parser` directory):
 ```
-	- data-structures/abstract-humdrum-graph/functions/ab-hgraph-to-hfile.rkt
-	- data-structures/abstract-humdrum-graph/functions/hfile-to-ab-hgraph.rkt
-	- parser/functions/file.rkt
-	- parser/functions/spine-parser.rkt
+	- data-structures/humdrum-graph/functions/hgraph-to-hfile.rkt
+	- data-structures/humdrum-graph/functions/hfile-to-hgraph.rkt
+	- functions/file.rkt
+	- functions/spine-parser.rkt
 ```
 These functions are converters:
 ```
-	- ab-hgraph->hfile (AbstractHumdrumGraph -> HumdrumFile)
-	- lolot->lor       ((listof (listof Token)) -> (listof Record))
-	- ab-hgraph->lolot (AbstractHumdrumGraph -> (listof (listof Token)))
-	- hfile->ab-hgraph (HumdrumFile -> AbstractHumdrumGraph)
-	- branch->lot      ((listof Node) -> (listof Token))
+	- hgraph->hfile (HumdrumGraph -> HumdrumFile)
+	- lolot->lor    ((listof (listof Token)) -> (listof Record))
+	- hgraph->lolot (HumdrumGraph -> (listof (listof Token)))
+	- hfile->hgraph (HumdrumFile -> HumdrumGraph)
+	- branch->lot   ((listof Node) -> (listof Token))
 ```
 
 ## Testing
@@ -61,13 +63,12 @@ challenge, as they create the arbitrary size of Humdrum data.
 All parsers and converters must pass two types of tests: count tests and order
 tests. Count tests ensure that the parser or converter works regardless of the
 number of spines and regardless of the number of spine splits and joins. Order
-tests ensure that the  parser or converter works regardless of the order
-of spine splits or spine joins.
+tests ensure that the parser or converter works regardless of the order of spine
+splits or spine joins.
 
 Count tests should cover all cases from empty to 3 spines. For each spine, count
 tests should further cover all cases from no spine splits to 3 spine splits in
-all spines. Spines are split and joined only once on a record. Spines are ordered
-from left to right; spine joins are ordered from right to left.
+all spines.
 
 Order tests should cover all cases of spine splits and spine joins. These
 include:
@@ -78,9 +79,10 @@ include:
 	- spine joins successively
 	- spine splits are separated
 	- spine joins are separated
-	- spine splits are unordered and can be simultaneous, i.e. the following are all valid. The
-	  spine splits to and joins to the right case is identical to the spine joins successively
-	  case, so the same file is used for both tests.
+	- spine splits are unordered and can be simultaneous, i.e. the following
+          are all valid. The spine splits to and joins to the right case is
+          identical to the spine joins successively case, so the same file is
+          used for both tests.
 		*^
 		*	*^
 
@@ -106,4 +108,19 @@ include:
 
 		*v	*v	*
 		*v	*v
+	- more than two spine joins
+		*v	*v	*v
+	- spine splits and joins
+		*^	*v	*v
+		*v	*v	*^
+
+		**kern	**kern
+		*^	*^
+		*	*^	*	*
+		*v	*v	*v	*	*^
+
+		**kern	**kern
+		*^	*^
+		*	*	*^	*
+		*^	*	*v	*v	*v
 ```
