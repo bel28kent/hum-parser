@@ -25,3 +25,25 @@ spines, or subspines, which can in turn be "joined" into less spines. Spines can
 split and join an arbitrary number of times.
 
 ## Limitations on splits and joins
+The following limitations on splits and joins are recognized in the [Humdrum
+manual, Chapter 5](https://www.humdrum.org/guide/ch05/#spine-paths):
+
+```
+(1) when subspines within a single spine join, the "*v" tokens must be adjacent
+(2) more than two subspines may be joined on a single record
+(3) more than two spines or subspines may be split on a single record
+(4) (sub)spines may be split and joined on the same record
+```
+
+The following possibilities granted by Humdrum are not currently supported by
+`hum-parser`:
+
+```
+(1) adding a new spine after the initial exclusive interpretation record
+(2) terminating a spine before other spines are terminated
+(3) exchanging the position of spines
+```
+
+Lastly, the combination of `*^`  and `*v` with any other interpretations (apart
+from the null interpretation) is not supported by `hum-parser` (cf. with
+examples in Chapter 5).
