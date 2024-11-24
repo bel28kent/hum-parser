@@ -293,7 +293,8 @@
 ; SpineType is one of:
 ;  - Kern
 ;  - Dynam
-;  Represents the representation scheme of the spine
+;  - #f
+;  Represents the representation scheme of the spine, or false if unknown
 
 (struct global-spine (type tokens spine-number) #:transparent)
 ; GlobalSpine is (global-spine SpineType (listof (listof Token)) Natural)

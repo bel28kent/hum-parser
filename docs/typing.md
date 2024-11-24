@@ -9,7 +9,7 @@ All lines read from a file can be sorted into one of four categories:
 	- Token
 ```
 `ReferenceRecord`, `GlobalComment`, and `LocalComment` are `MetadataType`.
-they contain information about the file or encoding. A Metadata record starts
+They contain information about the file or encoding. A Metadata record starts
 with one of three tags, each defined as a sequence of bangs:
 ```racket
 	(define REFERENCE-TAG "!!!")
@@ -22,6 +22,14 @@ There are no constraints on the string argument to `type-metadata` and
 `type-record`.
 
 ## Spines
+A spine's type is declared by its exclusive interpretation, or initial token
+that begins with `**`. The following types are currently recognized:
+```
+	- Kern
+	- Dynam
+	- #f
+```
+As with tokens (see below), the false (#f) subclass represents unknown types.
 
 ## Tokens
 Tokens can be typed as one of several subclasses:
