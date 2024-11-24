@@ -298,7 +298,10 @@
 (struct global-spine (type tokens spine-number) #:transparent)
 ; GlobalSpine is (global-spine SpineType (listof (listof Token)) Natural)
 ;  Represents a singe global column of a Humdrum file.
-;  CONSTRAINT: spine-number >= 0
+;  CONSTRAINTS:  (1) spine-number >= 0
+;                (2) length tokens >= 2
+;                (3) tokens contains at least an exlusive interpretation at index 0 and
+;                    a spine terminator at index length - 1.
 
 (define GLOBAL-SPINE-EX
         (global-spine KERN
