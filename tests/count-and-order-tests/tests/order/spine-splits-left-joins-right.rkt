@@ -6,8 +6,7 @@
          "../../../../parser/data-structures/humdrum-graph/data-definitions/data-definitions.rkt"
          "../../../../parser/data-structures/humdrum-graph/functions/hgraph-to-hfile.rkt"
          "../../../../parser/data-structures/humdrum-graph/functions/hfile-to-hgraph.rkt"
-         test-engine/racket-tests
-         racket/list) ; TODO remove
+         test-engine/racket-tests)
 
 (check-expect (path->hfile "../../data/order/spine-splits-left-joins-right.krn")
               (hfile (list (record "**kern" TOKEN

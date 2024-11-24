@@ -6,8 +6,7 @@
          "../../../../parser/data-structures/humdrum-graph/data-definitions/data-definitions.rkt"
          "../../../../parser/data-structures/humdrum-graph/functions/hgraph-to-hfile.rkt"
          "../../../../parser/data-structures/humdrum-graph/functions/hfile-to-hgraph.rkt"
-         test-engine/racket-tests
-         racket/list) ; TODO remove
+         test-engine/racket-tests)
 
 (check-expect (path->hfile "../../data/order/two-spines-split-simultaneously.krn")
               (hfile (list (record "**kern\t**kern" TOKEN
@@ -96,7 +95,7 @@
                                                        (leaf (token "*v" SPINE-JOIN 6 1))))
                                          (leaf (token "*-" SPINE-TERMINATOR 7 0)))
                                    (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 1))
-                                         (parent (token "*^" SPINE-SPLIT 1)
+                                         (parent (token "*^" SPINE-SPLIT 1 0)
                                                  (list (leaf (token "4c" SPINE-DATA 2 2))
                                                        (leaf (token "4c" SPINE-DATA 3 2))
                                                        (leaf (token "4c" SPINE-DATA 4 2))
