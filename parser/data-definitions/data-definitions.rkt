@@ -1,11 +1,11 @@
 #lang racket/base
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  hum-parser: data definitions
 ;;
 ;;    NB: All example constants must end with -EX.
 ;;        All type constants are at the top of file.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (provide (all-defined-out))
 
@@ -269,18 +269,26 @@
 
 (struct record (record type split record-number) #:transparent)
 ; Record is one of:
-;  - (record REFERENCE-RECORD (listof Reference)     Natural)
-;  - (record GLOBAL-COMMENT   (listof GlobalComment) Natural)
-;  - (record LOCAL-COMMENT    (listof Token)         Natural)
-;  - (record TOKEN            (listof Token)         Natural)
+;  - (record String REFERENCE-RECORD (listof Reference)     Natural)
+;  - (record String GLOBAL-COMMENT   (listof GlobalComment) Natural)
+;  - (record String LOCAL-COMMENT    (listof Token)         Natural)
+;  - (record String TOKEN            (listof Token)         Natural)
 ;  Represents a single line of a Humdrum file.
 ;  CONSTRAINT: record-number >= 0
 
-(define RECORD-REF-EX (list "!!!AGN: Etude"))  ; scriabin-op08_no07.krn
-(define RECORD-GC-EX (list "!! First ending")) ; gershwin30.krn
-; TODO mozart/quartet/k080-01.krn
-(define RECORD-LC-EX
-        (list "! Adagio\t!\t! Adagio\t!\t! Adagio\t!\t! Adagio\t!"))
+(define RECORD-REF-EX (record "!!!AGN: Etude" REFERENCE-RECORD (list "!!!AGN: Etude") 8))
+(define RECORD-GC-EX (record "!! First ending" GLOBAL-COMMENT (list "!! First ending") 295))
+(define RECORD-LC-EX (record "! Adagio\t!\t! Adagio\t!\t! Adagio\t!\t! Adagio\t!"
+                             LOCAL-COMMENT
+                             (list (token "! Adagio" LOCAL-COMMENT 21 0)
+                                   (token "!" LOCAL-COMMENT 21 1)
+                                   (token "! Adagio" LOCAL-COMMENT 21 2)
+                                   (token "!" LOCAL-COMMENT 21 3)
+                                   (token "! Adagio" LOCAL-COMMENT 21 4)
+                                   (token "!" LOCAL-COMMENT 21 5)
+                                   (token "! Adagio" LOCAL-COMMENT 21 6)
+                                   (token "!" LOCAL-COMMENT 21 7))
+                             21))
 
 ; SpineType is one of:
 ;  - Kern
