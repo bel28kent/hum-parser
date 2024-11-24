@@ -31,6 +31,10 @@ that begins with `**`. The following types are currently recognized:
 ```
 As with tokens (see below), the false (#f) subclass represents unknown types.
 
+`type-spine` takes a list of token lists for each record. The first list must
+have a length of 1 and contain an exclusive interpretation, otherwise an
+argument exception is thrown.
+
 ## Tokens
 Tokens can be typed as one of several subclasses:
 ```

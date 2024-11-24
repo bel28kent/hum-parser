@@ -51,9 +51,18 @@
 ; type-spine
 ; (listof (listof Token)) -> SpineType or false
 ; produce the type of the spine or false if unknown
-
+; TODO: test error cases
 (define (type-spine lolot)
-  (local [(define first-token (first (first lolot)))]
+  (local
+    [(define first-token (begin (cond [(not (= 1 (length (first lolot))))
+                                       (raise-argument-error 'type-spine
+                                                             "only 1 exclusive interpretation"
+                                                             (first lolot))]
+                                      [(not (exclusive-interpretation? (first (first lolot))))
+                                       (raise-argument-error 'type-spine
+                                                             "first token must start with **"
+                                                             (first (first lolot)))])
+                                     (first (first lolot))))]
     (cond [(kern? first-token) KERN]
           [(dynam? first-token) DYNAM]
           [else
