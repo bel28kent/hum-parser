@@ -58,7 +58,8 @@
                                        (raise-argument-error 'type-spine
                                                              "only 1 exclusive interpretation"
                                                              (first lolot))]
-                                      [(not (exclusive-interpretation? (first (first lolot))))
+                                      [(not (exclusive-interpretation? (token-token
+                                                                        (first (first lolot)))))
                                        (raise-argument-error 'type-spine
                                                              "first token must start with **"
                                                              (first (first lolot)))])
