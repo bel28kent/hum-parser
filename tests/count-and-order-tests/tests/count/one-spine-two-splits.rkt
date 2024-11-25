@@ -389,7 +389,7 @@
                                          (token "*v" SPINE-JOIN 19 1))
                                    19)
                            (record "==" TOKEN (list (token "==" MEASURE 20 0)) 20)
-                           (record "*-" TOKEN (list (token "*-" SPINE-TERMINATOR 21 1)) 21))))
+                           (record "*-" TOKEN (list (token "*-" SPINE-TERMINATOR 21 0)) 21))))
 (check-expect (lolot->lor
                (list (list (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
                      (list (token "*clefG2" CLEF 1 0))
@@ -531,7 +531,7 @@
                                   (token "*v" SPINE-JOIN 19 1))
                             19)
                     (record "==" TOKEN (list (token "==" MEASURE 20 0)) 20)
-                    (record "*-" TOKEN (list (token "*-" SPINE-TERMINATOR 21 1)) 21)))
+                    (record "*-" TOKEN (list (token "*-" SPINE-TERMINATOR 21 0)) 21)))
 (check-expect (hgraph->lolot
                (hgraph (root (list (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
                                          (leaf (token "*clefG2" CLEF 1 0))
