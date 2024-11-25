@@ -28,9 +28,9 @@ Parsers provide basic facilities for getting Humdrum data into `hum-parser`.
 the list of Records.
 
 `spine-parser` separates spines in a HumdrumFile and returns them as a list.
-Note that a GlobalSpine only contains data from Records typed as TOKEN, so a
-GlobalSpine will be smaller than a HumdrumFile if the latter contains references
-or comments.
+Note that a GlobalSpine only contains data from Records typed as TOKEN or
+LOCAL-COMMENT, so a GlobalSpine will be smaller than a HumdrumFile if the latter
+contains references or global comments.
 
 ## Converters
 Converters serve two purposes: (1) to map parsed Humdrum data onto a graph and
