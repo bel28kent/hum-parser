@@ -133,12 +133,13 @@
 ; Image Image -> Natural
 ; produces a natural corresponding to one less than number of spines in parent
 
-; TODO: could return zero
 (define (factor parent-image node-img)
-  (local [(define width-parent-image (image-width parent-image))
+  (local [(define width-parent-img (image-width parent-image))
 
-          (define width-node-img (image-width node-img))]
-    (sub1
-      (round (/ width-parent-image
-                (+ width-node-img
-                   pad-width))))))
+          (define width-node-img (image-width node-img))
+
+          (define result (sub1 (round (/ width-parent-img (+ width-node-img pad-width)))))]
+    (if (zero? result)
+        (raise-result-error 'factor
+                            "produced a 0 result")
+        result)))
