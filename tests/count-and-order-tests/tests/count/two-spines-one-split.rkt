@@ -315,11 +315,11 @@
                                       (token "*v" SPINE-JOIN 18 3))
                                 (list (token "*v" SPINE-JOIN 19 0)
                                       (token "*v" SPINE-JOIN 19 1)
-                                      (token "*" NULL-INTERPRETATION 19 2j))
+                                      (token "*" NULL-INTERPRETATION 19 2))
                                 (list (token "==" MEASURE 20 0)
                                       (token "==" MEASURE 20 1))
                                 (list (token "*-" SPINE-TERMINATOR 21 0)
-                                      (token "*-" SPINE-TERMINATOR 21 0))))
+                                      (token "*-" SPINE-TERMINATOR 21 1))))
               (list (record "**kern\t**kern"
                             TOKEN
                             (list (token "**kern" EXCLUSIVE-INTERPRETATION 0 0)
