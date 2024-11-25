@@ -15,7 +15,6 @@
 
 (provide (all-defined-out))
 
-; TODO: test
 ; HumdrumFile -> (listof GlobalSpine)
 ; produces a list of global spines from the HumdrumFile
 
