@@ -51,7 +51,6 @@
 ; type-spine
 ; (listof (listof Token)) -> SpineType or false
 ; produce the type of the spine or false if unknown
-; TODO: test error cases
 (define (type-spine lolot)
   (local
     [(define first-token (begin (cond [(not (= 1 (length (first lolot))))

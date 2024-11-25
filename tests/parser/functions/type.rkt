@@ -7,8 +7,7 @@
 (require "../../../parser/data-definitions/data-definitions.rkt"
          "../../../parser/functions/type.rkt"
          test-engine/racket-tests
-         (only-in rackunit
-                  check-exn))
+         (only-in rackunit check-exn))
 
 ; type-metadata
 (check-expect (type-metadata "!!!COM: Scriabin, Alexander")   REFERENCE-RECORD)
@@ -23,30 +22,28 @@
 (check-expect (type-record "4a\t4aa\tf")                    TOKEN)
 
 ; type-spine
-(check-expect (type-spine (list (list (token "**kern"
-                                             EXCLUSIVE-INTERPRETATION
-                                             0
-                                             0))
+(check-expect (type-spine (list (list (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
                                 (list (token "4a" SPINE-DATA 1 0))
                                 (list (token "==" MEASURE 2 0))
                                 (list (token "*-" SPINE-TERMINATOR 3 0))))
               KERN)
-(check-expect (type-spine (list (list (token "**dynam"
-                                             EXCLUSIVE-INTERPRETATION
-                                             0
-                                             0))
+(check-expect (type-spine (list (list (token "**dynam" EXCLUSIVE-INTERPRETATION 0 0))
                                 (list (token "f" SPINE-DATA 1 0))
                                 (list (token "==" MEASURE 2 0))
                                 (list (token "*-" SPINE-TERMINATOR 3 0))))
               DYNAM)
-(check-expect (type-spine (list (list (token "**test"
-                                             EXCLUSIVE-INTERPRETATION
-                                             0
-                                             0))
+(check-expect (type-spine (list (list (token "**test" EXCLUSIVE-INTERPRETATION 0 0))
                                 (list (token "test" SPINE-DATA 1 0))
                                 (list (token "==" MEASURE 2 0))
                                 (list (token "*-" SPINE-TERMINATOR 3 0))))
               #f)
+(check-exn #rx"only 1 exclusive interpretation"
+           (λ ()
+              (type-spine (list (list (token "**kern" EXCLUSIVE-INTERPRETATION 0 0)
+                                      (token "*" NULL-INTERPRETATION 0 1))))))
+(check-exn #rx"first token must start with \\*\\*"
+           (λ ()
+              (type-spine (list (list (token "*" NULL-INTERPRETATION 0 0))))))
 
 ; type-token
 (check-expect (type-token "**kern")          EXCLUSIVE-INTERPRETATION)
