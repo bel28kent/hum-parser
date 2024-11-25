@@ -256,7 +256,6 @@
 ; NullSpineData is "NullSpineData"
 ;  Represents a token that equals "."
 
-; TODO
 ; LocalComment (TokenType) is "LocalComment"
 ;  Represents a token that begins with "!"
 
