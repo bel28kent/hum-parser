@@ -6,7 +6,15 @@
 
 (require "../../../data-definitions/data-definitions.rkt")
 
-(provide (all-defined-out))
+(provide linked-spine
+         node
+         node-box
+         token-node
+         split-node
+         terminator-node
+         LINKED-SPINE-BASE
+         LINKED-SPINE-SINGLE
+         LINKED-SPINE-ONE)
 
 #|
     A LinkedSpine represents a GlobalSpine as a linked list.
