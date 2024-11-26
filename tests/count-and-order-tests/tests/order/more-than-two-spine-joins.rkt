@@ -44,9 +44,26 @@
                                          (token "*v" SPINE-JOIN 6 2))
                                    6)
                            (record "*-" TOKEN (list (token "*-" SPINE-TERMINATOR 7 0)) 7))))
-#|
-(check-expect (spine-parser ) )
-|#
+(check-expect (spine-parser (path->hfile "../../data/order/more-than-two-spine-joins.krn"))
+              (list (global-spine KERN
+                                  (list (list (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
+                                        (list (token "*^" SPINE-SPLIT 1 0))
+                                        (list (token "*" NULL-INTERPRETATION 2 0)
+                                              (token "*^" SPINE-SPLIT 2 1))
+                                        (list (token "4c" SPINE-DATA 3 0)
+                                              (token "4c" SPINE-DATA 3 1)
+                                              (token "4c" SPINE-DATA 3 2))
+                                        (list (token "4c" SPINE-DATA 4 0)
+                                              (token "4c" SPINE-DATA 4 1)
+                                              (token "4c" SPINE-DATA 4 2))
+                                        (list (token "4c" SPINE-DATA 5 0)
+                                              (token "4c" SPINE-DATA 5 1)
+                                              (token "4c" SPINE-DATA 5 2))
+                                        (list (token "*v" SPINE-JOIN 6 0)
+                                              (token "*v" SPINE-JOIN 6 1)
+                                              (token "*v" SPINE-JOIN 6 2))
+                                        (list (token "*-" SPINE-TERMINATOR 7 0)))
+                                  0)))
 #|
 (check-expect (hgraph->hfile ) )
 |#
