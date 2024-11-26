@@ -123,6 +123,8 @@
                                  (token "4aaa" SPINE-DATA 4 2))
                            4))
 (define BERG (path->hfile "../data/berg01.pc"))
+(define SIM (path->hfile "../../count-and-order-tests/data/order/spine-splits-simultaneous.krn"))
+(define 3-J (path->hfile "../../count-and-order-tests/data/order/more-than-two-spine-joins.krn"))
 (define S-J-A (path->hfile "../../count-and-order-tests/data/order/spine-splits-and-joins-a.krn"))
 (define S-J-B (path->hfile "../../count-and-order-tests/data/order/spine-splits-and-joins-b.krn"))
 (define S-J-C (path->hfile "../../count-and-order-tests/data/order/spine-splits-and-joins-c.krn"))
@@ -143,6 +145,24 @@
                                                               (list 1 1)
                                                               (list 1 1)
                                                               (list 1 1))))
+(check-expect (extract-spine-arity SIM) (spine-arity 1 (list (list 1)
+                                                             (list 1)
+                                                             (list 2)
+                                                             (list 4)
+                                                             (list 4)
+                                                             (list 4)
+                                                             (list 4)
+                                                             (list 3)
+                                                             (list 2)
+                                                             (list 1))))
+(check-expect (extract-spine-arity 3-J) (spine-arity 1 (list (list 1)
+                                                             (list 1)
+                                                             (list 2)
+                                                             (list 3)
+                                                             (list 3)
+                                                             (list 3)
+                                                             (list 3)
+                                                             (list 1))))
 (check-expect (extract-spine-arity S-J-A) (spine-arity 1 (list (list 1)
                                                                (list 1)
                                                                (list 2)
@@ -235,30 +255,6 @@
 (check-expect (split-or-join-token? TEST-TOKEN-2) #t)
 (check-expect (split-or-join-token? TEST-TOKEN-3) #t)
 (check-expect (split-or-join-token? TEST-TOKEN-4) #f)
-
-; split-or-join-record
-(check-expect (split-or-join-record TEST-RECORD-1) #f)
-(check-expect (split-or-join-record TEST-RECORD-2) SPINE-SPLIT)
-(check-expect (split-or-join-record TEST-RECORD-3) SPINE-JOIN)
-(check-expect (split-or-join-record TEST-RECORD-4) #f)
-(check-expect (split-or-join-record (record
-                                     "*\t*^\t*\t*"
-                                     TOKEN
-                                     (list (token "*" NULL-INTERPRETATION 20 0)
-                                           (token "*^" SPINE-SPLIT 20 1)
-                                           (token "*" NULL-INTERPRETATION 20 2)
-                                           (token "*" NULL-INTERPRETATION 20 3))
-                                     20))
-              SPINE-SPLIT)
-(check-expect (split-or-join-record (record
-                                     "*\t*v\t*v\t*"
-                                     TOKEN
-                                     (list (token "*"  NULL-INTERPRETATION 20 0)
-                                           (token "*v" SPINE-JOIN 20 1)
-                                           (token "*v" SPINE-JOIN 20 2)
-                                           (token "*"  NULL-INTERPRETATION 20 3))
-                                     20))
-              SPINE-JOIN)
 
 ; struct-lon
 (check-expect (struct-lon SPLIT (list 1 1 1)) (list 1 2 1))

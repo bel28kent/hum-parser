@@ -35,9 +35,9 @@
   (local [(define (iterator records lolon previous)
             (cond [(empty? records) (reverse lolon)]
                   [else
-                    (iterator (rest records)
-                              (cons (lon-caller previous (first lolon)) lolon)
-                              (first records))]))]
+                   (iterator (rest records)
+                             (cons (lon-caller previous (first lolon)) lolon)
+                             (first records))]))]
     (if (= (length records) 1)
         (list (one-per-spine (length (record-split (first records)))))
         (iterator (rest records)
@@ -51,7 +51,7 @@
 (define (lon-caller previous prev-lon)
   (cond [(previous-spine-struct? previous) (struct-lon previous prev-lon)]
         [else
-          prev-lon]))
+         prev-lon]))
 
 ; previous-spine-struct?
 ; Record -> Boolean
@@ -64,7 +64,7 @@
             (cond [(empty? lot) #f]
                   [(not (false? (split-or-join-token? (first lot)))) #t]
                   [else
-                    (spine-struct? (rest lot))]))]
+                   (spine-struct? (rest lot))]))]
     (spine-struct? tokens)))
 
 ; split-or-join-token?
@@ -77,26 +77,6 @@
          (or (string=? type SPINE-SPLIT)
              (string=? type SPINE-JOIN)))))
 
-; split-or-join-record
-; Record -> SpineSplit or SpineJoin or false
-; produces type if SpineSplit or SpineJoin, else false
-
-(define (split-or-join-record record)
-  (local [(define tokens (record-split record))
-
-          (define (split-or-join tokens)
-            (local [(define type (if (empty? tokens)
-                                     #f
-                                     (token-type (first tokens))))]
-              (cond [(empty? tokens) #f]
-                    [(and (string? type)
-                          (string=? type SPINE-SPLIT)) SPINE-SPLIT]
-                    [(and (string? type)
-                          (string=? type SPINE-JOIN)) SPINE-JOIN]
-                    [else
-                      (split-or-join (rest tokens))])))]
-    (split-or-join tokens)))
-
 ; struct-lon
 ; Record (listof Natural) -> (listof Natural)
 ; produces the lon for the next record, which follows the given record
@@ -104,81 +84,64 @@
 (define (struct-lon previous prev-lon)
   (local [(define prev-tokens (record-split previous))
 
-          (define (caller tokens)
-            (cond [(string=? (split-or-join-record previous) SPINE-SPLIT)
-                   (split previous)]
-                  [(string=? (split-or-join-record previous) SPINE-JOIN)
-                   (join previous)]))
+          (define (get-num-joins tokens)
+            (cond [(empty? tokens) 0]
+                  [(not (string=? (token-type (first tokens)) SPINE-JOIN)) 0]
+                  [else
+                   (add1 (get-num-joins (rest tokens)))]))
 
-          (define (split previous)
+          (define (remove-joins tokens num-joins)
+            (local [(define (remove-joins lot counter)
+                      (cond [(= counter num-joins) lot]
+                            [else
+                              (remove-joins (rest lot) (add1 counter))]))]
+              (remove-joins tokens 0)))
+
+          (define (next-lon previous)
             ; num-tokens: Natural. Number tokens w/in a spine processed so far.
             ; num-spine: Natural. Number tokens in this spine.
             ; prev: (listof Natural). List of naturals for the previous record.
             ; current: (listof Natural). List returned when no tokens left.
             ;
-            (local [(define (split tokens num-tokens num-spine prev current)
+            (local [(define (next-lon tokens num-tokens num-spine prev current)
                       (cond [(empty? tokens) (reverse current)]
                             [(string=? (token-type (first tokens)) SPINE-SPLIT)
-                             
                              (if (= (add1 num-tokens) (first prev))
-                                 (split (rest tokens)
-                                        0 0
-                                        (rest prev)
-                                        (cons (+ 2 num-spine) current))
-                                 (split (rest tokens)
-                                        (add1 num-tokens)
-                                        (+ 2 num-spine)
-                                        prev
-                                        current))]
-                            [(= (add1 num-tokens) (first prev))
-
-                             (split (rest tokens)
-                                    0 0
-                                    (rest prev)
-                                    (cons (add1 num-spine) current))]
-                            [else
-                              (split (rest tokens)
-                                     (add1 num-tokens)
-                                     (add1 num-spine)
-                                     prev
-                                     current)]))]
-              (split prev-tokens 0 0 prev-lon empty)))
-
-          ; previous should only have one join
-          (define (join previous)
-            ; num-tokens: Natural. Number tokens w/in a spine processed so far.
-            ; num-spine: Natural. Number tokens in this spine.
-            ; prev: (listof Natural). List of naturals for the previous record.
-            ; current: (list of Natural). List returned when no tokens left.
-            ;
-            (local [(define (join tokens num-tokens num-spine prev current)
-                      (cond [(empty? tokens) (reverse current)]
+                                 (next-lon (rest tokens)
+                                           0 0
+                                           (rest prev)
+                                           (cons (+ 2 num-spine) current))
+                                 (next-lon (rest tokens)
+                                           (add1 num-tokens)
+                                           (+ 2 num-spine)
+                                           prev
+                                           current))]
                             [(string=? (token-type (first tokens)) SPINE-JOIN)
-
-                             (if (= (+ 2 num-tokens) (first prev))
-                                 (join (shift (rest tokens))
+                             (local [(define num-joins (get-num-joins tokens))
+                                     (define joins-removed (remove-joins tokens num-joins))]
+                               (if (= (+ num-joins num-tokens) (first prev))
+                                   (next-lon joins-removed
+                                             0 0
+                                             (rest prev)
+                                             (cons (add1 num-spine) current))
+                                   (next-lon joins-removed
+                                             (+ num-joins num-tokens)
+                                             (add1 num-spine)
+                                             prev
+                                             current)))]
+                            [(= (add1 num-tokens) (first prev))
+                             (next-lon (rest tokens)
                                        0 0
                                        (rest prev)
-                                       (cons (add1 num-spine) current))
-                                 (join (shift (rest tokens))
-                                       (+ 2 num-tokens)
+                                       (cons (add1 num-spine) current))]
+                            [else
+                             (next-lon (rest tokens)
+                                       (add1 num-tokens)
                                        (add1 num-spine)
                                        prev
-                                       current))]
-                            [(= (add1 num-tokens) (first prev))
-
-                             (join (rest tokens)
-                                   0 0
-                                   (rest prev)
-                                   (cons (add1 num-spine) current))]
-                            [else
-                              (join (rest tokens)
-                                    (add1 num-tokens)
-                                    (add1 num-spine)
-                                    prev
-                                    current)]))]
-              (join prev-tokens 0 0 prev-lon empty)))]
-    (caller prev-tokens)))
+                                       current)]))]
+              (next-lon prev-tokens 0 0 prev-lon empty)))]
+    (next-lon prev-tokens)))
 
 ; one-per-spine
 ; Natural -> (listof Natural)
@@ -188,5 +151,5 @@
   (local [(define (one-per-spine counter)
             (cond [(= counter number-global-spines) empty]
                   [else
-                    (cons 1 (one-per-spine (add1 counter)))]))]
+                   (cons 1 (one-per-spine (add1 counter)))]))]
     (one-per-spine 0)))
