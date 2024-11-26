@@ -61,32 +61,32 @@
                                   (token "4aaa" SPINE-DATA 4 3))
                             4))
 (define THIRD-JOIN-A (record "*\t*v\t*v\t*\t*\t*"
-                           TOKEN
-                           (list (token "*" NULL-INTERPRETATION 1 0)
-                                 (token "*v" SPINE-JOIN 1 1)
-                                 (token "*v" SPINE-JOIN 1 2)
-                                 (token "*" NULL-INTERPRETATION 1 3)
-                                 (token "*" NULL-INTERPRETATION 1 4)
-                                 (token "*" NULL-INTERPRETATION 1 5))
-                           1))
+                             TOKEN
+                             (list (token "*" NULL-INTERPRETATION 1 0)
+                                   (token "*v" SPINE-JOIN 1 1)
+                                   (token "*v" SPINE-JOIN 1 2)
+                                   (token "*" NULL-INTERPRETATION 1 3)
+                                   (token "*" NULL-INTERPRETATION 1 4)
+                                   (token "*" NULL-INTERPRETATION 1 5))
+                             1))
 (define THIRD-JOIN-B (record "*\t*\t*v\t*v\t*\t*"
-                           TOKEN
-                           (list (token "*" NULL-INTERPRETATION 1 0)
-                                 (token "*" NULL-INTERPRETATION 1 1)
-                                 (token "*v" SPINE-JOIN 1 2)
-                                 (token "*v" SPINE-JOIN 1 3)
-                                 (token "*" NULL-INTERPRETATION 1 4)
-                                 (token "*" NULL-INTERPRETATION 1 5))
-                           1))
+                             TOKEN
+                             (list (token "*" NULL-INTERPRETATION 1 0)
+                                   (token "*" NULL-INTERPRETATION 1 1)
+                                   (token "*v" SPINE-JOIN 1 2)
+                                   (token "*v" SPINE-JOIN 1 3)
+                                   (token "*" NULL-INTERPRETATION 1 4)
+                                   (token "*" NULL-INTERPRETATION 1 5))
+                             1))
 (define THIRD-JOIN-C (record "*\t*\t*\t*v\t*v\t*"
-                           TOKEN
-                           (list (token "*" NULL-INTERPRETATION 1 0)
-                                 (token "*" NULL-INTERPRETATION 1 1)
-                                 (token "*" NULL-INTERPRETATION 1 2)
-                                 (token "*v" SPINE-JOIN 1 3)
-                                 (token "*v" SPINE-JOIN 1 4)
-                                 (token "*" NULL-INTERPRETATION 1 5))
-                           1))
+                             TOKEN
+                             (list (token "*" NULL-INTERPRETATION 1 0)
+                                   (token "*" NULL-INTERPRETATION 1 1)
+                                   (token "*" NULL-INTERPRETATION 1 2)
+                                   (token "*v" SPINE-JOIN 1 3)
+                                   (token "*v" SPINE-JOIN 1 4)
+                                   (token "*" NULL-INTERPRETATION 1 5))
+                             1))
 (define SECOND-JOIN (record "*\t*\t*v\t*v\t*"
                             TOKEN
                             (list (token "*" NULL-INTERPRETATION 2 0)
@@ -123,6 +123,9 @@
                                  (token "4aaa" SPINE-DATA 4 2))
                            4))
 (define BERG (path->hfile "../data/berg01.pc"))
+(define S-J-A (path->hfile "../../count-and-order-tests/data/order/spine-splits-and-joins-a.krn"))
+(define S-J-B (path->hfile "../../count-and-order-tests/data/order/spine-splits-and-joins-b.krn"))
+(define S-J-C (path->hfile "../../count-and-order-tests/data/order/spine-splits-and-joins-c.krn"))
 
 ; extract-spine-arity
 (check-expect (extract-spine-arity BERG) (spine-arity 2 (list (list 1 1)
@@ -140,6 +143,50 @@
                                                               (list 1 1)
                                                               (list 1 1)
                                                               (list 1 1))))
+(check-expect (extract-spine-arity S-J-A) (spine-arity 1 (list (list 1)
+                                                               (list 1)
+                                                               (list 2)
+                                                               (list 3)
+                                                               (list 3)
+                                                               (list 3)
+                                                               (list 3)
+                                                               (list 3)
+                                                               (list 3)
+                                                               (list 3)
+                                                               (list 3)
+                                                               (list 3)
+                                                               (list 3)
+                                                               (list 3)
+                                                               (list 3)
+                                                               (list 2)
+                                                               (list 1))))
+(check-expect (extract-spine-arity S-J-B) (spine-arity 2 (list (list 1 1)
+                                                               (list 1 1)
+                                                               (list 2 2)
+                                                               (list 3 2)
+                                                               (list 3 2)
+                                                               (list 3 2)
+                                                               (list 3 2)
+                                                               (list 1 3)
+                                                               (list 1 3)
+                                                               (list 1 3)
+                                                               (list 1 3)
+                                                               (list 1 2)
+                                                               (list 1 1))))
+(check-expect (extract-spine-arity S-J-C) (spine-arity 2 (list (list 1 1)
+                                                               (list 1 1)
+                                                               (list 2 2)
+                                                               (list 2 3)
+                                                               (list 2 3)
+                                                               (list 2 3)
+                                                               (list 2 3)
+                                                               (list 3 1)
+                                                               (list 3 1)
+                                                               (list 3 1)
+                                                               (list 3 1)
+                                                               (list 2 1)
+                                                               (list 1 1))))
+
 ; lolon
 (check-expect (lolon (list TEST-RECORD-1)) (list (list 1)))
 (check-expect (lolon (filter-type record-type
@@ -174,13 +221,13 @@
 (check-expect (previous-spine-struct? TEST-RECORD-3) #t)
 (check-expect (previous-spine-struct? TEST-RECORD-4) #f)
 (check-expect (previous-spine-struct?
-                (record "*\t*^\t*\t*"
-                        TOKEN
-                        (list (token "*" NULL-INTERPRETATION 20 0)
-                              (token "*^" SPINE-SPLIT 20 1)
-                              (token "*" NULL-INTERPRETATION 20 2)
-                              (token "*" NULL-INTERPRETATION 20 3))
-                        20))
+               (record "*\t*^\t*\t*"
+                       TOKEN
+                       (list (token "*" NULL-INTERPRETATION 20 0)
+                             (token "*^" SPINE-SPLIT 20 1)
+                             (token "*" NULL-INTERPRETATION 20 2)
+                             (token "*" NULL-INTERPRETATION 20 3))
+                       20))
               #t)
 
 ; split-or-join-token?
@@ -195,22 +242,22 @@
 (check-expect (split-or-join-record TEST-RECORD-3) SPINE-JOIN)
 (check-expect (split-or-join-record TEST-RECORD-4) #f)
 (check-expect (split-or-join-record (record
-                                      "*\t*^\t*\t*"
-                                      TOKEN
-                                      (list (token "*" NULL-INTERPRETATION 20 0)
-                                            (token "*^" SPINE-SPLIT 20 1)
-                                            (token "*" NULL-INTERPRETATION 20 2)
-                                            (token "*" NULL-INTERPRETATION 20 3))
-                                      20))
+                                     "*\t*^\t*\t*"
+                                     TOKEN
+                                     (list (token "*" NULL-INTERPRETATION 20 0)
+                                           (token "*^" SPINE-SPLIT 20 1)
+                                           (token "*" NULL-INTERPRETATION 20 2)
+                                           (token "*" NULL-INTERPRETATION 20 3))
+                                     20))
               SPINE-SPLIT)
 (check-expect (split-or-join-record (record
-                                      "*\t*v\t*v\t*"
-                                      TOKEN
-                                      (list (token "*"  NULL-INTERPRETATION 20 0)
-                                            (token "*v" SPINE-JOIN 20 1)
-                                            (token "*v" SPINE-JOIN 20 2)
-                                            (token "*"  NULL-INTERPRETATION 20 3))
-                                      20))
+                                     "*\t*v\t*v\t*"
+                                     TOKEN
+                                     (list (token "*"  NULL-INTERPRETATION 20 0)
+                                           (token "*v" SPINE-JOIN 20 1)
+                                           (token "*v" SPINE-JOIN 20 2)
+                                           (token "*"  NULL-INTERPRETATION 20 3))
+                                     20))
               SPINE-JOIN)
 
 ; struct-lon
