@@ -11,7 +11,7 @@
          "../../../../parser/functions/predicates.rkt"
          "../data-definitions/data-definitions.rkt")
 
-(provide (all-defined-out))
+(provide gspines->linked-spines)
 
 ; gspines->linked-spines
 ; (listof GlobalSpine) -> (listof LinkedSpine)
@@ -37,18 +37,11 @@
 
           ; (listof Token) -> (listof Node)
           (define (wrap-terminators lot)
-            (map (λ (t) (node-box (box-immutable t))) lot))
+            (map (λ (t) (terminator-node (node-box (box-immutable t)))) lot))
 
           ; (listof Token) (listof Node) -> (listof Node)
           (define (wrap-tokens tokens next-nodes)
-            (local [(define original tokens)
-
-                    (define (wrap-tokens tokens)
-                      (cond [(empty? tokens) empty]
-                            [else
-                             (cons (pair-token (first tokens) original next-nodes)
-                                   (wrap-tokens (rest tokens)))]))]
-              (wrap-tokens tokens)))
+            (map (λ (t) (pair-token t tokens next-nodes)) tokens))
 
           ; Token (listof Node) -> Node
           (define (pair-token token tokens next-nodes)
@@ -69,8 +62,10 @@
                       (cond [(token-node? n) (= index (token-field-index (token-node-token n)))]
                             [(split-node? n) (= index (token-field-index (split-node-token n)))]
                             [else
-                             (= index (token-field-index (terminator-node-token n)))]))]
-              (filter index=? next-nodes)))
+                             (= index (token-field-index (unbox
+                                                          (node-box-box
+                                                           (terminator-node-token n)))))]))]
+              (first (filter index=? next-nodes))))
 
           ; Token (listof Token) -> Natural
           ; adjust index of Token if there are splits or joins to the left

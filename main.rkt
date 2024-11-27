@@ -24,11 +24,15 @@
                      hgraph->hfile)
             (only-in "parser/data-structures/humdrum-graph/functions/hfile-to-hgraph.rkt"
                      hfile->hgraph)
-            "parser/data-structures/humdrum-graph/functions/longest-string-in.rkt")
+            "parser/data-structures/humdrum-graph/functions/longest-string-in.rkt"
+            "parser/data-structures/linked-spine/data-definitions/data-definitions.rkt"
+            "parser/data-structures/linked-spine/functions/gspines-to-linked-spines.rkt")
   (provide  (all-from-out "parser/data-structures/humdrum-graph/data-definitions/data-definitions.rkt")
             hgraph->hfile
             hfile->hgraph
-            (all-from-out "parser/data-structures/humdrum-graph/functions/longest-string-in.rkt")))
+            (all-from-out "parser/data-structures/humdrum-graph/functions/longest-string-in.rkt")
+            (all-from-out "parser/data-structures/linked-spine/data-definitions/data-definitions.rkt")
+            gspines->linked-spines))
 
 (require 'parser
          'data-structures)
