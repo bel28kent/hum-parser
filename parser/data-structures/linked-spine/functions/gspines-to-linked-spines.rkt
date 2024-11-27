@@ -52,7 +52,8 @@
                   [(null-interpretation? (token-token token))
                    (null-helper token (adjust-index token tokens) next-nodes)]
                   [else
-                   (token-node token (node-box (box (at-same-field-index token next-nodes))))]))
+                   (token-node token (node-box
+                                      (box-immutable (at-same-field-index token next-nodes))))]))
 
           ; Token (listof Node) -> Node
           (define (at-same-field-index token next-nodes)
@@ -96,16 +97,16 @@
           (define (split-helper token index next-nodes)
             (local [(define index (token-field-index token))]
               (split-node token
-                          (node-box (box (list-ref next-nodes index)))
-                          (node-box (box (list-ref next-nodes (add1 index)))))))
+                          (node-box (box-immutable (list-ref next-nodes index)))
+                          (node-box (box-immutable (list-ref next-nodes (add1 index)))))))
 
           ; Token Index (listof Node) -> TokenNode
           (define (join-helper token index next-nodes)
             (local [(define index (token-field-index token))]
-              (token-node token (node-box (box (list-ref next-nodes (sub1 index)))))))
+              (token-node token (node-box (box-immutable (list-ref next-nodes (sub1 index)))))))
 
           ; Token Index (listof Node) -> TokenNode
           (define (null-helper token index next-nodes)
             (local [(define index (token-field-index token))]
-              (token-node token (node-box (box (list-ref next-nodes index))))))]
+              (token-node token (node-box (box-immutable (list-ref next-nodes index))))))]
     (map gspine->linked-spine gspines)))
