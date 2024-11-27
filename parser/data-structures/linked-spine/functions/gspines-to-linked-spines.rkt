@@ -25,48 +25,47 @@
           ; (listof (listof Token)) -> Node
           ; Must go in reverse order because next must already be wrapped in a node type
           (define (fn-for-lolot lolot)
-                    ; reversed: (listof (listof Token)). the spines tokens, in reverse order
-                    ; next-nodes: (listof Node). the already wrapped tokens from the next record
+            ; reversed: (listof (listof Token)). the spines tokens, in reverse order
+            ; next-nodes: (listof Node). the already wrapped tokens from the next record
             (local [(define (fn-for-lolot reversed next-nodes)
-                      (cond [(empty? reversed) next-nodes]
+                      (cond [(empty? reversed) (first next-nodes)]
                             [else
-                              (fn-for-lolot (rest reversed)
-                                            (wrap-tokens (first reversed) next-nodes))]))]
+                             (fn-for-lolot (rest reversed)
+                                           (wrap-tokens (first reversed) next-nodes))]))]
               (fn-for-lolot (rest (reverse lolot))
                             (wrap-terminators (first (reverse lolot))))))
 
-          ; (listof Token) -> (listof NodeBox)
+          ; (listof Token) -> (listof Node)
           (define (wrap-terminators lot)
             (map (λ (t) (node-box (box-immutable t))) lot))
 
-          ; (listof Token) (listof NodeBox) -> (listof NodeBox)
+          ; (listof Token) (listof Node) -> (listof Node)
           (define (wrap-tokens tokens next-nodes)
             (local [(define (wrap-tokens tokens)
                       (cond [(empty? tokens) empty]
                             [else
-                              (cons (pair-token (first tokens) next-nodes)
-                                    (wrap-tokens (rest tokens)))]))]
+                             (cons (pair-token (first tokens) next-nodes)
+                                   (wrap-tokens (rest tokens)))]))]
               (wrap-tokens tokens)))
 
-          ; Token (listof NodeBox) -> NodeBox
+          ; Token (listof Node) -> Node
           (define (pair-token token next-nodes)
             (cond [(spine-split? (token-token token)) (split-helper token next-nodes)]
                   [(spine-join? (token-token token)) (join-helper token next-nodes)]
                   [(null-interpretation? (token-token token)) (null-helper token next-nodes)]
                   [else
-                    (token-node token (at-same-field-index token next-nodes))]))
+                   (token-node token (node-box (box (at-same-field-index token next-nodes))))]))
 
-          ; Token (listof NodeBox) -> NodeBox
+          ; Token (listof Node) -> Node
           (define (at-same-field-index token next-nodes)
             (local [(define index (token-field-index token))
 
-                    (define (index=? nbox)
-                      (local [(define n (unbox (node-box-box nbox)))]
-                        (cond [(token-node? n) (= index (token-field-index (token-node-token n)))]
-                              [(split-token? n) (= index (token-field-index (split-node-token n)))]
-                              [else
-                                (= index (token-field-index (terminator-node-token n)))])))]
-              (filter index? next-nodes)))
+                    (define (index=? n)
+                      (cond [(token-node? n) (= index (token-field-index (token-node-token n)))]
+                            [(split-node? n) (= index (token-field-index (split-node-token n)))]
+                            [else
+                             (= index (token-field-index (terminator-node-token n)))]))]
+              (filter index=? next-nodes)))
 
           ; Token (listof NodeBox) -> SplitNode
           (define (split-helper token next-nodes)
