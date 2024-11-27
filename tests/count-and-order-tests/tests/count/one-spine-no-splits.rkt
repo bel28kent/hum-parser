@@ -6,6 +6,7 @@
          "../../../../parser/data-structures/humdrum-graph/data-definitions/data-definitions.rkt"
          "../../../../parser/data-structures/humdrum-graph/functions/hgraph-to-hfile.rkt"
          "../../../../parser/data-structures/humdrum-graph/functions/hfile-to-hgraph.rkt"
+         "../../../../parser/data-structures/linked-spine/functions/gspines-to-linked-spines.rkt"
          test-engine/racket-tests)
 
 (check-expect (path->hfile "../../data/count/one-spine-no-splits.krn")
@@ -196,5 +197,6 @@
                     (token "4c" SPINE-DATA 15 0)
                     (token "==" MEASURE 16 0)
                     (token "*-" SPINE-TERMINATOR 17 0)))
+(check-expect (gspines->linked-spines empty) empty)
 
 (test)

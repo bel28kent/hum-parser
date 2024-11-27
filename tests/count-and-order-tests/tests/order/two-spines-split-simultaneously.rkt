@@ -6,6 +6,7 @@
          "../../../../parser/data-structures/humdrum-graph/data-definitions/data-definitions.rkt"
          "../../../../parser/data-structures/humdrum-graph/functions/hgraph-to-hfile.rkt"
          "../../../../parser/data-structures/humdrum-graph/functions/hfile-to-hgraph.rkt"
+         "../../../../parser/data-structures/linked-spines/functions/gspines-to-linked-spines.rkt"
          test-engine/racket-tests)
 
 (check-expect (path->hfile "../../data/order/two-spines-split-simultaneously.krn")
@@ -302,5 +303,6 @@
                     (token "*v" SPINE-JOIN 5 3)
                     (token "*" NULL-INTERPRETATION 6 2)
                     (token "*-" SPINE-TERMINATOR 7 1)))
+(check-expect (gspines->linked-spines empty) empty)
 
 (test)
