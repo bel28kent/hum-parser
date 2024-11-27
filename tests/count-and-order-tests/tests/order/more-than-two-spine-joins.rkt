@@ -6,8 +6,32 @@
          "../../../../parser/data-structures/humdrum-graph/data-definitions/data-definitions.rkt"
          "../../../../parser/data-structures/humdrum-graph/functions/hfile-to-hgraph.rkt"
          "../../../../parser/data-structures/humdrum-graph/functions/hgraph-to-hfile.rkt"
+         "../../../../parser/data-structures/linked-spine/data-definitions/data-definitions.rkt"
          "../../../../parser/data-structures/linked-spine/functions/gspines-to-linked-spines.rkt"
          test-engine/racket-tests)
+
+;; Node definitions
+(define TERM-NODE (terminator-node (node-box (box-immutable (token "*-" SPINE-TERMINATOR 7 0)))))
+(define J-3 (token-node (token "*v" SPINE-JOIN 6 2) TERM-NODE))
+(define J-2 (token-node (token "*v" SPINE-JOIN 6 1) TERM-NODE))
+(define J-1 (token-node (token "*v" SPINE-JOIN 6 0) TERM-NODE))
+(define 4c-5-3 (token-node (token "4c" SPINE-DATA 5 2) (node-box (box-immutable J-3))))
+(define 4c-5-2 (token-node (token "4c" SPINE-DATA 5 1) (node-box (box-immutable J-2))))
+(define 4c-5-1 (token-node (token "4c" SPINE-DATA 5 0) (node-box (box-immutable J-1))))
+(define 4c-4-3 (token-node (token "4c" SPINE-DATA 4 2) (node-box (box-immutable 4c-5-3))))
+(define 4c-4-2 (token-node (token "4c" SPINE-DATA 4 1) (node-box (box-immutable 4c-5-2))))
+(define 4c-4-1 (token-node (token "4c" SPINE-DATA 4 0) (node-box (box-immutable 4c-5-1))))
+(define 4c-3-3 (token-node (token "4c" SPINE-DATA 3 2) (node-box (box-immutable 4c-4-3))))
+(define 4c-3-2 (token-node (token "4c" SPINE-DATA 3 1) (node-box (box-immutable 4c-4-2))))
+(define 4c-3-1 (token-node (token "4c" SPINE-DATA 3 0) (node-box (box-immutable 4c-4-1))))
+(define SPLIT-2 (split-node (token "*^" SPINE-SPLIT 2 1) (node-box (box-immutable 4c-3-2))
+                                                         (node-box (box-immutable 4c-3-3))))
+(define NULL-2 (token-node (token "*" NULL-INTERPRETATION 2 0) (node-box (box-immutable 4c-3-1))))
+(define SPLIT-1 (split-node (token "*^" SPINE-SPLIT 1 0) (node-box (box-immutable NULL-2))
+                                                         (node-box (box-immutable SPLIT-2))))
+(define KERN-0 (token-node (token "**kern" EXCLUSIVE-INTERPRETATION 0 0)
+                           (node-box (box-immutable SPLIT-1))))
+
 
 (check-expect (path->hfile "../../data/order/more-than-two-spine-joins.krn")
               (hfile (list (record "**kern"
@@ -80,6 +104,8 @@
 #|
 (check-expect (branch->lot ) )
 |#
-(check-expect (gspines->linked-spines empty) empty)
+(check-expect (gspines->linked-spines (spine-parser
+                                        (path->hfile "../../data/order/more-than-two-spine-joins.krn")))
+              (list (linked-spine KERN-0)))
 
 (test)

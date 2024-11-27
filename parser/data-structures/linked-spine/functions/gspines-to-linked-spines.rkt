@@ -51,6 +51,8 @@
                    (join-helper token (adjust-index token tokens) next-nodes)]
                   [(null-interpretation? (token-token token))
                    (null-helper token (adjust-index token tokens) next-nodes)]
+                  [(terminator-node? (first next-nodes))
+                   (token-node token (at-same-field-index token next-nodes))]
                   [else
                    (token-node token (node-box
                                       (box-immutable (at-same-field-index token next-nodes))))]))
@@ -95,18 +97,30 @@
 
           ; Token Index (listof Node) -> SplitNode
           (define (split-helper token index next-nodes)
-            (local [(define index (token-field-index token))]
-              (split-node token
-                          (node-box (box-immutable (list-ref next-nodes index)))
-                          (node-box (box-immutable (list-ref next-nodes (add1 index)))))))
+            (cond [(terminator-node? (first next-nodes))
+                   (split-node token (list-ref next-nodes index)
+                                     (list-ref next-nodes (add1 index)))]
+                  [else
+                    (split-node token
+                                (node-box (box-immutable (list-ref next-nodes index)))
+                                (node-box (box-immutable (list-ref next-nodes (add1 index)))))]))
 
           ; Token Index (listof Node) -> TokenNode
           (define (join-helper token index next-nodes)
-            (local [(define index (token-field-index token))]
-              (token-node token (node-box (box-immutable (list-ref next-nodes (sub1 index)))))))
+            (cond [(terminator-node? (first next-nodes))
+                   (token-node token (list-ref next-nodes (if (zero? index)
+                                                              0
+                                                              (sub1 index))))]
+                  [else
+                    (token-node token (node-box (box-immutable (list-ref next-nodes
+                                                                         (if (zero? index)
+                                                                             0
+                                                                             (sub1 index))))))]))
 
           ; Token Index (listof Node) -> TokenNode
           (define (null-helper token index next-nodes)
-            (local [(define index (token-field-index token))]
-              (token-node token (node-box (box-immutable (list-ref next-nodes index))))))]
+            (cond [(terminator-node? (first next-nodes))
+                   (token-node token (list-ref next-nodes index))]
+                  [else
+                    (token-node token (node-box (box-immutable (list-ref next-nodes index))))]))]
     (map gspine->linked-spine gspines)))
