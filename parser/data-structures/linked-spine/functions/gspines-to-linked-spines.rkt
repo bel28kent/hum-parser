@@ -41,18 +41,23 @@
 
           ; (listof Token) (listof Node) -> (listof Node)
           (define (wrap-tokens tokens next-nodes)
-            (local [(define (wrap-tokens tokens)
+            (local [(define original tokens)
+
+                    (define (wrap-tokens tokens)
                       (cond [(empty? tokens) empty]
                             [else
-                             (cons (pair-token (first tokens) next-nodes)
+                             (cons (pair-token (first tokens) original next-nodes)
                                    (wrap-tokens (rest tokens)))]))]
               (wrap-tokens tokens)))
 
           ; Token (listof Node) -> Node
-          (define (pair-token token next-nodes)
-            (cond [(spine-split? (token-token token)) (split-helper token next-nodes)]
-                  [(spine-join? (token-token token)) (join-helper token next-nodes)]
-                  [(null-interpretation? (token-token token)) (null-helper token next-nodes)]
+          (define (pair-token token tokens next-nodes)
+            (cond [(spine-split? (token-token token))
+                   (split-helper token (adjust-index token tokens) next-nodes)]
+                  [(spine-join? (token-token token))
+                   (join-helper token (adjust-index token tokens) next-nodes)]
+                  [(null-interpretation? (token-token token))
+                   (null-helper token (adjust-index token tokens) next-nodes)]
                   [else
                    (token-node token (node-box (box (at-same-field-index token next-nodes))))]))
 
@@ -67,15 +72,43 @@
                              (= index (token-field-index (terminator-node-token n)))]))]
               (filter index=? next-nodes)))
 
-          ; Token (listof NodeBox) -> SplitNode
-          (define (split-helper token next-nodes)
-            ())
+          ; Token (listof Token) -> Natural
+          ; adjust index of Token if there are splits or joins to the left
+          (define (adjust-index token tokens)
+            (local [(define index (token-field-index token))
 
-          ; Token (listof NodeBox) -> TokenNode
-          (define (join-helper token next-nodes)
-            ())
+                    ; i: Natural. the index.
+                    ; counter: Natural. number of tokens processed so far.
+                    ; loj: (listof Token). if found, a list of successive spine joins, else empty.
+                    (define (adjust tokens i counter loj)
+                      (cond [(= counter index) i]
+                            [(string=? SPINE-SPLIT (token-type (first tokens)))
+                             (adjust (rest tokens) (add1 i) (add1 counter) empty)]
+                            [(string=? SPINE-JOIN (token-type (first tokens)))
+                             (adjust (rest tokens) i (add1 counter) (cons (first tokens) loj))]
+                            [else
+                             (if (empty? loj)
+                                 (adjust (rest tokens) i (add1 counter) empty)
+                                 (adjust (rest tokens)
+                                         (- i (- (length loj) 1))
+                                         (add1 counter)
+                                         empty))]))]
+              (adjust tokens index 0 empty)))
 
-          ; Token (listof NodeBox) -> TokenNode
-          (define (null-helper token next-nodes)
-            ())]
+          ; Token Index (listof Node) -> SplitNode
+          (define (split-helper token index next-nodes)
+            (local [(define index (token-field-index token))]
+              (split-node token
+                          (node-box (box (list-ref next-nodes index)))
+                          (node-box (box (list-ref next-nodes (add1 index)))))))
+
+          ; Token Index (listof Node) -> TokenNode
+          (define (join-helper token index next-nodes)
+            (local [(define index (token-field-index token))]
+              (token-node token (node-box (box (list-ref next-nodes index))))))
+
+          ; Token Index (listof Node) -> TokenNode
+          (define (null-helper token index next-nodes)
+            (local [(define index (token-field-index token))]
+              (token-node token (node-box (box (list-ref next-nodes index))))))]
     (map gspine->linked-spine gspines)))
