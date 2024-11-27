@@ -41,6 +41,7 @@ These files comprise converters (all in the `parser` directory):
 ```
 	- data-structures/humdrum-graph/functions/hgraph-to-hfile.rkt
 	- data-structures/humdrum-graph/functions/hfile-to-hgraph.rkt
+        - data-structures/linked-spine/functions/gspines-to-linked-spines.rkt
 	- functions/file.rkt
 	- functions/spine-parser.rkt
 ```
@@ -50,6 +51,7 @@ These functions are converters:
 	- lolot->lor    ((listof (listof Token)) -> (listof Record))
 	- hgraph->lolot (HumdrumGraph -> (listof (listof Token)))
 	- hfile->hgraph (HumdrumFile -> HumdrumGraph)
+        - gspines->linked-spines ((listof GlobalSpine) -> (listof LinkedSpine))
 	- branch->lot   ((listof Node) -> (listof Token))
 ```
 

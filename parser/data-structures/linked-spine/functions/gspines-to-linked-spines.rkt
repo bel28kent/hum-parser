@@ -76,7 +76,9 @@
                     ; counter: Natural. number of tokens processed so far.
                     ; loj: (listof Token). if found, a list of successive spine joins, else empty.
                     (define (adjust tokens i counter loj)
-                      (cond [(= counter index) i]
+                      (cond [(= counter index) (if (empty? loj)
+                                                   i
+                                                   (- i (- (length loj) 1)))]
                             [(string=? SPINE-SPLIT (token-type (first tokens)))
                              (adjust (rest tokens) (add1 i) (add1 counter) empty)]
                             [(string=? SPINE-JOIN (token-type (first tokens)))
@@ -100,7 +102,7 @@
           ; Token Index (listof Node) -> TokenNode
           (define (join-helper token index next-nodes)
             (local [(define index (token-field-index token))]
-              (token-node token (node-box (box (list-ref next-nodes index))))))
+              (token-node token (node-box (box (list-ref next-nodes (sub1 index)))))))
 
           ; Token Index (listof Node) -> TokenNode
           (define (null-helper token index next-nodes)
