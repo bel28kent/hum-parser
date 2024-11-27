@@ -1,7 +1,7 @@
 #lang racket/base
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data-structures: LinkedSpine
+;; hum-parser: data structures: LinkedSpine
 ;;    Function templates
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
