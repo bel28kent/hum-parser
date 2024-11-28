@@ -43,12 +43,12 @@
           (define (wrap-tokens tokens next-nodes)
             (map (λ (t) (pair-token t tokens next-nodes)) tokens))
 
-          ; Token (listof Node) -> Node
+          ; Token (listof Token) (listof Node) -> Node
           (define (pair-token token tokens next-nodes)
             (cond [(spine-split? (token-token token))
                    (split-helper token (adjust-index token tokens) next-nodes)]
                   [(spine-join? (token-token token))
-                   (join-helper token (adjust-index token tokens) next-nodes)]
+                   (join-helper token (adjust-index token tokens) tokens next-nodes)]
                   [(null-interpretation? (token-token token))
                    (null-helper token (adjust-index token tokens) next-nodes)]
                   [(terminator-node? (first next-nodes))
@@ -105,17 +105,21 @@
                                 (node-box (box-immutable (list-ref next-nodes index)))
                                 (node-box (box-immutable (list-ref next-nodes (add1 index)))))]))
 
-          ; Token Index (listof Node) -> TokenNode
-          (define (join-helper token index next-nodes)
-            (cond [(terminator-node? (first next-nodes))
-                   (token-node token (list-ref next-nodes (if (zero? index)
-                                                              0
-                                                              (sub1 index))))]
-                  [else
-                    (token-node token (node-box (box-immutable (list-ref next-nodes
-                                                                         (if (zero? index)
-                                                                             0
-                                                                             (sub1 index))))))]))
+          ; BOUNDARY: left most join is treated like a regular token (do not decrement)
+          ; Token Index (listof Token) (listof Node) -> TokenNode
+          (define (join-helper token index tokens next-nodes)
+            (local [(define not-adjusted-i (token-field-index token))
+
+                    (define i (cond [(zero? not-adjusted-i) 0]
+                                    [(not (spine-join? (token-token
+                                                         (list-ref tokens (sub1 not-adjusted-i)))))
+                                     index]
+                                    [else
+                                      (sub1 index)]))]
+              (cond [(terminator-node? (first next-nodes)) (token-node token
+                                                                       (list-ref next-nodes i))]
+                    [else
+                      (token-node token (node-box (box-immutable (list-ref next-nodes i))))])))
 
           ; Token Index (listof Node) -> TokenNode
           (define (null-helper token index next-nodes)

@@ -6,8 +6,59 @@
          "../../../../parser/data-structures/humdrum-graph/data-definitions/data-definitions.rkt"
          "../../../../parser/data-structures/humdrum-graph/functions/hfile-to-hgraph.rkt"
          "../../../../parser/data-structures/humdrum-graph/functions/hgraph-to-hfile.rkt"
+         "../../../../parser/data-structures/linked-spine/data-definitions/data-definitions.rkt"
          "../../../../parser/data-structures/linked-spine/functions/gspines-to-linked-spines.rkt"
          test-engine/racket-tests)
+
+;; Node Definitions
+(define TERM-NODE (terminator-node (node-box (box-immutable (token "*-" SPINE-TERMINATOR 16 0)))))
+(define J-15-2 (token-node (token "*v" SPINE-JOIN 15 1) TERM-NODE))
+(define J-15-1 (token-node (token "*v" SPINE-JOIN 15 0) TERM-NODE))
+(define J-14-3 (token-node (token "*v" SPINE-JOIN 14 2) (node-box (box-immutable J-15-2))))
+(define J-14-2 (token-node (token "*v" SPINE-JOIN 14 1) (node-box (box-immutable J-15-2))))
+(define NULL-14 (token-node (token "*" NULL-INTERPRETATION 14 0) (node-box (box-immutable J-15-1))))
+(define 4c-13-3 (token-node (token "4c" SPINE-DATA 13 2) (node-box (box-immutable J-14-3))))
+(define 4c-13-2 (token-node (token "4c" SPINE-DATA 13 1) (node-box (box-immutable J-14-2))))
+(define 4c-13-1 (token-node (token "4c" SPINE-DATA 13 0) (node-box (box-immutable NULL-14))))
+(define 4c-12-3 (token-node (token "4c" SPINE-DATA 12 2) (node-box (box-immutable 4c-13-3))))
+(define 4c-12-2 (token-node (token "4c" SPINE-DATA 12 1) (node-box (box-immutable 4c-13-2))))
+(define 4c-12-1 (token-node (token "4c" SPINE-DATA 12 0) (node-box (box-immutable 4c-13-1))))
+(define 4c-11-3 (token-node (token "4c" SPINE-DATA 11 2) (node-box (box-immutable 4c-12-3))))
+(define 4c-11-2 (token-node (token "4c" SPINE-DATA 11 1) (node-box (box-immutable 4c-12-2))))
+(define 4c-11-1 (token-node (token "4c" SPINE-DATA 11 0) (node-box (box-immutable 4c-12-1))))
+(define S-10-3 (split-node (token "*^" SPINE-SPLIT 10 2) (node-box (box-immutable 4c-11-2))
+                                                         (node-box (box-immutable 4c-11-3))))
+(define J-10-2 (token-node (token "*v" SPINE-JOIN 10 1) (node-box (box-immutable 4c-11-1))))
+(define J-10-1 (token-node (token "*v" SPINE-JOIN 10 0) (node-box (box-immutable 4c-11-1))))
+(define 4c-9-3 (token-node (token "4c" SPINE-DATA 9 2) (node-box (box-immutable S-10-3))))
+(define 4c-9-2 (token-node (token "4c" SPINE-DATA 9 1) (node-box (box-immutable J-10-2))))
+(define 4c-9-1 (token-node (token "4c" SPINE-DATA 9 0) (node-box (box-immutable J-10-1))))
+(define 4c-8-3 (token-node (token "4c" SPINE-DATA 8 2) (node-box (box-immutable 4c-9-3))))
+(define 4c-8-2 (token-node (token "4c" SPINE-DATA 8 1) (node-box (box-immutable 4c-9-2))))
+(define 4c-8-1 (token-node (token "4c" SPINE-DATA 8 0) (node-box (box-immutable 4c-9-1))))
+(define 4c-7-3 (token-node (token "4c" SPINE-DATA 7 2) (node-box (box-immutable 4c-8-3))))
+(define 4c-7-2 (token-node (token "4c" SPINE-DATA 7 1) (node-box (box-immutable 4c-8-2))))
+(define 4c-7-1 (token-node (token "4c" SPINE-DATA 7 0) (node-box (box-immutable 4c-8-1))))
+(define J-6-3 (token-node (token "*v" SPINE-JOIN 6 2) (node-box (box-immutable 4c-7-3))))
+(define J-6-2 (token-node (token "*v" SPINE-JOIN 6 1) (node-box (box-immutable 4c-7-3))))
+(define S-6-1 (split-node (token "*^" SPINE-SPLIT 6 0) (node-box (box-immutable 4c-7-1))
+                                                       (node-box (box-immutable 4c-7-2))))
+(define 4c-5-3 (token-node (token "4c" SPINE-DATA 5 2) (node-box (box-immutable J-6-3))))
+(define 4c-5-2 (token-node (token "4c" SPINE-DATA 5 1) (node-box (box-immutable J-6-2))))
+(define 4c-5-1 (token-node (token "4c" SPINE-DATA 5 0) (node-box (box-immutable S-6-1))))
+(define 4c-4-3 (token-node (token "4c" SPINE-DATA 4 2) (node-box (box-immutable 4c-5-3))))
+(define 4c-4-2 (token-node (token "4c" SPINE-DATA 4 1) (node-box (box-immutable 4c-5-2))))
+(define 4c-4-1 (token-node (token "4c" SPINE-DATA 4 0) (node-box (box-immutable 4c-5-1))))
+(define 4c-3-3 (token-node (token "4c" SPINE-DATA 3 2) (node-box (box-immutable 4c-4-3))))
+(define 4c-3-2 (token-node (token "4c" SPINE-DATA 3 1) (node-box (box-immutable 4c-4-2))))
+(define 4c-3-1 (token-node (token "4c" SPINE-DATA 3 0) (node-box (box-immutable 4c-4-1))))
+(define S-2-2 (split-node (token "*^" SPINE-SPLIT 2 1) (node-box (box-immutable 4c-3-2))
+                                                       (node-box (box-immutable 4c-3-3))))
+(define N-2-1 (token-node (token "*" NULL-INTERPRETATION 2 0) (node-box (box-immutable 4c-3-1))))
+(define S-1 (split-node (token "*^" SPINE-SPLIT 1 0) (node-box (box-immutable N-2-1))
+                                                     (node-box (box-immutable S-2-2))))
+(define KERN-0 (token-node (token "**kern" EXCLUSIVE-INTERPRETATION 0 0)
+                           (node-box (box-immutable S-1))))
 
 (check-expect (path->hfile "../../data/order/spine-splits-and-joins-a.krn")
               (hfile (list (record "**kern"
@@ -159,6 +210,8 @@
 #|
 (check-expect (branch->lot ) )
 |#
-(check-expect (gspines->linked-spines empty) empty)
+(check-expect (gspines->linked-spines (spine-parser
+                                        (path->hfile "../../data/order/spine-splits-and-joins-a.krn")))
+              (list (linked-spine KERN-0)))
 
 (test)
