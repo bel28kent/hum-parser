@@ -11,9 +11,9 @@
          test-engine/racket-tests)
 
 ;; Node Definitions
-(define TERM-16-0 (terminator-node (box-immutable (token "*-" SPINE-TERMINATOR 16 0))))
-(define J-15-0 (token-node (token "*v" SPINE-JOIN 15 0) TERM-16-0))
-(define J-15-1 (token-node (token "*v" SPINE-JOIN 15 1) TERM-16-0))
+(define TERM-16-0 (terminator-node (token "*-" SPINE-TERMINATOR 16 0)))
+(define J-15-0 (token-node (token "*v" SPINE-JOIN 15 0) (box-immutable TERM-16-0)))
+(define J-15-1 (token-node (token "*v" SPINE-JOIN 15 1) (box-immutable TERM-16-0)))
 (define NULL-14-0 (token-node (token "*" NULL-INTERPRETATION 14 0) (box-immutable J-15-0)))
 (define J-14-1 (token-node (token "*v" SPINE-JOIN 14 1) (box-immutable J-15-1)))
 (define J-14-2 (token-node (token "*v" SPINE-JOIN 14 2) (box-immutable J-15-1)))

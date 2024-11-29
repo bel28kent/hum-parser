@@ -11,10 +11,10 @@
          test-engine/racket-tests)
 
 ;; Node definitions
-(define TERM-7-0 (terminator-node (box-immutable (token "*-" SPINE-TERMINATOR 7 0))))
-(define J-6-0 (token-node (token "*v" SPINE-JOIN 6 0) TERM-7-0))
-(define J-6-1 (token-node (token "*v" SPINE-JOIN 6 1) TERM-7-0))
-(define J-6-2 (token-node (token "*v" SPINE-JOIN 6 2) TERM-7-0))
+(define TERM-7-0 (terminator-node (token "*-" SPINE-TERMINATOR 7 0)))
+(define J-6-0 (token-node (token "*v" SPINE-JOIN 6 0) (box-immutable TERM-7-0)))
+(define J-6-1 (token-node (token "*v" SPINE-JOIN 6 1) (box-immutable TERM-7-0)))
+(define J-6-2 (token-node (token "*v" SPINE-JOIN 6 2) (box-immutable TERM-7-0)))
 (define 4c-5-0 (token-node (token "4c" SPINE-DATA 5 0) (box-immutable J-6-0)))
 (define 4c-5-1 (token-node (token "4c" SPINE-DATA 5 1) (box-immutable J-6-1)))
 (define 4c-5-2 (token-node (token "4c" SPINE-DATA 5 2) (box-immutable J-6-2)))

@@ -51,13 +51,13 @@
 ;    next and a right-hand next.
 
 (struct terminator-node (token) #:transparent)
-; TerminatorNode is (terminator-node (box-immutable Token))
+; TerminatorNode is (terminator-node Token))
 ; Represents a Token of TokenType SPINE-TERMINATOR.
 
 ; BASE CASE
 (define EX (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
 (define TERM (token "*-" SPINE-TERMINATOR 1 0))
-(define TERM-NODE (terminator-node (box-immutable TERM)))
+(define TERM-NODE (terminator-node TERM))
 (define EX-NODE (token-node EX (box-immutable TERM-NODE)))
 (define LINKED-SPINE-BASE (box-immutable (linked-spine EX-NODE)))
 
@@ -66,7 +66,7 @@
 (define 4B (token "4b" SPINE-DATA 2 0))
 (define 4C (token "4c" SPINE-DATA 3 0))
 (define TERM-4 (token "*-" SPINE-TERMINATOR 4 0))
-(define TERM-4-NODE (terminator-node (box-immutable TERM-4)))
+(define TERM-4-NODE (terminator-node TERM-4))
 (define 4C-NODE (token-node 4C (box-immutable TERM-4)))
 (define 4B-NODE (token-node 4B (box-immutable 4C-NODE)))
 (define 4A-NODE (token-node 4A (box-immutable 4B-NODE)))
@@ -84,7 +84,7 @@
 (define STAR-v-1 (token "*v" SPINE-JOIN 5 0))
 (define STAR-v-2 (token "*v" SPINE-JOIN 5 1))
 (define TERM-6 (token "*-" SPINE-TERMINATOR 6 0))
-(define TERM-6-NODE (box-immutable TERM-6))
+(define TERM-6-NODE TERM-6)
 (define STAR-v-2-NODE (token-node STAR-v-2 (box-immutable TERM-6-NODE)))
 (define STAR-v-1-NODE (token-node STAR-v-1 (box-immutable TERM-6-NODE)))
 (define 4CC-4-NODE (token-node 4CC-4 (box-immutable STAR-v-2-NODE)))

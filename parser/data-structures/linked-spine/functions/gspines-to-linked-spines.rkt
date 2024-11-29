@@ -39,7 +39,7 @@
 
           ; (listof Token) -> (listof Node)
           (define (wrap-terminators lot)
-            (map (λ (t) (terminator-node (box-immutable t))) lot))
+            (map (λ (t) (terminator-node t)) lot))
 
           ; (listof Token) (listof Node) -> (listof Node)
           (define (wrap-tokens tokens next-nodes)
@@ -54,7 +54,7 @@
                   [(null-interpretation? (token-token token))
                    (null-helper token (adjust-index token) next-nodes)]
                   [(terminator-node? (first next-nodes))
-                   (token-node token (at-same-field-index token next-nodes))]
+                   (token-node token (box-immutable (at-same-field-index token next-nodes)))]
                   [else
                    (token-node token (box-immutable (at-same-field-index token next-nodes)))]))
 
@@ -66,7 +66,7 @@
                       (cond [(token-node? n) (= index (token-field-index (token-node-token n)))]
                             [(split-node? n) (= index (token-field-index (split-node-token n)))]
                             [else
-                             (= index (token-field-index (unbox (terminator-node-token n))))]))]
+                             (= index (token-field-index (terminator-node-token n)))]))]
               (first (filter index=? next-nodes))))
 
           ; Token (listof Token) -> Natural
@@ -102,7 +102,7 @@
                       (cond [(token-node? node) (token-field-index (token-node-token node))]
                             [(split-node? node) (token-field-index (split-node-token node))]
                             [else
-                              (token-field-index (unbox (terminator-node-token node)))]))
+                              (token-field-index (terminator-node-token node))]))
 
                     (define (get-node nodes)
                       (cond [(empty? nodes) (raise-result-error 'get-node
@@ -121,8 +121,8 @@
           ; Token Index (listof Node) -> SplitNode
           (define (split-helper token index next-nodes)
             (cond [(terminator-node? (first next-nodes))
-                   (split-node token (get-node next-nodes index token 'split-helper)
-                                     (get-node next-nodes (add1 index) token 'split-helper))]
+                   (split-node token (box-immutable (get-node next-nodes index token 'split-helper))
+                                     (box-immutable (get-node next-nodes (add1 index) token 'split-helper)))]
                   [else
                     (split-node token
                                 (box-immutable (get-node next-nodes index token 'split-helper))
@@ -133,7 +133,7 @@
           ; Token Index (listof Token) (listof Node) -> TokenNode
           (define (join-helper token index tokens next-nodes)
               (cond [(terminator-node? (first next-nodes))
-                     (token-node token (get-node next-nodes index token 'join-helper))]
+                     (token-node token (box (get-node next-nodes index token 'join-helper)))]
                     [else
                       (token-node token (box-immutable
                                           (get-node next-nodes index token 'join-helper)))]))
@@ -141,7 +141,7 @@
           ; Token Index (listof Node) -> TokenNode
           (define (null-helper token index next-nodes)
             (cond [(terminator-node? (first next-nodes))
-                   (token-node token (get-node next-nodes index token 'null-helper))]
+                   (token-node token (box-immutable (get-node next-nodes index token 'null-helper)))]
                   [else
                     (token-node token (box-immutable
                                         (get-node next-nodes index token 'null-helper)))]))]

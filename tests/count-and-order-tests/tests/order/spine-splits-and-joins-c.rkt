@@ -11,9 +11,9 @@
          test-engine/racket-tests)
 
 ;; Node Definitions
-(define TERM-12-0 (terminator-node (box-immutable (token "*-" SPINE-TERMINATOR 12 0))))
-(define J-11-0 (token-node (token "*v" SPINE-JOIN 11 0) TERM-12-0))
-(define J-11-1 (token-node (token "*v" SPINE-JOIN 11 1) TERM-12-0))
+(define TERM-12-0 (terminator-node (token "*-" SPINE-TERMINATOR 12 0)))
+(define J-11-0 (token-node (token "*v" SPINE-JOIN 11 0) (box-immutable TERM-12-0)))
+(define J-11-1 (token-node (token "*v" SPINE-JOIN 11 1) (box-immutable TERM-12-0)))
 (define NULL-10-0 (token-node (token "*" NULL-INTERPRETATION 10 0) (box-immutable J-11-0)))
 (define J-10-1 (token-node (token "*v" SPINE-JOIN 10 1) (box-immutable J-11-1)))
 (define J-10-2 (token-node (token "*v" SPINE-JOIN 10 2) (box-immutable J-11-1)))
@@ -43,8 +43,8 @@
                           (box-immutable NULL-2-1)))
 (define KERN-0-0 (token-node (token "**kern" EXCLUSIVE-INTERPRETATION 0 0) (box-immutable S-1-0)))
 
-(define TERM-12-1 (terminator-node (box-immutable (token "*-" SPINE-TERMINATOR 12 1))))
-(define NULL-11-2 (token-node (token "*" NULL-INTERPRETATION 11 2) TERM-12-1))
+(define TERM-12-1 (terminator-node (token "*-" SPINE-TERMINATOR 12 1)))
+(define NULL-11-2 (token-node (token "*" NULL-INTERPRETATION 11 2) (box-immutable TERM-12-1)))
 (define NULL-10-3 (token-node (token "*" NULL-INTERPRETATION 10 3) (box-immutable NULL-11-2)))
 (define 4c-9-3 (token-node (token "4c" SPINE-DATA 9 3) (box-immutable NULL-10-3)))
 (define 4c-8-3 (token-node (token "4c" SPINE-DATA 8 3) (box-immutable 4c-9-3)))
