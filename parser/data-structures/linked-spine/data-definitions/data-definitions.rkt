@@ -42,40 +42,36 @@
 ;    - TerminatorNode
 ; Represents an element of a LinkedSpine
 
-(struct node-box (box) #:transparent)
-; NodeBox is (node-box (box-immutable Node))
-; Represents an address to a Node.
-
 (struct token-node (token next) #:transparent)
-; TokenNode is (token-node Token NodeBox)
+; TokenNode is (token-node Token (box-immutable Node))
 ; Represents a Token with a single next.
 
 (struct split-node (token left-next right-next) #:transparent)
-; SplitNode is (split-node Token NodeBox NodeBox)
+; SplitNode is (split-node Token (box-immutable Node) (box-immutable Node))
 ; Represents a Token of TokenType SPINE-SPLIT with a left-hand
 ;    next and a right-hand next.
 
 (struct terminator-node (token) #:transparent)
-; TerminatorNode is (terminator-node NodeBox)
+; TerminatorNode is (terminator-node (box-immutable Node))
 ; Represents a Token of TokenType SPINE-TERMINATOR.
 
 ; BASE CASE
 (define EX (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
 (define TERM (token "*-" SPINE-TERMINATOR 1 0))
-(define TERM-NODE (terminator-node (node-box (box-immutable TERM))))
-(define EX-NODE (token-node EX TERM-NODE))
-(define LINKED-SPINE-BASE (linked-spine EX-NODE))
+(define TERM-NODE (terminator-node (box-immutable TERM)))
+(define EX-NODE (token-node EX (box-immutable TERM-NODE)))
+(define LINKED-SPINE-BASE (box-immutable (linked-spine EX-NODE)))
 
 ; NO SPLITS
 (define 4A (token "4a" SPINE-DATA 1 0))
 (define 4B (token "4b" SPINE-DATA 2 0))
 (define 4C (token "4c" SPINE-DATA 3 0))
 (define TERM-4 (token "*-" SPINE-TERMINATOR 4 0))
-(define TERM-4-NODE (terminator-node (node-box (box-immutable TERM-4))))
-(define 4C-NODE (token-node 4C (node-box (box-immutable TERM-4))))
-(define 4B-NODE (token-node 4B (node-box (box-immutable 4C-NODE))))
-(define 4A-NODE (token-node 4A (node-box (box-immutable 4B-NODE))))
-(define EX-NODE-SINGLE (token-node EX (node-box (box-immutable 4A-NODE))))
+(define TERM-4-NODE (terminator-node (box-immutable TERM-4)))
+(define 4C-NODE (token-node 4C (box-immutable TERM-4)))
+(define 4B-NODE (token-node 4B (box-immutable 4C-NODE)))
+(define 4A-NODE (token-node 4A (box-immutable 4B-NODE)))
+(define EX-NODE-SINGLE (token-node EX (box-immutable 4A-NODE)))
 (define LINKED-SPINE-SINGLE (linked-spine EX-NODE-SINGLE))
 
 ; ONE SPLIT
@@ -89,17 +85,17 @@
 (define STAR-v-1 (token "*v" SPINE-JOIN 5 0))
 (define STAR-v-2 (token "*v" SPINE-JOIN 5 1))
 (define TERM-6 (token "*-" SPINE-TERMINATOR 6 0))
-(define TERM-6-NODE (node-box (box-immutable TERM-6)))
-(define STAR-v-2-NODE (token-node STAR-v-2 (node-box (box-immutable TERM-6-NODE))))
-(define STAR-v-1-NODE (token-node STAR-v-1 (node-box (box-immutable TERM-6-NODE))))
-(define 4CC-4-NODE (token-node 4CC-4 (node-box (box-immutable STAR-v-2-NODE))))
-(define 4C-4-NODE (token-node 4C-4 (node-box (box-immutable STAR-v-1-NODE))))
-(define 4BB-3-NODE (token-node 4BB-3 (node-box (box-immutable 4CC-4-NODE))))
-(define 4B-3-NODE (token-node 4B-3 (node-box (box-immutable 4C-4-NODE))))
-(define 4AA-2-NODE (token-node 4AA-2 (node-box (box-immutable 4BB-3-NODE))))
-(define 4A-2-NODE (token-node 4A-2 (node-box (box-immutable 4B-3-NODE))))
+(define TERM-6-NODE (box-immutable TERM-6))
+(define STAR-v-2-NODE (token-node STAR-v-2 (box-immutable TERM-6-NODE)))
+(define STAR-v-1-NODE (token-node STAR-v-1 (box-immutable TERM-6-NODE)))
+(define 4CC-4-NODE (token-node 4CC-4 (box-immutable STAR-v-2-NODE)))
+(define 4C-4-NODE (token-node 4C-4 (box-immutable STAR-v-1-NODE)))
+(define 4BB-3-NODE (token-node 4BB-3 (box-immutable 4CC-4-NODE)))
+(define 4B-3-NODE (token-node 4B-3 (box-immutable 4C-4-NODE)))
+(define 4AA-2-NODE (token-node 4AA-2 (box-immutable 4BB-3-NODE)))
+(define 4A-2-NODE (token-node 4A-2 (box-immutable 4B-3-NODE)))
 (define STAR-^-NODE (split-node STAR-^
-                                (node-box (box-immutable 4A-2-NODE))
-                                (node-box (box-immutable 4AA-2-NODE))))
-(define EX-NODE-SPLIT (token-node EX (node-box (box-immutable STAR-^-NODE))))
+                                (box-immutable 4A-2-NODE)
+                                (box-immutable 4AA-2-NODE)))
+(define EX-NODE-SPLIT (token-node EX (box-immutable STAR-^-NODE)))
 (define LINKED-SPINE-ONE (linked-spine EX-NODE-SPLIT))
