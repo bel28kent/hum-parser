@@ -50,9 +50,9 @@
             (cond [(spine-split? (token-token token))
                    (split-helper token (adjust-index token) next-nodes)]
                   [(spine-join? (token-token token))
-                   (join-helper token (adjust-index token) tokens next-nodes)]
+                   (token-helper token (adjust-index token) tokens next-nodes)]
                   [(null-interpretation? (token-token token))
-                   (null-helper token (adjust-index token) next-nodes)]
+                   (token-helper token (adjust-index token) next-nodes)]
                   [(terminator-node? (first next-nodes))
                    (token-node token (box-immutable (at-same-field-index token next-nodes)))]
                   [else
@@ -121,27 +121,21 @@
           ; Token Index (listof Node) -> SplitNode
           (define (split-helper token index next-nodes)
             (cond [(terminator-node? (first next-nodes))
-                   (split-node token (box-immutable (get-node next-nodes index token 'split-helper))
-                                     (box-immutable (get-node next-nodes (add1 index) token 'split-helper)))]
+                   (split-node token
+                               (box-immutable (get-node next-nodes index token 'split-helper))
+                               (box-immutable
+                                 (get-node next-nodes (add1 index) token 'split-helper)))]
                   [else
                     (split-node token
                                 (box-immutable (get-node next-nodes index token 'split-helper))
                                 (box-immutable
                                   (get-node next-nodes (add1 index) token 'split-helper)))]))
 
-          ; BOUNDARY: left most join is treated like a regular token (do not decrement)
-          ; Token Index (listof Token) (listof Node) -> TokenNode
-          (define (join-helper token index tokens next-nodes)
-              (cond [(terminator-node? (first next-nodes))
-                     (token-node token (box (get-node next-nodes index token 'join-helper)))]
-                    [else
-                      (token-node token (box-immutable
-                                          (get-node next-nodes index token 'join-helper)))]))
-
           ; Token Index (listof Node) -> TokenNode
-          (define (null-helper token index next-nodes)
+          (define (token-helper token index next-nodes)
             (cond [(terminator-node? (first next-nodes))
-                   (token-node token (box-immutable (get-node next-nodes index token 'null-helper)))]
+                   (token-node token
+                               (box-immutable (get-node next-nodes index token 'null-helper)))]
                   [else
                     (token-node token (box-immutable
                                         (get-node next-nodes index token 'null-helper)))]))]
