@@ -8,7 +8,6 @@
 
 (provide (struct-out linked-spine)
          (struct-out node)
-         (struct-out node-box)
          (struct-out token-node)
          (struct-out split-node)
          (struct-out terminator-node)

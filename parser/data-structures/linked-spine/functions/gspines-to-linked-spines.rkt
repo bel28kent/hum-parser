@@ -37,7 +37,7 @@
 
           ; (listof Token) -> (listof Node)
           (define (wrap-terminators lot)
-            (map (λ (t) (terminator-node  (box-immutable t)))) lot)
+            (map (λ (t) (terminator-node (box-immutable t))) lot))
 
           ; (listof Token) (listof Node) -> (listof Node)
           (define (wrap-tokens tokens next-nodes)
