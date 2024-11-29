@@ -105,7 +105,8 @@
 (check-expect (branch->lot ) )
 |#
 (check-expect (gspines->linked-spines (spine-parser
-                                        (path->hfile "../../data/order/more-than-two-spine-joins.krn")))
+                                        (path->hfile "../../data/order/more-than-two-spine-joins.krn"))
+                                      (path->hfile "../../data/order/more-than-two-spine-joins.krn"))
               (list (linked-spine KERN-0)))
 
 (test)

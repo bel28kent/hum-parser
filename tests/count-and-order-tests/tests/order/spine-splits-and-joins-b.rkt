@@ -42,7 +42,7 @@
 (define J-11-1 (token-node (token "*v" SPINE-JOIN 11 1) TERM-1))
 (define J-11-2 (token-node (token "*v" SPINE-JOIN 11 2) TERM-1))
 (define J-10-1 (token-node (token "*v" SPINE-JOIN 10 1) (box-immutable J-11-1)))
-(define J-10-2 (token-node (token "*v" SPINE-JOIN 10 2) (box-immutable J-11-2)))
+(define J-10-2 (token-node (token "*v" SPINE-JOIN 10 2) (box-immutable J-11-1)))
 (define NULL-10-4 (token-node (token "*" NULL-INTERPRETATION 10 3)
                               (box-immutable J-11-2)))
 (define 4c-9-2 (token-node (token "4c" SPINE-DATA 9 1) (box-immutable J-10-1)))
@@ -54,8 +54,8 @@
 (define 4c-7-2 (token-node (token "4c" SPINE-DATA 7 1) (box-immutable 4c-8-2)))
 (define 4c-7-3 (token-node (token "4c" SPINE-DATA 7 2) (box-immutable 4c-8-3)))
 (define 4c-7-4 (token-node (token "4c" SPINE-DATA 7 3) (box-immutable 4c-8-4)))
-(define NULL-6 (token-node (token "*" NULL-INTERPRETATION 6 4) (box-immutable 4c-7-2)))
-(define S-6 (split-node (token "*^" SPINE-SPLIT 6 5) (box-immutable 4c-7-3)
+(define NULL-6 (token-node (token "*" NULL-INTERPRETATION 6 3) (box-immutable 4c-7-2)))
+(define S-6 (split-node (token "*^" SPINE-SPLIT 6 4) (box-immutable 4c-7-3)
                                                      (box-immutable 4c-7-4)))
 (define 4c-5-4 (token-node (token "4c" SPINE-DATA 5 3) (box-immutable NULL-6)))
 (define 4c-5-5 (token-node (token "4c" SPINE-DATA 5 4) (box-immutable S-6)))
@@ -229,7 +229,8 @@
 (check-expect(branch->lot ) )
 |#
 (check-expect (gspines->linked-spines (spine-parser
-                                        (path->hfile "../../data/order/spine-splits-and-joins-b.krn")))
-              (linked-spine (list KERN-0 KERN-1)))
+                                        (path->hfile "../../data/order/spine-splits-and-joins-b.krn"))
+                                      (path->hfile "../../data/order/spine-splits-and-joins-b.krn"))
+              (list (linked-spine KERN-0) (linked-spine KERN-1)))
 
 (test)

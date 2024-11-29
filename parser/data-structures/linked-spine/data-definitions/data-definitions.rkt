@@ -51,7 +51,7 @@
 ;    next and a right-hand next.
 
 (struct terminator-node (token) #:transparent)
-; TerminatorNode is (terminator-node (box-immutable Node))
+; TerminatorNode is (terminator-node (box-immutable Token))
 ; Represents a Token of TokenType SPINE-TERMINATOR.
 
 ; BASE CASE

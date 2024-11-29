@@ -211,7 +211,8 @@
 (check-expect (branch->lot ) )
 |#
 (check-expect (gspines->linked-spines (spine-parser
-                                        (path->hfile "../../data/order/spine-splits-and-joins-a.krn")))
+                                        (path->hfile "../../data/order/spine-splits-and-joins-a.krn"))
+                                      (path->hfile "../../data/order/spine-splits-and-joins-a.krn"))
               (list (linked-spine KERN-0)))
 
 (test)
