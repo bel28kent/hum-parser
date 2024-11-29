@@ -37,7 +37,7 @@
 
           ; (listof Token) -> (listof Node)
           (define (wrap-terminators lot)
-            (map (λ (t) (terminator-node (node-box (box-immutable t)))) lot))
+            (map (λ (t) (terminator-node  (box-immutable t)))) lot)
 
           ; (listof Token) (listof Node) -> (listof Node)
           (define (wrap-tokens tokens next-nodes)
@@ -54,8 +54,7 @@
                   [(terminator-node? (first next-nodes))
                    (token-node token (at-same-field-index token next-nodes))]
                   [else
-                   (token-node token (node-box
-                                      (box-immutable (at-same-field-index token next-nodes))))]))
+                   (token-node token (box-immutable (at-same-field-index token next-nodes)))]))
 
           ; Token (listof Node) -> Node
           (define (at-same-field-index token next-nodes)
@@ -65,9 +64,7 @@
                       (cond [(token-node? n) (= index (token-field-index (token-node-token n)))]
                             [(split-node? n) (= index (token-field-index (split-node-token n)))]
                             [else
-                             (= index (token-field-index (unbox
-                                                          (node-box-box
-                                                           (terminator-node-token n)))))]))]
+                             (= index (token-field-index (unbox (terminator-node-token n))))]))]
               (first (filter index=? next-nodes))))
 
           ; Token (listof Token) -> Natural
@@ -101,9 +98,8 @@
                    (split-node token (list-ref next-nodes index)
                                      (list-ref next-nodes (add1 index)))]
                   [else
-                    (split-node token
-                                (node-box (box-immutable (list-ref next-nodes index)))
-                                (node-box (box-immutable (list-ref next-nodes (add1 index)))))]))
+                    (split-node token (box-immutable (list-ref next-nodes index))
+                                      (box-immutable (list-ref next-nodes (add1 index))))]))
 
           ; BOUNDARY: left most join is treated like a regular token (do not decrement)
           ; Token Index (listof Token) (listof Node) -> TokenNode
@@ -119,12 +115,12 @@
               (cond [(terminator-node? (first next-nodes)) (token-node token
                                                                        (list-ref next-nodes i))]
                     [else
-                      (token-node token (node-box (box-immutable (list-ref next-nodes i))))])))
+                      (token-node token (box-immutable (list-ref next-nodes i)))])))
 
           ; Token Index (listof Node) -> TokenNode
           (define (null-helper token index next-nodes)
             (cond [(terminator-node? (first next-nodes))
                    (token-node token (list-ref next-nodes index))]
                   [else
-                    (token-node token (node-box (box-immutable (list-ref next-nodes index))))]))]
+                    (token-node token (box-immutable (list-ref next-nodes index)))]))]
     (map gspine->linked-spine gspines)))
