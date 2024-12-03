@@ -50,7 +50,7 @@
             (cond [(spine-split? (token-token token))
                    (split-helper token (adjust-index token) next-nodes)]
                   [(spine-join? (token-token token))
-                   (token-helper token (adjust-index token) tokens next-nodes)]
+                   (token-helper token (adjust-index token) next-nodes)]
                   [(null-interpretation? (token-token token))
                    (token-helper token (adjust-index token) next-nodes)]
                   [(terminator-node? (first next-nodes))
