@@ -29,7 +29,7 @@
 |#
 
 (struct linked-spine (first-node) #:transparent)
-; LinkedSpine is (linked-spine Node))
+; LinkedSpine is (linked-spine TokenNode))
 ; Represents a GlobalSpine as a linked list.
 ; CONSTRAINTS: first-node's token is EXCLUSIVE-INTERPRETATION
 ;              first-node at least points to a SPINE-TERMINATOR
@@ -59,7 +59,7 @@
 (define TERM (token "*-" SPINE-TERMINATOR 1 0))
 (define TERM-NODE (terminator-node TERM))
 (define EX-NODE (token-node EX (box-immutable TERM-NODE)))
-(define LINKED-SPINE-BASE (box-immutable (linked-spine EX-NODE)))
+(define LINKED-SPINE-BASE (linked-spine EX-NODE))
 
 ; NO SPLITS
 (define 4A (token "4a" SPINE-DATA 1 0))
