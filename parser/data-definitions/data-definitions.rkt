@@ -18,52 +18,17 @@
 (define TANDEM-TAG    "*")
 (define MEASURE-TAG   "=")
 
-(define SPLIT-TOKEN "*^")
-(define JOIN-TOKEN  "*v")
-(define TERMINATOR  "*-")
-
 (define REFERENCE-RECORD         "ReferenceRecord")
 (define GLOBAL-COMMENT           "GlobalComment")
 (define LOCAL-COMMENT            "LocalComment")
 (define TOKEN                    "Token")
 
-(define KERN                     "Kern")
-(define DYNAM                    "Dynam")
 
 (define EXCLUSIVE-INTERPRETATION "ExclusiveInterpretation")
 (define MEASURE                  "Measure")
 (define SPINE-DATA               "SpineData")
 (define NULL-SPINE-DATA          "NullSpineData")
 
-(define SPINE-SPLIT              "SpineSplit")
-(define SPINE-JOIN               "SpineJoin")
-(define SPINE-TERMINATOR         "SpineTerminator")
-(define NULL-INTERPRETATION      "NullInterpretation")
-(define CLEF                     "Clef")
-(define TIME-SIG                 "TimeSignature")
-(define KEY-SIG                  "KeySignature")
-(define KEY-LABEL                "KeyLabel")
-(define KEY-CANCEL               "CancelKeySignature")
-(define STAFF-NUMBER             "StaffNumber")
-(define INSTRUMENT-CLASS         "InstrumentClass")
-(define OTTAVA                   "Ottava")
-(define GROUP-ATTRIBUTION        "GroupAttribution")
-(define PART-NUMBER              "PartNumber")
-(define METRONOME-MARKING        "MetronomeMarking")
-(define CUE-SIZED-NOTES          "CueSizedNotes")
-(define TUPLET                   "Tuplet")
-(define TREMOLO                  "Tremolo")
-(define PEDAL-MARKING            "PedalMarking")
-(define FORM-MARKER              "FormMarker")
-(define BRACKET-TUPLET           "BracketTuplet")
-(define FLIP-SUBSPINES           "FlipSubspines")
-(define ABOVE-STAFF              "AboveStaff")
-(define BELOW-STAFF              "BelowStaff")
-(define CENTER-STAFF             "CenterStaff")
-(define LIGATURE-BRACKET         "LigatureBracket")
-(define RHYTHMIC-SCALING-FACTOR  "RhythmicScalingFactor")
-(define TASTO-SOLO               "TastoSolo")
-(define END-TASTO-SOLO           "EndTastoSolo")
 
 ;;;;;;;;;;;;;;;;;;;;
 ;;  METADATA
@@ -127,134 +92,11 @@
 ; ExclusiveInterpretation is "ExclusiveInterpretation"
 ;  Represents a token starting with EXCLUSIVE-TAG
 
-; TandemInterpretation is one of:
-;  - SpineSplit
-;  - SpineJoin
-;  - SpineTerminator
-;  - NullInterpretation
-;  - Clef
-;  - TimeSignature
-;  - KeySignature
-;  - KeyLabel
-;  - CancelKeySignature
-;  - StaffNumber
-;  - InstrumentClass
-;  - Ottava
-;  - GroupAttribution
-;  - PartNumber
-;  - MetronomeMarking
-;  - CueSizedNotes
-;  - Tuplet
-;  - Tremolo
-;  - PedalMarking
-;  - FormMarker
-;  - BracketTuplet
-;  - FlipSubspines
-;  - AboveStaff
-;  - BelowStaff
-;  - CenterStaff
-;  - LigatureBracket
-;  - RhythmicScalingFactor
-;  - TastoSolo
-;  - EndTastoSolo
-;  - #f
-;  Represents a token starting with TANDEM-TAG, or false if unknown
-
-; SpineSplit is "SpineSplit"
-;  Represents a token that equals SPLIT-TOKEN
-
-; SpineJoin is "SpineJoin"
-;  Represents a token that equals JOIN-TOKEN
-
-; SpineTerminator is "SpineTerminator"
-;  Represents a token that equals TERMINATOR
-
-; NullInterpretation is "NullInterpretation"
-;  Represents a token that equals TANDEM-TAG
-
-; Clef is "Clef"
-;  Represents a token that begins with "^\\*m?clef"
-
-; TimeSignature is "TimeSignature"
-;  Represents a token that matches "(^\\*m{1,2}et.*$)|(^\\*M[\\d]+/[\\d]+$)"
-
-; KeySignature is "KeySignature"
-;  Represents a token that matches "\\*k\\[.*\\]"
-
-; KeyLabel is "KeyLabel"
-;  Represents a token that matches "\\*([a-gA-G]|X)(-|#)?:"
-
-; CancelKeySignature is "CancelKeySignature"
-;  Represents a token that equals "*kcancel"
-
-; StaffNumber is "StaffNumber"
-;  Represents a token that matches "\\*staff[0-9]+"
-
-; InstrumentClass is "InstrumentClass"
-;  Represents a token that matches "^\\*I.*$"
-
-; Ottava is "Ottava"
-;  Represents a token that matches "^\\*X?8.+$"
-
-; GroupAttribution is "GroupAttribution"
-;  Represents a token that matches "^\\*grp:.+$"
-
-; PartNumber is "PartNumber"
-;  Represents a token that matches "^\\*part[[:digit:]]+$"
-
-; MetronomeMarking is "MetronomeMarking"
-;  Represents a token that matches "^\\*MM[\\d]+\\.?[\\d]*$"
-
-; CueSizedNotes is "CueSizedNotes"
-;  Represents a token that matches "^\\*X?cue$"
-
-; Tuplet is "Tuplet"
-;  Represents a token that matches "^\\*X?tuplet$"
-
-; Tremolo is "Tremolo"
-;  Represents a token that matches "^\\*X?tremolo$"
-
-; PedalMarking is "PedalMarking"
-;  Represents a token that matches "^\\*X?ped"
-
-; FormMarker is "FormMarker"
-;  Represents a token that matches "^\\*>.*$"
-
-; BracketTuplet is "BracketTuplet"
-;  Represents a token that matches "^\\*X?brackettup$"
-
-; FlipSubspines is "FlipSubspines"
-;  Represents a token that matches "^\\*X?flip$"
-
-; AboveStaff is "AboveStaff"
-;  Represents a token that matches "^\\*above"
-
-; BelowStaff is "BelowStaff"
-;  Represents a token that matches "^\\*below"
-
-; CenterStaff is "CenterStaff"
-;  Represents a token that matches "^\\*center"
-
-; LigatureBracket is "LigatureBracket"
-;  Represents a token that matches "^\\*X?lig$"
-
-; RhythmicScalingFactor is "RhythmicScalingFactor"
-;  Represents a token that matches "^\\*rscale" 
-
-; TastoSolo is "TastoSolo"
-;  Represents a token that matches "\\*solo"
-
-; EndTastoSolo is "EndTastoSolo"
-;  Represents a token that matches "\\*accomp"
-
 ; Measure is "Measure"
 ;  Represents a token starting with MEASURE-TAG
 
 ; SpineData is "SpineData"
 ;  Represents a token that is not one of above and not "."
-
-; NullSpineData is "NullSpineData"
-;  Represents a token that equals "."
 
 ; LocalComment (TokenType) is "LocalComment"
 ;  Represents a token that begins with "!"
