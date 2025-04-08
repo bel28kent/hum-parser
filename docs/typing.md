@@ -17,4 +17,5 @@ trying to type a token as a sublcass of `ExclusiveInterpretation` or
 `TandemInterpretation`, it will be typed as `'Unknown` if its string cannot
 match one of the regular expressions in those hashes.
 
-An `'Unknown` type can be reported as an issue on the GitHub repo.
+An `'Unknown` type can be reported as an
+[issue on the GitHub repo](https://github.com/bel28kent/hum-parser/issues).
