@@ -1,91 +1,20 @@
 # Typing of records, spines, and tokens
+Types are understood as enumerations, and implemented as hashes with key-value
+pairs of type Symbol -> RegularExpression. These enumerations include:
+`HumdrumRecordType`, `HumdrumTokenType`, `ExclusiveInterpretation`, and
+`TandemInterpretation`.
 
-## Records
-All lines read from a file can be sorted into one of four categories:
-```
-	- ReferenceRecord
-	- GlobalComment
-	- LocalComment
-	- Token
-```
-`ReferenceRecord`, `GlobalComment`, and `LocalComment` are `MetadataType`.
-They contain information about the file or encoding. A Metadata record starts
-with one of three tags, each defined as a sequence of bangs:
-```racket
-	(define REFERENCE-TAG "!!!")
-	(define GLOBAL-TAG    "!!")
-	(define LOCAL-TAG     "!")
-```
-Any line that does not start with one of these tags is typed as `Token`.
+`HumdrumRecordType` and `HumdrumTokenType` represent the general types of the
+formal Humdrum syntax; See Humdrum Guide, Chapter 5. Any valid record can be
+typed as one-and-only-one subclass of `HumdrumRecordType`, and any valid token
+can be typed as one-and-only-one subclass of `HumdrumTokenType`.
 
-There are no constraints on the string argument to `type-metadata` and
-`type-record`.
+Tokens may be specified as one of the known `ExclusiveInterpretation` or
+`TandemInterpretation` types. Because users may define their own data
+representations in the Humdrum syntax, `hum-parser` must allow for tokens that
+do not have a known type. (Here, "known" means known to `hum-parser`.) When
+trying to type a token as a sublcass of `ExclusiveInterpretation` or
+`TandemInterpretation`, it will be typed as `'Unknown` if its string cannot
+match one of the regular expressions in those hashes.
 
-## Spines
-A spine's type is declared by its exclusive interpretation, or initial token
-that begins with `**`. The following types are currently recognized:
-```
-	- Kern
-	- Dynam
-	- #f
-```
-As with tokens (see below), the false (#f) subclass represents unknown types.
-
-`type-spine` takes a list of token lists for each record. The first list must
-have a length of 1 and contain an exclusive interpretation, otherwise an
-argument exception is thrown.
-
-## Tokens
-Tokens can be typed as one of several subclasses:
-```
-	- ExclusiveInterpretation
-	- TandemInterpretation
-	- Measure
-	- SpineData
-	- NullSpineData
-	- LocalComment
-	- #f
-```
-where `TandemInterpretation` is one of:
-```
-	- SpineSplit
-	- SpineJoin
-	- SpineTerminator
-	- NullInterpretation
-	- Clef
-	- TimeSignature
-	- KeySignature
-	- KeyLabel
-	- CancelKeySignature
-	- StaffNumber
-	- InstrumentClass
-	- Ottava
-	- GroupAttribution
-	- PartNumber
-	- MetronomeMarking
-        - CueSizedNotes
-        - Tuplet
-	- Tremolo
-	- PedalMarking
-	- FormMarker
-	- BracketTuplet
-	- FlipSubspines
-	- AboveStaff
-	- BelowStaff
-	- CenterStaff
-	- LigatureBracket
-	- RhythmicScalingFactor
-	- #f
-```
-Given the extensibility of Humdrum, the false subclass `#f` represents unknown
-types, tokens that cannot be typed by the current data definitions. This
-allows for the user's data to still be parsed, though typing will be restricted.
-
-The string argument to `type-token` must match the regular expression
-`(^=[^\t]*$)|(^!$|^!?[^!\t][^\t]*$)`, otherwise an argument error is raised.
-The first capture group allows for measure tokens, which may contain bangs.
-One bang is allowed at the beginning of the string for local comments, which
-will have one token for each global spine. The presence of tabs indicates that
-the string has multiple fields, and so must be a record. (The space is not
-included to allow for typing of stops, which are interpreted as nested within a
-single token.) The caller will not handle the argument error.
+An `'Unknown` type can be reported as an issue on the GitHub repo.
