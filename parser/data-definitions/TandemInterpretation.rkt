@@ -6,6 +6,14 @@
         Implemented as (hash Symbol RegularExpression ...)
 |#
 
+(require racket/contract
+         racket/list
+         racket/local)
+
+(provide TandemInterpretation
+         tandem-interpretation?
+         tandem-interpretation-match?)
+
 (define TandemInterpretation (hash 'AboveStaff            "^\\*above"
                                    'AllaOttava            "^\\*8va"
                                    'BelowStaff            "^\\*below"
@@ -39,9 +47,24 @@
                                    'PedalMarking          "^\\*ped"
                                    'RhythmicScalingFactor "^\\*rscale:\\d+(/\\d+)?"
                                    'SpineJoin             "^\\*v"
-                                   'SpineSplit            "^\\*^"
+                                   'SpineSplit            "^\\*\\^"
                                    'SpineTerminator       "^\\*-"
                                    'StaffNumber           "^\\*staff\\d+"
                                    'TimeSignature         "^\\*M\\d+/\\d+"
                                    'Tremolo               "^\\*tremolo"
 ))
+
+(define/contract (tandem-interpretation? str)
+  (-> string? boolean?)
+  (local [(define (tandem-interpretation? keys)
+            (cond [(empty? keys) #f]
+                  [(tandem-interpretation-match? (first keys) str) #t]
+                  [else
+                    (tandem-interpretation? (rest keys))]))]
+    (tandem-interpretation? (hash-keys TandemInterpretation))))
+
+(define/contract (tandem-interpretation-match? interp str)
+  (-> symbol? string? boolean?)
+  (regexp-match? (pregexp
+                   (hash-ref TandemInterpretation interp))
+                 str))
