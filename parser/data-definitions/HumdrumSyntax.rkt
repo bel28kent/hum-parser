@@ -69,9 +69,10 @@
                                    (andmap token? split))
                                (int&>=? record-index 0))
                           (values record type split record-index)]
-                         [(error type-name
-                                 "String Symbol ListOfString OR ListofToken Natural; Given: ~a ~a ~a ~a"
-                                 record type split record-index)])))
+                         [else
+                           (error type-name
+                                  "String Symbol ListOfString OR ListofToken Natural; Given: ~a ~a ~a ~a"
+                                  record type split record-index)])))
 
 (struct spine-arity (global lolon)
         #:transparent
