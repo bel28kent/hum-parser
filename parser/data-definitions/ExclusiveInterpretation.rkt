@@ -16,7 +16,9 @@
 
 (define ExclusiveInterpretation (hash 'Dynam "^\\*{2}dynam"
                                       'Kern  "^\\*{2}kern"
+                                      'MIDI  "^\\*{2}MIDI"
                                       'Neume "^\\*{2}neume"
+                                      'Solfa "^\\*{2}solfa"
                                       'Text  "^\\*{2}text"
 ))
 
