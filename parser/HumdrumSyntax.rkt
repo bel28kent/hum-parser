@@ -6,6 +6,8 @@
 	Reference: Humdrum Guide, Chapter 5.
 |#
 
+(require (only-in "abstract.rkt" hash-match? hash-member?))
+
 (provide HumdrumRecordType
          HumdrumTokenType
          StopSeparator
@@ -14,7 +16,11 @@
          humdrum-file
          record
          spine-arity
-         token)
+         token
+         humdrum-record-type?
+         humdrum-record-type-match?
+         humdrum-token-type?
+         humdrum-token-type-match?)
 
 (define HumdrumRecordType (hash 'ExclusiveInterpretation "^\\*{2}"
                                 'GlobalComment           "^!{2}"
@@ -99,6 +105,18 @@
                            (error type-name
                                   "String Symbol Natural Natural; Given: ~a ~a ~a ~a"
                                   token type record-index field-index)])))
+
+(define (humdrum-record-type? str)
+  (hash-member? HumdrumRecordType str))
+
+(define (humdrum-record-type-match? type str)
+  (hash-match? HumdrumRecordType type str))
+
+(define (humdrum-token-type? str)
+  (hash-member? HumdrumTokenType str))
+
+(define (humdrum-token-type-match? type str)
+  (hash-match? HumdrumTokenType type str))
 
 (define (int&>=? i lower)
   (and (integer? i) (>= i lower)))

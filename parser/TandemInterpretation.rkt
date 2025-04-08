@@ -6,7 +6,7 @@
         Implemented as (hash Symbol RegularExpression ...)
 |#
 
-(require racket/contract
+(require (only-in "abstract.rkt" hash-match? hash-member?)
          racket/list
          racket/local)
 
@@ -54,17 +54,8 @@
                                    'Tremolo               "^\\*tremolo"
 ))
 
-(define/contract (tandem-interpretation? str)
-  (-> string? boolean?)
-  (local [(define (tandem-interpretation? keys)
-            (cond [(empty? keys) #f]
-                  [(tandem-interpretation-match? (first keys) str) #t]
-                  [else
-                    (tandem-interpretation? (rest keys))]))]
-    (tandem-interpretation? (hash-keys TandemInterpretation))))
+(define (tandem-interpretation? str)
+  (hash-member? TandemInterpretation str))
 
-(define/contract (tandem-interpretation-match? interp str)
-  (-> symbol? string? boolean?)
-  (regexp-match? (pregexp
-                   (hash-ref TandemInterpretation interp))
-                 str))
+(define (tandem-interpretation-match? interp str)
+  (hash-match? TandemInterpretation interp str))

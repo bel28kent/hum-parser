@@ -1,58 +1,54 @@
 #lang racket/base
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  hum-parser: functions: abstract
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#|
+	Abstract functions.
+|#
 
 (require racket/bool
+         racket/contract
          racket/list
-         racket/local
-         "../data-definitions/data-definitions.rkt")
+         racket/local)
 
-(provide (all-defined-out))
+(provide filter-type
+         hash-match?
+         hash-member?
+         shift
+         true?
+         valmap)
 
-; tag=?
-; String Natural String -> Boolean 
-; produce true if first string starts with second string
-
-(define (tag=? string upto constant)
-  (and (>= (string-length string) upto)
-       (string=? (substring string 0 upto) constant)))
-
-; filter-type
-; proc String (listof X) -> (listof X)
-; produces listof X whose type matches String
-; CONSTRAINT: proc is a selector that selects the type field of X
-
-(define (filter-type proc str lox)
+(define/contract (filter-type proc symbol lox)
+  (-> procedure? symbol? (listof any) (listof any))
   (local [(define (is-type x)
-            (string=? (proc x) str))]
+            (symbol=? (proc x) symbol))]
     (filter is-type lox)))
 
-; shift
-; (listof X) -> (listof X)
-; Removes the first element and produces the resultant list
+(define/contract (hash-match? hsh key str)
+  (-> hash? symbol? string? boolean?)
+  (regexp-match? (pregexp (hash-ref hsh key)) str))
 
-(define (shift lox)
+(define/contract (hash-member? hsh str)
+  (-> hash? string? boolean?)
+  (local [(define (hash-member? keys)
+            (cond [(empty? keys) #f]
+                  [(hash-match? hsh (first keys) str) #t]
+                  [else
+                    (hash-member? (rest keys))]))]
+    (hash-member? (hash-keys hsh))))
+
+(define/contract (shift lox)
+  (-> list? list?)
   (cond [(empty? lox) empty]
         [else
           (rest lox)]))
 
-; valmap
-; X (listof proc) -> (listof Y)
-; produce the list of results of calling each procedure on X
-; CONSTRAINT: X is a valid parameter type to each procedure
+(define/contract (true? b)
+  (-> boolean? boolean?)
+  (boolean=? #t b))
 
-(define (valmap val lop)
+(define/contract (valmap val lop)
+  (-> any (listof procedure?) list?)
   (local [(define (valmap lop)
             (cond [(empty? lop) empty]
                   [else
                     (cons ((first lop) val) (valmap (rest lop)))]))]
     (valmap lop)))
-
-; true?
-; Boolean -> Boolean
-; produce true if true
-
-(define (true? bool)
-  (not (false? bool)))
