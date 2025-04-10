@@ -6,7 +6,7 @@
 	Implemented as (hash Symbol RegularExpression ...)
 |#
 
-(require (only-in "abstract.rkt" hash-match? hash-member?)
+(require (only-in "abstract-fn.rkt" hash-match? hash-member?)
          racket/list
          racket/local)
 

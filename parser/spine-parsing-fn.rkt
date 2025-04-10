@@ -1,17 +1,17 @@
 #lang racket/base
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: functions: spine-parser
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#|
+	Spine parsing functions.
+|#
 
 (require racket/list
          racket/local
          "../data-definitions/data-definitions.rkt"
-         "abstract.rkt"
-         (only-in "extract-spine-arity.rkt"
+         "abstract-fn.rkt"
+         (only-in "spine-arity-fn.rkt"
                   extract-spine-arity)
-         "split-and-gather.rkt"
-         "type.rkt")
+         "split-and-gather-fn.rkt"
+         "type-fn.rkt")
 
 (provide (all-defined-out))
 

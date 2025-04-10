@@ -8,7 +8,7 @@
          racket/list
          racket/local
          "../data-definitions/data-definitions.rkt"
-         "abstract.rkt")
+         "abstract-fn.rkt")
 
 (provide (all-defined-out))
 

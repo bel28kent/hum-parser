@@ -17,11 +17,11 @@
          true?
          valmap)
 
-(define/contract (filter-type proc symbol lox)
-  (-> procedure? symbol? (listof any) (listof any))
-  (local [(define (is-type x)
-            (symbol=? (proc x) symbol))]
-    (filter is-type lox)))
+(define/contract (filter-type type-accessor symbol los)
+  (-> struct-accessor-procedure? symbol? (listof struct?) (listof struct?))
+  (local [(define (is-type? s)
+            (symbol=? (type-accessor s) symbol))]
+    (filter is-type? los)))
 
 (define/contract (hash-match? hsh key str)
   (-> hash? symbol? string? boolean?)
@@ -66,7 +66,7 @@
   (boolean=? #t b))
 
 (define/contract (valmap val lop)
-  (-> any (listof procedure?) list?)
+  (-> any/c (listof procedure?) list?)
   (local [(define (valmap lop)
             (cond [(empty? lop) empty]
                   [else

@@ -6,7 +6,7 @@
 	Reference: Humdrum Guide, Chapter 5.
 |#
 
-(require (only-in "abstract.rkt" hash-match? hash-member?))
+(require (only-in "abstract-fn.rkt" hash-match? hash-member?))
 
 (provide HumdrumRecordType
          HumdrumTokenType

@@ -1,8 +1,8 @@
 #lang racket/base
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  hum-parser: functions: type
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#|
+	Type functions.
+|#
 
 (require racket/bool
          racket/contract
@@ -15,12 +15,20 @@
          "HumdrumSyntax.rkt"
          "TandemInterpretation.rkt"
          "abstract-fn.rkt"
-         "predicates.rkt")
+         "predicate-fn.rkt")
 
-(provide type-record
+(provide global-comment?
+         reference?
+         type-record
          type-token
          type-exclusive
          type-tandem)
+
+(define (global-comment? str)
+  (hash-match? HumdrumSyntax 'GlobalComment str))
+
+(define (reference? str)
+  (hash-match? HumdrumSyntax 'Reference str))
 
 (define (type-record str)
   (get-type str HumdrumRecordType 'error))

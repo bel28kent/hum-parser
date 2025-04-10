@@ -1,14 +1,14 @@
 #lang racket/base
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  hum-parser: functions: predicates
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#|
+	Predicate (boolean) functions.
+|#
 
 (require racket/bool
          racket/list
          racket/local
          "../data-definitions/data-definitions.rkt"
-         "abstract.rkt")
+         "abstract-fn.rkt")
 
 (provide (all-defined-out))
 
