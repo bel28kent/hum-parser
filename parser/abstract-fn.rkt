@@ -12,6 +12,7 @@
 (provide filter-type
          hash-match?
          hash-member?
+         get-type
          shift
          true?
          valmap)
@@ -34,6 +35,25 @@
                   [else
                     (hash-member? (rest keys))]))]
     (hash-member? (hash-keys hsh))))
+
+(define/contract (get-type str hsh base)
+  (-> string? hash? symbol? symbol?)
+  (local [(define (type f r)
+            (if (regexp-match? (pregexp (hash-ref hsh f)) str)
+                f
+                r))
+
+          (define base (if (symbol=? base 'Unknown)
+                           'Unknown
+                           type-error))
+
+          (define keys (hash-keys hsh))
+
+          (define type-error (λ () (error
+                                     (string-append "syntax-error: could not match a "
+                                                    (symbol->string 'hsh))
+                                     str)))]
+    (foldl type base keys)))
 
 (define/contract (shift lox)
   (-> list? list?)

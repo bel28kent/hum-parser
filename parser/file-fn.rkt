@@ -1,82 +1,71 @@
 #lang racket/base
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  hum-parser: functions: file
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#|
+	File and IO functions.
+|#
 
-(require racket/list
+(require racket/contract
+         racket/list
          racket/local
-         "../data-definitions/data-definitions.rkt"
-         "predicates.rkt"
-         "split-and-gather.rkt"
-         "type.rkt")
+         (only-in "HumdrumSyntax.rkt" humdrum-file record token)
+         (only-in "type-fn.rkt" type-record type-token reference? global-comment?))
 
-(provide (all-defined-out))
+(provide build-filenames
+         build-paths
+         hfile->los
+         path->hfile
+         read-file
+         write-file)
 
-; read-file
-; String -> (listof String)
-; produces list of records split into fields from file at path
-
-(define (read-file path)
-  (local [(define (read-file lolos in)
+(define/contract (read-file path)
+  (-> string? (listof string?))
+  (local [(define (read-file los in)
             (local [(define next-line (read-line in))]
               (if (eof-object? next-line)
-                  (reverse lolos)
-                  (read-file (cons next-line lolos) in))))]
+                  (reverse los)
+                  (read-file (cons next-line los) in))))]
     (call-with-input-file path
                           (λ (in) (read-file empty in)))))
 
-; write-file
-; (listof String) String -> #<void>
-; writes list to file at given path
-
-(define (write-file los path)
+(define/contract (write-file los path)
+  (-> (listof string?) string? void?)
   (local [(define (write-file los out)
             (foldl (λ (f r) (displayln f out)) (void) los))]
     (call-with-output-file path (λ (out) (write-file los out)))))
 
-; path->hfile
-; String -> HumdrumFile
-; produces the HumdrumFile at the given path
+(define/contract (path->hfile path)
+  (-> string? humdrum-file?)
+  (local [(define (los->lor los record-index)
+            (local [(define (str->record str)
+                      (record str
+                              (type-record str)
+                              (if (or (reference? str) (global-comment? str))
+                                  (list str)
+                                  (los->lot (split str)))
+                              record-index))
 
-(define (path->hfile path)
-  (local [(define los (read-file path))
-          (define record-number -1)
+                    (define (los->lot los)
+                      (local [(define (los->lot los field-index)
+                                (cond [(empty? los) empty]
+                                      [else
+                                        (cons (str->token (first los) field-index)
+                                              (los->lot (rest los) (add1 field-index)))]))]
+                        (los->lot los 0)))
 
-          (define (los->lor los)
-            (cond [(empty? los) empty]
-                  [else
-                   (cons (str->record (first los))
-                         (begin (set! record-number (add1 record-number))
-                                (los->lor (rest los))))]))
 
-          (define (str->record str)
-            (record str
-                    (type-record str)
-                    (if (or (reference? str) (global-comment? str))
-                        (list str)
-                        (los->lot (split str)))
-                    record-number))
+                    (define (str->token str field-index)
+                      (token str (type-token str) record-index field-index))]
+              (cond [(empty? los) empty]
+                    [else
+                      (cons (str->record (first los))
+                            (los->lor (rest los) (add1 record-index)))])))]
+    (hfile
+      (los->lor
+        (read-file path) 0))))
 
-          (define (los->lot los)
-            (local [(define (los->lot los field-index)
-                      (cond [(empty? los) empty]
-                            [else
-                             (cons (str->token (first los) field-index)
-                                   (los->lot (rest los) (add1 field-index)))]))]
-              (los->lot los 0)))
-
-          (define (str->token str field-index)
-            (token str (type-token str) record-number field-index))]
-    (hfile (begin (set! record-number 0)
-                  (los->lor los)))))
-
-; hfile->los
-; HumdrumFile -> (listof String)
-; produces the unwrapped list of records (strings) from the humdrumfile
-
-(define (hfile->los hfile)
-  (local [(define records (hfile-records hfile))]
+(define/contract (hfile->los hfile)
+  (-> humdrum-file? (listof string?))
+  (local [(define records (humdrum-file-records hfile))]
     (foldr (λ (f r) (cons (record-record f) r)) empty records)))
 
 ; hfile-hash-join
@@ -107,11 +96,8 @@
            (for-each token-record post)
            (hfile (hash-join (append pre post))))))
 
-; build-filenames
-; String String Natural -> (listof String)
-; produces a list of numbered filenames
-
-(define (build-filenames start extension number)
+(define/contract (build-filenames start extension number)
+  (-> string? string? natural-number/c (listof string?))
   (local [(define number-str-length (string-length
                                       (number->string number)))
 
@@ -133,9 +119,6 @@
             (make-string repeat #\0))]
     (build-list number strings->filename)))
 
-; build-paths
-; String (listof String) -> (listof String)
-; produces a list of paths
-
-(define (build-paths path filenames)
+(define/contract (build-paths path filenames)
+  (-> string? (listof string?) (listof string?))
   (map (λ (filename) (string-append path filename)) filenames))

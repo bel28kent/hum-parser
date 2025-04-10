@@ -5,44 +5,34 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require racket/bool
+         racket/contract
          racket/local
          racket/list
          racket/string
          (only-in lang/htdp-advanced
                   boolean->string)
-         "../data-definitions/data-definitions.rkt"
+         "ExclusiveInterpretation.rkt"
+         "HumdrumSyntax.rkt"
+         "TandemInterpretation.rkt"
+         "abstract-fn.rkt"
          "predicates.rkt")
 
-(provide (all-defined-out))
+(provide type-record
+         type-token
+         type-exclusive
+         type-tandem)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  METADATA FUNCTIONS
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define (type-record str)
+  (get-type str HumdrumRecordType 'error))
 
-; type-metadata
-; String -> MetadataType or false
-; produce the type of the metadata or false if unknown
+(define (type-token str)
+  (get-type str HumdrumTokenType 'error))
 
-(define (type-metadata string)
-  (cond [(reference? string)      REFERENCE-RECORD]
-        [(global-comment? string) GLOBAL-COMMENT]
-        [(local-comment? string)  LOCAL-COMMENT]
-        [else
-          #f]))
+(define (type-exclusive str)
+  (get-type str ExclusiveInterpretation 'Unknown))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  RECORD FUNCTIONS
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-; type-record
-; String -> MetadataType or Token
-; produce the type of the record
-
-(define (type-record string)
-  (local [(define metadata (type-metadata string))]
-    (if (false? metadata)
-        TOKEN
-        metadata)))
+(define (type-tandem str)
+  (get-type str TandemInterpretation 'Unknown))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  SPINE FUNCTIONS
