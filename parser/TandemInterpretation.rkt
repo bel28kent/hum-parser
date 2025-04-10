@@ -59,3 +59,6 @@
 
 (define (tandem-interpretation-match? interp str)
   (hash-match? TandemInterpretation interp str))
+
+(define (type-tandem str)
+  (get-type str TandemInterpretation 'Unknown))

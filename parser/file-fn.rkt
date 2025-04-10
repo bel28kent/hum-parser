@@ -7,7 +7,10 @@
 (require racket/contract
          racket/list
          racket/local
-         (only-in "HumdrumSyntax.rkt" humdrum-file record token)
+         (only-in "HumdrumSyntax.rkt" humdrum-file
+                                      humdrum-record-type-match?
+                                      record
+                                      token)
          (only-in "type-fn.rkt" type-record type-token reference? global-comment?))
 
 (provide build-filenames
@@ -39,7 +42,8 @@
             (local [(define (str->record str)
                       (record str
                               (type-record str)
-                              (if (or (reference? str) (global-comment? str))
+                              (if (or (humdrum-record-type-match? 'Reference str)
+                                      (humdrum-record-type-match? 'GlobalComment str))
                                   (list str)
                                   (los->lot (split str)))
                               record-index))

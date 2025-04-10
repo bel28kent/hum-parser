@@ -12,53 +12,6 @@
 
 (provide (all-defined-out))
 
-; reference?
-; String -> Boolean
-; produce true if string starts with REFERENCE-TAG
-
-(define (reference? string)
-  (tag=? string 3 REFERENCE-TAG))
-
-; global-comment?
-; String -> Boolean
-; produce true if string starts with GLOBAL-COMMENT-TAG
-
-(define (global-comment? string)
-  (and (tag=? string 2 GLOBAL-TAG)
-       (not (reference? string))))
-
-; local-comment?
-; String -> Boolean
-; produce true if string starts with LOCAL-COMMENT-TAG
-
-(define (local-comment? string)
-  (and (tag=? string 1 LOCAL-TAG)
-       (andmap not (valmap string (list reference? global-comment?)))))
-
-; metadata?
-; String -> Boolean
-; produce true if string is a type of metadata
-
-(define (metadata? string)
-  (ormap true?
-         (valmap string (list reference? global-comment? local-comment?))))
-
-; exclusive-interpretation?
-; String -> Boolean
-; produce true if string starts with EXCLUSIVE-TAG
-
-(define (exclusive-interpretation? token)
-  (tag=? token 2 EXCLUSIVE-TAG))
-
-; tandem-interpretation?
-; String -> Boolean
-; produce true if string starts with TANDEM-TAG
-
-(define (tandem-interpretation? token)
-  (and (tag=? token 1 TANDEM-TAG)
-       (> (string-length token) 1)
-       (not (exclusive-interpretation? token))))
-
 ; null-interpretation?
 ; String -> Boolean
 ; produce true if string exactly matches TANDEM-TAG
@@ -104,13 +57,6 @@
 (define (spine-structure? token)
   (ormap true?
          (valmap token (list spine-split? spine-join? spine-terminator?))))
-
-; measure?
-; String -> Boolean
-; produce true if string starts with MEASURE-TAG
-
-(define (measure? token)
-  (tag=? token 1 MEASURE-TAG))
 
 ; clef?
 ; String -> Boolean
