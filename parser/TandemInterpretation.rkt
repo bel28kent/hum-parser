@@ -12,7 +12,8 @@
 
 (provide TandemInterpretation
          tandem-interpretation?
-         tandem-interpretation-match?)
+         tandem-interpretation-match?
+         type-tandem)
 
 (define TandemInterpretation (hash 'AboveStaff            "^\\*above"
                                    'AllaOttava            "^\\*8va"

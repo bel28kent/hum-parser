@@ -12,7 +12,8 @@
 
 (provide ExclusiveInterpretation
          exclusive-interpretation?
-         exclusive-interpretation-match?)
+         exclusive-interpretation-match?
+         type-exclusive)
 
 (define ExclusiveInterpretation (hash 'Dynam "^\\*{2}dynam"
                                       'Kern  "^\\*{2}kern"
