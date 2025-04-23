@@ -4,53 +4,44 @@
 	String functions.
 |#
 
-(require racket/list
+(require racket/contract
+         racket/list
          racket/local
-         "../data-definitions/data-definitions.rkt")
+         "ExclusiveInterpretation.rkt"
+         "HumdrumSyntax.rkt"
+         "TandemInterpretation.rkt")
 
-(provide (all-defined-out))
+(provide split
+         gather)
 
-; split
-; String -> (listof String)
-; splits the string around SEPARATOR
-
-(define (split string)
-  (local [(define (splitter string los)
-            (cond [(string=? string "") los]
+(define (split str separator)
+  (-> string? string? (listof string?))
+  (local [(define (splitter str strings)
+            (cond [(string=? str "") strings]
                   [else
-                   (splitter
-                    (substring string (pos-after-separator string))
-                    (append los (list (next-field string))))]))
+                    (splitter
+                      (substring str (pos-after-separator str))
+                      (append strings (list (next-field str))))]))
 
-          ;; pos-after-separator
-          ;; String -> Integer
-          ;; produces index of character after first instance of SEPARATOR
-          (define (pos-after-separator string)
-            (local [(define (pos string position)
-                      (cond [(string=? string "") position]
-                            [(string=? (substring string 0 1) SEPARATOR)
-                             (+ 1 position)]
+          (define (pos-after-separator str)
+            (local [(define (pos str position)
+                      (cond [(string=? str "") position]
+                            [(string=? (substring str 0 1) separator) (+ 1 position)]
                             [else
-                             (pos (substring string 1) (+ 1 position))]))]
-              (pos string 0)))
+                             (pos (substring str 1) (+ 1 position))]))]
+              (pos str 0)))
 
-          ;; next-field
-          ;; String -> String
-          ;; produces substring of string from first character up to SEPARATOR
-          (define (next-field string)
-            (cond [(string=? string "") string]
-                  [(string=? (substring string 0 1) SEPARATOR) ""]
+          (define (next-field str)
+            (cond [(string=? str "") str]
+                  [(string=? (substring str 0 1) separator) ""]
                   [else
-                    (string-append (substring string 0 1)
-                                   (next-field (substring string 1)))]))]
-    (splitter string empty)))
+                    (string-append (substring str 0 1)
+                                   (next-field (substring str 1)))]))]
+    (splitter str empty)))
 
-; gather
-; (listof String) -> String
-; concatenates each of los together, separated by SEPARATOR
-
-(define (gather los)
-  (cond [(empty? los) ""]
-        [(empty? (rest los)) (string-append (first los) (gather (rest los)))]
+(define (gather strings separator)
+  (-> (listof string?) string? string?)
+  (cond [(empty? strings) ""]
+        [(empty? (rest strings)) (string-append (first strings) (gather (rest strings)))]
         [else
-          (string-append (first los) SEPARATOR (gather (rest los)))]))
+          (string-append (first strings) separator (gather (rest strings)))]))

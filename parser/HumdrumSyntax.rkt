@@ -12,11 +12,11 @@
          HumdrumTokenType
          StopSeparator
          TokenSeparator
-         global-spine
-         humdrum-file
-         record
-         spine-arity
-         token
+         (struct-out global-spine)
+         (struct-out humdrum-file)
+         (struct-out record)
+         (struct-out spine-arity)
+         (struct-out token)
          humdrum-record-type?
          humdrum-record-type-match?
          humdrum-token-type?
@@ -80,18 +80,18 @@
                                   "String Symbol ListOfString OR ListofToken Natural; Given: ~a ~a ~a ~a"
                                   record type split record-index)])))
 
-(struct spine-arity (global lolon)
+(struct spine-arity (file byrecord)
         #:transparent
-        #:guard (λ (global lolon type-name)
-                   (cond [(and (int&>=? global 1)
+        #:guard (λ (file byrecord type-name)
+                   (cond [(and (int&>=? file 1)
                                (andmap (λ (lon)
                                           (andmap (λ (n) (int&>=? n 1)) lon))
-                                       lolon))
-                          (values global lolon)]
+                                       byrecord))
+                          (values file byrecord)]
                          [else
                            (error type-name
                                   "Natural ListOfListOfNatural; Given: ~a ~a"
-                                  global lolon)])))
+                                  file byrecord)])))
 
 (struct token (token type record-index field-index)
         #:transparent

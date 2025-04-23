@@ -10,12 +10,11 @@
          (only-in "HumdrumSyntax.rkt" humdrum-file
                                       humdrum-record-type-match?
                                       record
-                                      token)
-         (only-in "type-fn.rkt" type-record type-token reference? global-comment?))
+                                      token))
 
 (provide build-filenames
          build-paths
-         hfile->los
+         hfile->strings
          path->hfile
          read-file
          write-file)
@@ -67,7 +66,7 @@
       (los->lor
         (read-file path) 0))))
 
-(define/contract (hfile->los hfile)
+(define/contract (hfile->strings hfile)
   (-> humdrum-file? (listof string?))
   (local [(define records (humdrum-file-records hfile))]
     (foldr (λ (f r) (cons (record-record f) r)) empty records)))
