@@ -43,9 +43,9 @@
                 f
                 r))
 
-          (define base (if (symbol=? base 'Unknown)
-                           'Unknown
-                           type-error))
+          (define base-case (if (symbol=? base 'Unknown)
+                                'Unknown
+                                type-error))
 
           (define keys (hash-keys hsh))
 
@@ -53,7 +53,7 @@
                                      (string-append "syntax-error: could not match a "
                                                     (symbol->string 'hsh))
                                      str)))]
-    (foldl type base keys)))
+    (foldl type base-case keys)))
 
 (define/contract (shift lox)
   (-> list? list?)
