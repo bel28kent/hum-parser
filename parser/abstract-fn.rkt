@@ -12,10 +12,7 @@
 (provide filter-type
          hash-match?
          hash-member?
-         get-type
-         shift
-         true?
-         valmap)
+         get-type)
 
 (define/contract (filter-type type-accessor symbol los)
   (-> struct-accessor-procedure? symbol? (listof struct?) (listof struct?))
@@ -47,21 +44,3 @@
                         (first keys)
                         (get-type (rest keys)))]))]
     (get-type (hash-keys hsh))))
-
-(define/contract (shift lox)
-  (-> list? list?)
-  (cond [(empty? lox) empty]
-        [else
-          (rest lox)]))
-
-(define/contract (true? b)
-  (-> boolean? boolean?)
-  (boolean=? #t b))
-
-(define/contract (valmap val lop)
-  (-> any/c (listof procedure?) list?)
-  (local [(define (valmap lop)
-            (cond [(empty? lop) empty]
-                  [else
-                    (cons ((first lop) val) (valmap (rest lop)))]))]
-    (valmap lop)))

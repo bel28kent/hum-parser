@@ -1,50 +1,60 @@
 #lang racket
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  hum-parser: tests for abstract functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#|
+	Tests for abstract functions.
+|#
 
-(require "../../../parser/data-definitions/data-definitions.rkt"
-         "../../../parser/functions/abstract.rkt"
-         "../../../parser/functions/file.rkt"
-         test-engine/racket-tests)
+(require "../../parser/abstract-fn.rkt"
+         "../../parser/HumdrumSyntax.rkt"
+         test-engine/racket-tests
+         (only-in rackunit check-exn))
 
-(define BERG-PATH "../data/berg01.pc")
+(define KernRecord
+        (record "**kern\t**dynam"
+                'ExclusiveInterpretation
+                (list (token "**kern" 'ExclusiveInterpretation 0 0)
+                      (token "**dynam" 'ExclusiveInterpretation 0 1))
+                0))
+(define TokenRecord
+        (record "4a\tpp"
+                'Token
+                (list (token "4a" 'SpineData 1 0)
+                      (token "pp" 'SpineData 1 1))
+                1))
+(define SpineTerminatorRecord
+        (record "*-\t*-"
+                'TandemInterpretation
+                (list (token "*-" 'SpineTerminator 2 0)
+                      (token "*-" 'SpineTerminator 2 1))
+                2))
+(define TestingListOfStruct (list KernRecord TokenRecord SpineTerminatorRecord))
 
-; tag=?
-(check-expect (tag=? "!!!COM: Scriabin, Alexander" 3 REFERENCE-TAG) #t)
-(check-expect (tag=? "*\t*8va\t*" 3 REFERENCE-TAG)                  #f)
-(check-expect (tag=? "!! This is a global comment" 2 GLOBAL-TAG)    #t)
-(check-expect (tag=? "!\t! Possibly Bn" 1 LOCAL-TAG)                #t)
-(check-expect (tag=? "**kern\t**kern" 2 EXCLUSIVE-TAG)              #t)
-(check-expect (tag=? "!! Global comment" 2 EXCLUSIVE-TAG)           #f)
-(check-expect (tag=? "*\t*8va\t*" 1 TANDEM-TAG)                     #t)
-(check-expect (tag=? "=1\t=1" 1 MEASURE-TAG)                        #t)
-(check-expect (tag=? "*\t*8va\t*" 1 MEASURE-TAG)                    #f)
+(define TestingTypeHash (hash 'Letter "[a-zA-Z]"
+                              'Number "\\d"))
 
 ; filter-type
-(check-expect (filter-type record-type TOKEN empty) empty)
-(check-expect (map (λ (r) (record-type r))
-                   (filter-type record-type
-                                TOKEN
-                                (hfile-records (path->hfile BERG-PATH))))
-              (list TOKEN TOKEN TOKEN TOKEN TOKEN
-                    TOKEN TOKEN TOKEN TOKEN TOKEN
-                    TOKEN TOKEN TOKEN TOKEN TOKEN))
+(check-expect (filter-type record-type 'ExclusiveInterpretation TestingListOfStruct) (list KernRecord))
+(check-expect (filter-type record-type 'Token TestingListOfStruct) (list TokenRecord))
+(check-expect (filter-type record-type 'TandemInterpretation TestingListOfStruct) (list SpineTerminatorRecord))
+(check-expect (filter-type record-type 'Measure TestingListOfStruct) empty)
 
-; shift
-(check-expect (shift empty) empty)
-(check-expect (shift (list 1)) empty)
-(check-expect (shift (list 1 2 3)) (list 2 3))
+; hash-match?
+(check-expect (hash-match? TestingTypeHash 'Letter "a") #t)
+(check-expect (hash-match? TestingTypeHash 'Number "1") #t)
+(check-expect (hash-match? TestingTypeHash 'Letter "1") #f)
+(check-expect (hash-match? TestingTypeHash 'Number "a") #f)
 
-; valmap
-(check-expect (valmap 1 empty) empty)
-(check-expect (valmap 1 (list zero?)) (list #f))
-(check-expect (valmap 1 (list zero? positive? add1))
-              (list #f #t 2))
+; hash-member?
+(check-expect (hash-member? TestingTypeHash "a") #t)
+(check-expect (hash-member? TestingTypeHash "1") #t)
+(check-expect (hash-member? TestingTypeHash "_") #f)
 
-; true?
-(check-expect (true? #t) #t)
-(check-expect (true? #f) #f)
+; get-type
+(check-expect (get-type "a" TestingTypeHash 'Unknown) 'Letter)
+(check-expect (get-type "1" TestingTypeHash 'Unknown) 'Number)
+(check-expect (get-type "_" TestingTypeHash 'Unknown) 'Unknown)
+(check-exn #rx"syntax-error: could not match a"
+           (λ ()
+              (get-type "!" TestingTypeHash 'error)))
 
 (test)
