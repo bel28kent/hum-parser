@@ -6,7 +6,7 @@
 	Reference: Humdrum Guide, Chapter 5.
 |#
 
-(require (only-in "abstract-fn.rkt" hash-match? hash-member?))
+(require (only-in "abstract-fn.rkt" get-type hash-match? hash-member?))
 
 (provide HumdrumRecordType
          HumdrumTokenType
@@ -17,17 +17,17 @@
          (struct-out record)
          (struct-out spine-arity)
          (struct-out token)
-         humdrum-record-type?
          humdrum-record-type-match?
-         humdrum-token-type?
-         humdrum-token-type-match?)
+         type-humdrum-record
+         humdrum-token-type-match?
+         type-humdrum-token)
 
-(define HumdrumRecordType (hash 'ExclusiveInterpretation "^\\*{2}"
-                                'GlobalComment           "^!{2}"
-                                'LocalComment            "^!{1}"
+(define HumdrumRecordType (hash 'ExclusiveInterpretation "^\\*\\*.*$"
+                                'GlobalComment           "^!![^!].*$"
+                                'LocalComment            "^![^!].*$"
                                 'Measure                 "^="
-                                'Reference               "^!{3}"
-                                'TandemInterpretation    "^\\*{1}"
+                                'Reference               "^!!!.*$"
+                                'TandemInterpretation    "^\\*[^\\*].*$"
                                 'Token                   "^[^\\*!=]"
 ))
 
@@ -36,7 +36,7 @@
                                'Measure                 "^=[^\\s]*$"
                                'NullSpineData           "^\\.$"
                                'SpineData               "^[^\\*!=\\.].+$"
-                               'TandemInterpretation    "^\\*{1}[\\w\\d:>\\[\\]]+$"
+                               'TandemInterpretation    "^\\*{1}[\\w:>\\[\\]]*$"
 ))
 
 (define StopSeparator " ")
@@ -106,17 +106,17 @@
                                   "String Symbol Natural Natural; Given: ~a ~a ~a ~a"
                                   token type record-index field-index)])))
 
-(define (humdrum-record-type? str)
-  (hash-member? HumdrumRecordType str))
-
 (define (humdrum-record-type-match? type str)
   (hash-match? HumdrumRecordType type str))
 
-(define (humdrum-token-type? str)
-  (hash-member? HumdrumTokenType str))
+(define (type-humdrum-record str)
+  (get-type str HumdrumRecordType 'error))
 
 (define (humdrum-token-type-match? type str)
   (hash-match? HumdrumTokenType type str))
+
+(define (type-humdrum-token str)
+  (get-type str HumdrumTokenType 'error))
 
 (define (int&>=? i lower)
   (and (integer? i) (>= i lower)))

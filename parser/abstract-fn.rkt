@@ -38,22 +38,15 @@
 
 (define/contract (get-type str hsh base)
   (-> string? hash? symbol? symbol?)
-  (local [(define (type f r)
-            (if (regexp-match? (pregexp (hash-ref hsh f)) str)
-                f
-                r))
-
-          (define base-case (if (symbol=? base 'Unknown)
-                                'Unknown
-                                type-error))
-
-          (define keys (hash-keys hsh))
-
-          (define type-error (λ () (error
-                                     (string-append "syntax-error: could not match a "
-                                                    (symbol->string 'hsh))
-                                     str)))]
-    (foldl type base-case keys)))
+  (local [(define (get-type keys)
+            (cond [(empty? keys) (if (symbol=? base 'Unknown)
+                                     'Unknown
+                                     (error "syntax-error: could not match a" str))]
+                  [else
+                    (if (regexp-match? (pregexp (hash-ref hsh (first keys))) str)
+                        (first keys)
+                        (get-type (rest keys)))]))]
+    (get-type (hash-keys hsh))))
 
 (define/contract (shift lox)
   (-> list? list?)
