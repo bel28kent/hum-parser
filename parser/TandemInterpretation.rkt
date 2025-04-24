@@ -35,7 +35,7 @@
                                    'GroupAttribution      "^\\*grp:\\w$"
                                    'GroupNumber           "^\\*group\\d+$"
                                    'InstrumentClass       "^\\*(m|o)?I$"
-                                   'KeyLabel              "^\\*[a-gA-G][-#]?:$"
+                                   'KeyLabel              "^\\*[a-gA-GX][-#]?:$"
                                    'KeySignature          "^\\*k\\[([a-g][-#])*\\]$"
                                    'LigatureBracket       "^\\*lig$"
                                    'MetronomeMarking      "^\\*MM\\d+$"

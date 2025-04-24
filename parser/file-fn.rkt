@@ -4,20 +4,23 @@
 	File and IO functions.
 |#
 
-(require racket/contract
+(require racket/bool
+         racket/contract
          racket/list
          racket/local
-         (only-in "HumdrumSyntax.rkt" humdrum-file
-                                      humdrum-record-type-match?
-                                      record
-                                      token))
+         "HumdrumSyntax.rkt"
+         (only-in "TandemInterpretation.rkt" type-tandem)
+         (only-in "string-fn.rkt" split))
 
-(provide build-filenames
-         build-paths
-         hfile->strings
-         path->hfile
+(provide HUM-PARSER-PATH
          read-file
-         write-file)
+         write-file
+         path->hfile
+         hfile->strings
+         build-filenames
+         build-paths)
+
+(define HUM-PARSER-PATH "/Applications/Racket v8.10/collects/hum-parser")
 
 (define/contract (read-file path)
   (-> string? (listof string?))
@@ -40,11 +43,11 @@
   (local [(define (los->lor los record-index)
             (local [(define (str->record str)
                       (record str
-                              (type-record str)
+                              (type-humdrum-record str)
                               (if (or (humdrum-record-type-match? 'Reference str)
                                       (humdrum-record-type-match? 'GlobalComment str))
                                   (list str)
-                                  (los->lot (split str)))
+                                  (los->lot (split str TokenSeparator)))
                               record-index))
 
                     (define (los->lot los)
@@ -55,9 +58,14 @@
                                               (los->lot (rest los) (add1 field-index)))]))]
                         (los->lot los 0)))
 
-
                     (define (str->token str field-index)
-                      (token str (type-token str) record-index field-index))]
+                      (local [(define type (type-humdrum-token str))]
+                        (token str
+                               (if (symbol=? type 'TandemInterpretation)
+                                   (type-tandem str)
+                                   type)
+                               record-index
+                               field-index)))]
               (cond [(empty? los) empty]
                     [else
                       (cons (str->record (first los))
@@ -77,20 +85,20 @@
 ; CONSTRAINT: Assumes that composite will have the dimensions as the output of path->hfile
 
 (define (hfile-hash-join pre-hfile post-hfile)
-  (local [(define pre (hfile-records pre-hfile))
-          (define post (hfile-records post-hfile))
+  (local [(define pre (humdrum-file-records pre-hfile))
+          (define post (humdrum-file-records post-hfile))
 
           (define (not-token-record r)
-            (cond [(string=? TOKEN (record-type r))
+            (cond [(symbol=? 'Token (record-type r))
                    (raise-argument-error 'hfile-hash-join "not a token record" 0 r)]))
 
           (define (token-record r)
-            (cond [(not (string=? TOKEN (record-type r)))
+            (cond [(not (symbol=? 'Token (record-type r)))
                    (raise-argument-error 'hfile-hash-join "token record" 1 r)]))
 
           (define (hash-join records)
             (local [(define records-hash (apply hash
-                                                (foldr (λ (f rnr) (cons (record-record-number f)
+                                                (foldr (λ (f rnr) (cons (record-record-index f)
                                                                     (cons f rnr)))
                                                        empty
                                                        records)))]

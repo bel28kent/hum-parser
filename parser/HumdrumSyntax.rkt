@@ -28,15 +28,15 @@
                                 'Measure                 "^="
                                 'Reference               "^!!!.*$"
                                 'TandemInterpretation    "^\\*[^\\*].*$"
-                                'Token                   "^[^\\*!=]"
+                                'Token                   "^[^\\*!=].*"
 ))
 
-(define HumdrumTokenType (hash 'ExclusiveInterpretation "^\\*{2}\\w+$"
+(define HumdrumTokenType (hash 'ExclusiveInterpretation "^\\*\\*\\w+$"
                                'LocalComment            "^!{1}.*$"
                                'Measure                 "^=[^\\s]*$"
                                'NullSpineData           "^\\.$"
-                               'SpineData               "^[^\\*!=\\.].+$"
-                               'TandemInterpretation    "^\\*{1}[\\w:>\\[\\]]*$"
+                               'SpineData               "^[^\\*!=\\.].*$"
+                               'TandemInterpretation    "^\\*[\\w:>\\-\\[\\]]*$"
 ))
 
 (define StopSeparator " ")
