@@ -36,6 +36,15 @@
            (λ ()
               (type-humdrum-record "")))
 
+; is-spine-content-type?
+(check-expect (is-spine-content-type? 'ExclusiveInterpretation) #t)
+(check-expect (is-spine-content-type? 'GlobalComment) #f)
+(check-expect (is-spine-content-type? 'LocalComment) #t)
+(check-expect (is-spine-content-type? 'Measure) #t)
+(check-expect (is-spine-content-type? 'Reference) #f)
+(check-expect (is-spine-content-type? 'TandemInterpretation) #t)
+(check-expect (is-spine-content-type? 'Token) #t)
+
 ; humdrum-token-type-match?
 (check-expect (humdrum-token-type-match? 'ExclusiveInterpretation "**kern") #t)
 (check-expect (humdrum-token-type-match? 'LocalComment "!") #t)

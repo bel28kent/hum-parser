@@ -6,7 +6,8 @@
 	Reference: Humdrum Guide, Chapter 5.
 |#
 
-(require (only-in "abstract-fn.rkt" get-type hash-match? hash-member?))
+(require racket/bool
+         (only-in "abstract-fn.rkt" get-type hash-match? hash-member?))
 
 (provide HumdrumRecordType
          HumdrumTokenType
@@ -19,6 +20,7 @@
          (struct-out token)
          humdrum-record-type-match?
          type-humdrum-record
+         is-spine-content-type?
          humdrum-token-type-match?
          type-humdrum-token)
 
@@ -111,6 +113,14 @@
 
 (define (type-humdrum-record str)
   (get-type str HumdrumRecordType 'error))
+
+; TODO: test
+(define (is-spine-content-type? symbol)
+  (or (symbol=? 'ExclusiveInterpretation symbol)
+      (symbol=? 'LocalComment symbol)
+      (symbol=? 'Measure symbol)
+      (symbol=? 'TandemInterpretation symbol)
+      (symbol=? 'Token symbol)))
 
 (define (humdrum-token-type-match? type str)
   (hash-match? HumdrumTokenType type str))
