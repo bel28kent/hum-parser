@@ -110,5 +110,13 @@
                                         (path->hfile "../../data/order/more-than-two-spine-joins.krn"))
                                       (path->hfile "../../data/order/more-than-two-spine-joins.krn"))
               (list (linked-spine KERN-0-0)))
+(check-expect (extract-spine-arity 3-J) (spine-arity 1 (list (list 1)
+                                                             (list 1)
+                                                             (list 2)
+                                                             (list 3)
+                                                             (list 3)
+                                                             (list 3)
+                                                             (list 3)
+                                                             (list 1))))
 
 (test)
