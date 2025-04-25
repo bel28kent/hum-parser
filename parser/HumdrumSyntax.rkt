@@ -20,6 +20,7 @@
          (struct-out token)
          humdrum-record-type-match?
          type-humdrum-record
+         is-spine-content-str?
          is-spine-content-type?
          humdrum-token-type-match?
          type-humdrum-token)
@@ -114,7 +115,10 @@
 (define (type-humdrum-record str)
   (get-type str HumdrumRecordType 'error))
 
-; TODO: test
+(define (is-spine-content-str? str)
+  (is-spine-content-type?
+    (type-humdrum-record str)))
+
 (define (is-spine-content-type? symbol)
   (or (symbol=? 'ExclusiveInterpretation symbol)
       (symbol=? 'LocalComment symbol)

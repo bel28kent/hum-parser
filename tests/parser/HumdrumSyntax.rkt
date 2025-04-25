@@ -36,6 +36,19 @@
            (λ ()
               (type-humdrum-record "")))
 
+; is-spine-content-str?
+(check-expect (is-spine-content-str? "**kern") #t)
+(check-expect (is-spine-content-str? "!! Global comment") #f)
+(check-expect (is-spine-content-str? "!\t! Local comment\t!") #t)
+(check-expect (is-spine-content-str? "=8\t=8") #t)
+(check-expect (is-spine-content-str? "!!!COM: Bach, Johann Sebastian") #f)
+(check-expect (is-spine-content-str? "*\t*clefG2\t*\t*") #t)
+(check-expect (is-spine-content-str? "4a\t4cc#\tf") #t)
+(check-exn #rx"syntax-error: could not match a "
+           (λ ()
+              (is-spine-content-str? "")))
+
+
 ; is-spine-content-type?
 (check-expect (is-spine-content-type? 'ExclusiveInterpretation) #t)
 (check-expect (is-spine-content-type? 'GlobalComment) #f)
