@@ -14,7 +14,7 @@
 (provide split
          gather)
 
-(define (split str separator)
+(define/contract (split str separator)
   (-> string? string? (listof string?))
   (local [(define (splitter str strings)
             (cond [(string=? str "") strings]
@@ -39,9 +39,11 @@
                                    (next-field (substring str 1)))]))]
     (splitter str empty)))
 
-(define (gather strings separator)
+(define/contract (gather strings separator)
   (-> (listof string?) string? string?)
-  (cond [(empty? strings) ""]
-        [(empty? (rest strings)) (string-append (first strings) (gather (rest strings)))]
-        [else
-          (string-append (first strings) separator (gather (rest strings)))]))
+  (local [(define (gatherer strings)
+            (cond [(empty? strings) ""]
+                  [(empty? (rest strings)) (first strings)]
+                  [else
+                    (string-append (first strings) separator (gatherer (rest strings)))]))]
+    (gatherer strings)))
