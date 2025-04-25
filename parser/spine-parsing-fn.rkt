@@ -36,12 +36,10 @@
 
 (define/contract (unwrap hfile)
   (-> humdrum-file? (listof (listof token?)))
-  (local [(define (spine-content? record)
-            (or (symbol=? 'Token (record-type record))
-                (symbol=? 'LocalComment (record-type record))))]
-    (foldr (λ (f r) (cons (record-split f) r)) empty
-      (filter spine-content?
-        (humdrum-file-records hfile)))))
+  (foldr (λ (f r) (cons (record-split f) r))
+         empty
+         (filter (λ (r) (is-spine-content-type? (record-type r)))
+           (humdrum-file-records hfile))))
 
 (define/contract (byrecord->byspine spine-arity)
   (-> spine-arity? (listof (listof natural-number/c)))
@@ -50,9 +48,7 @@
           (struct result (spine-list remaining))
 
           (define (for-spines byrecord)
-            (local [(define first-spine (byspine (first byrecord)))
-
-                    (define (iterator num-spine spine-lists result)
+            (local [(define (iterator num-spine spine-lists result)
                       (cond [(= num-spine num-spines)
                              (reverse
                                (cons (result-spine-list result) spine-lists))]
@@ -60,8 +56,9 @@
                               (iterator (add1 num-spine)
                                         (cons (result-spine-list result) spine-lists)
                                         (byspine (result-remaining result)))]))]
-              (iterator 1 empty (result (result-spine-list first-spine)
-                                        (result-remaining first-spine)))))
+              (local [(define first-spine (byspine byrecord))]
+                (iterator 1 empty (result (result-spine-list first-spine)
+                                          (result-remaining first-spine))))))
 
           (define (byspine byrecord)
             (local [(define (iterator arity spine-list remaining)
@@ -172,8 +169,7 @@
 
 (define/contract (extract-spine-arity hfile)
   (-> humdrum-file? spine-arity?)
-  (local [(define token-records (filter (λ (r) (or (symbol=? 'Token (record-type r))
-                                                   (symbol=? 'LocalComment (record-type r))))
+  (local [(define token-records (filter (λ (r) (is-spine-content-type? (record-type r)))
                                         (humdrum-file-records hfile)))]
     (spine-arity (length (record-split (first token-records)))
                  (get-byrecord token-records))))
