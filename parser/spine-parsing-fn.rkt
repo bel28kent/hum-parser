@@ -14,7 +14,17 @@
 
 (provide spine-parser
          unwrap
-         byrecord->byspine)
+         byrecord->byspine
+         tokens-by-spine
+         gspine-wrapper
+         gspines->strings
+         extract-spine-arity
+         get-byrecord
+         maybe-spine-structure
+         was-spine-struct?
+         split-or-join-token?
+         after-struct
+         one-per-spine)
 
 (define/contract (spine-parser hfile)
   (-> humdrum-file? (listof global-spine?))
@@ -118,7 +128,9 @@
                       (add1 spine-index))]))
 
           (define (wrapper interp spine spine-index)
-            (global-spine (type-exclusive interp) spine spine-index))]
+            (global-spine (type-exclusive (token-token interp))
+                          spine
+                          spine-index))]
     (gspine-wrapper spines empty 0)))
 
 (define/contract (gspines->strings gspines)
@@ -142,7 +154,8 @@
                                         (tokens->strings (rest tokens)
                                                          (cons
                                                            (gather
-                                                             (map token-token (first tokens)))
+                                                             (map token-token (first tokens))
+                                                             TokenSeparator)
                                                            strings))]))]
                         (tokens->strings tokens empty)))]
               (tokens->strings tokens)))]
