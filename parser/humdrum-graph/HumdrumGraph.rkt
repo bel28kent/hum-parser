@@ -1,14 +1,5 @@
 #lang racket/base
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data structures: HumdrumGraph
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(require racket/list
-         "../../../data-definitions/data-definitions.rkt")
-
-(provide (all-defined-out))
-
 #|
     A HumdrumGraph is a directed graph. A HumdrumGraph is best
     imagined as trees with branches and nodes, though it allows
@@ -31,6 +22,15 @@
     token. A parent represents a spine split that creates a left and
     right sub-branch.
 |#
+
+(require racket/list
+         "../HumdrumSyntax.rkt")
+
+(provide (struct-out humdrum-graph)
+         (struct-out root)
+         (struct-out leaf)
+         (struct-out parent))
+
 
 (struct humdrum-graph (root) #:constructor-name hgraph #:transparent)
 
@@ -62,32 +62,32 @@
 
 ; HumdrumGraph with one spine, no splits
 (define SIMPLE-AB-HGRAPH (hgraph (root (list (list
-                                              (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
-                                              (leaf (token "4a" SPINE-DATA 1 0))
-                                              (leaf (token "4b" SPINE-DATA 2 0)))))))
+                                              (leaf (token "**kern" 'ExclusiveInterpretation 0 0))
+                                              (leaf (token "4a" 'SpineData 1 0))
+                                              (leaf (token "4b" 'SpineData 2 0)))))))
 
 ; HumdrumGraph with two spines, no splits
 (define HGRAPH-TWO-SPINES (hgraph (root (list (list
-                                               (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
-                                               (leaf (token "4a" SPINE-DATA 1 0))
-                                               (leaf (token "4b" SPINE-DATA 2 0)))
+                                               (leaf (token "**kern" 'ExclusiveInterpretation 0 0))
+                                               (leaf (token "4a" 'SpineData 1 0))
+                                               (leaf (token "4b" 'SpineData 2 0)))
                                               (list
                                                (leaf
-                                                (token "**dynam" EXCLUSIVE-INTERPRETATION 0 0))
-                                               (leaf (token "f" #f 1 0))
-                                               (leaf (token "p" #f 2 0)))))))
+                                                (token "**dynam" 'ExclusiveInterpretation 0 0))
+                                               (leaf (token "f" 'SpineData 1 0))
+                                               (leaf (token "p" 'SpineData 2 0)))))))
 
 ; HumdrumGraph with one spine, splits
 (define HGRAPH-ONE-SPLITS (hgraph (root (list (list
-                                               (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
-                                               (leaf (token "4a" SPINE-DATA 1 0))
-                                               (parent (token "*^" SPINE-SPLIT 2 0)
-                                                       (list (leaf (token "4a" SPINE-DATA 3 0))
-                                                             (leaf (token "4a" SPINE-DATA 4 0))
-                                                             (leaf (token "*v" SPINE-JOIN 5 0)))
-                                                       (list (leaf (token "4aa" SPINE-DATA 3 1))
-                                                             (leaf (token "4aa" SPINE-DATA 4 1))
-                                                             (leaf (token "*v" SPINE-JOIN 5 1))))
-                                               (leaf (token "4a" SPINE-DATA 6 0))
-                                               (leaf (token "4b" SPINE-DATA 7 0))
-                                               (leaf (token "4c" SPINE-DATA 8 0)))))))
+                                               (leaf (token "**kern" 'ExclusiveInterpretation 0 0))
+                                               (leaf (token "4a" 'SpineData 1 0))
+                                               (parent (token "*^" 'SpineSplit 2 0)
+                                                       (list (leaf (token "4a" 'SpineData 3 0))
+                                                             (leaf (token "4a" 'SpineData 4 0))
+                                                             (leaf (token "*v" 'SpineJoin 5 0)))
+                                                       (list (leaf (token "4aa" 'SpineData 3 1))
+                                                             (leaf (token "4aa" 'SpineData 4 1))
+                                                             (leaf (token "*v" 'SpineJoin 5 1))))
+                                               (leaf (token "4a" 'SpineData 6 0))
+                                               (leaf (token "4b" 'SpineData 7 0))
+                                               (leaf (token "4c" 'SpineData 8 0)))))))
