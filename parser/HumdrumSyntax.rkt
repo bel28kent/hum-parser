@@ -39,7 +39,7 @@
                                'Measure                 "^=[^\\s]*$"
                                'NullSpineData           "^\\.$"
                                'SpineData               "^[^\\*!=\\.].*$"
-                               'TandemInterpretation    "^\\*[\\w\\^:>\\-\\[\\]]*$"
+                               'TandemInterpretation    "^\\*[^\\*]*$"
 ))
 
 (define StopSeparator " ")

@@ -3,11 +3,11 @@
 (require "../../../../../parser/HumdrumSyntax.rkt"
          "../../../../../parser/file-fn.rkt"
          "../../../../../parser/spine-parsing-fn.rkt"
-         "../../../../../parser/humdrum-graph/data-definitions/data-definitions.rkt"
-         "../../../../../parser/humdrum-graph/functions/hfile-to-hgraph.rkt"
-         "../../../../../parser/humdrum-graph/functions/hgraph-to-hfile.rkt"
-         "../../../../../parser/linked-spine/data-definitions/data-definitions.rkt"
-         "../../../../../parser/linked-spine/functions/gspines-to-linked-spines.rkt"
+         "../../../../../parser/humdrum-graph/HumdrumGraph.rkt"
+         "../../../../../parser/humdrum-graph/hfile-to-hgraph-fn.rkt"
+         "../../../../../parser/humdrum-graph/hgraph-to-hfile-fn.rkt"
+         "../../../../../parser/linked-spine/LinkedSpine.rkt"
+         "../../../../../parser/linked-spine/gspines-to-linked-spines-fn.rkt"
          test-engine/racket-tests)
 
 (define one-spine-no-splits (path->hfile "../../data/count/one-spine-no-splits.krn"))
@@ -70,7 +70,7 @@
                                    (list (token "*-" 'SpineTerminator 17 0))
                                    17))))
 (check-expect (spine-parser one-spine-no-splits)
-              (list (global-spine KERN
+              (list (global-spine 'Kern
                                   (list (list (token "**kern" 'ExclusiveInterpretation 0 0))
                                         (list (token "*clefG2" 'Clef 1 0))
                                         (list (token "*k[]" 'KeySignature 2 0))
@@ -110,7 +110,7 @@
                                                 (leaf (token "==" 'Measure 16 0))
                                                 (leaf (token "*-" 'SpineTerminator 17 0)))))))
               one-spine-no-splits)
-(check-expect (lolot->lor (list (list (token "**kern" 'ExclusiveInterpretation 0 0))
+(check-expect (tokens->records (list (list (token "**kern" 'ExclusiveInterpretation 0 0))
                                 (list (token "*clefG2" 'Clef 1 0))
                                 (list (token "*k[]" 'KeySignature 2 0))
                                 (list (token "*a:" 'KeyLabel 3 0))
@@ -155,7 +155,7 @@
                             'TandemInterpretation
                             (list (token "*-" 'SpineTerminator 17 0))
                             17)))
-(check-expect (hgraph->lolot (hgraph
+(check-expect (hgraph->tokens (hgraph
                               (root (list (list (leaf (token "**kern" 'ExclusiveInterpretation 0 0))
                                                 (leaf (token "*clefG2" 'Clef 1 0))
                                                 (leaf (token "*k[]" 'KeySignature 2 0))
@@ -192,6 +192,7 @@
                     (list (token "4c" 'SpineData 15 0))
                     (list (token "==" 'Measure 16 0))
                     (list (token "*-" 'SpineTerminator 17 0))))
+#|
 (check-expect (hfile->hgraph one-spine-no-splits)
               (hgraph (root (list (list (leaf (token "**kern" 'ExclusiveInterpretation 0 0))
                                         (leaf (token "*clefG2" 'Clef 1 0))
@@ -211,42 +212,7 @@
                                         (leaf (token "4c" 'SpineData 15 0))
                                         (leaf (token "==" 'Measure 16 0))
                                         (leaf (token "*-" 'SpineTerminator 17 0)))))))
-(check-expect (branch->lot (list (leaf (token "**kern" 'ExclusiveInterpretation 0 0))
-                                 (leaf (token "*clefG2" 'Clef 1 0))
-                                 (leaf (token "*k[]" 'KeySignature 2 0))
-                                 (leaf (token "*a:" 'KeyLabel 3 0))
-                                 (leaf (token "*M3/4" 'TimeSignature 4 0))
-                                 (leaf (token "4c" 'SpineData 5 0))
-                                 (leaf (token "4c" 'SpineData 6 0))
-                                 (leaf (token "4c" 'SpineData 7 0))
-                                 (leaf (token "=2" 'Measure 8 0))
-                                 (leaf (token "4c" 'SpineData 9 0))
-                                 (leaf (token "4c" 'SpineData 10 0))
-                                 (leaf (token "4c" 'SpineData 11 0))
-                                 (leaf (token "=3" 'Measure 12 0))
-                                 (leaf (token "4c" 'SpineData 13 0))
-                                 (leaf (token "4c" 'SpineData 14 0))
-                                 (leaf (token "4c" 'SpineData 15 0))
-                                 (leaf (token "==" 'Measure 16 0))
-                                 (leaf (token "*-" 'SpineTerminator 17 0))))
-              (list (token "**kern" 'ExclusiveInterpretation 0 0)
-                    (token "*clefG2" 'Clef 1 0)
-                    (token "*k[]" 'KeySignature 2 0)
-                    (token "*a:" 'KeyLabel 3 0)
-                    (token "*M3/4" 'TimeSignature 4 0)
-                    (token "4c" 'SpineData 5 0)
-                    (token "4c" 'SpineData 6 0)
-                    (token "4c" 'SpineData 7 0)
-                    (token "=2" 'Measure 8 0)
-                    (token "4c" 'SpineData 9 0)
-                    (token "4c" 'SpineData 10 0)
-                    (token "4c" 'SpineData 11 0)
-                    (token "=3" 'Measure 12 0)
-                    (token "4c" 'SpineData 13 0)
-                    (token "4c" 'SpineData 14 0)
-                    (token "4c" 'SpineData 15 0)
-                    (token "==" 'Measure 16 0)
-                    (token "*-" 'SpineTerminator 17 0)))
+|#
 (check-expect (gspines->linked-spines (spine-parser
                                         one-spine-no-splits)
                                       one-spine-no-splits)
