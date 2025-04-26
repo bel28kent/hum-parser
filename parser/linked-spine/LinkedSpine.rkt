@@ -1,20 +1,5 @@
 #lang racket/base
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data structures: LinkedSpine
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(require "../../../data-definitions/data-definitions.rkt")
-
-(provide (struct-out linked-spine)
-         (struct-out node)
-         (struct-out token-node)
-         (struct-out split-node)
-         (struct-out terminator-node)
-         LINKED-SPINE-BASE
-         LINKED-SPINE-SINGLE
-         LINKED-SPINE-ONE)
-
 #|
     A LinkedSpine represents a GlobalSpine as a linked list.
     That is, each token is associated with at least one
@@ -25,8 +10,19 @@
 
     A "*^" is associated with two next tokens.
 
-    The "*-" terminates the LinkedSpine (cf. docs/spines.md).
+    The "*-" terminates the LinkedSpine (See docs/spines.md).
 |#
+
+(require "../HumdrumSyntax.rkt")
+
+(provide (struct-out linked-spine)
+         (struct-out node)
+         (struct-out token-node)
+         (struct-out split-node)
+         (struct-out terminator-node)
+         LINKED-SPINE-BASE
+         LINKED-SPINE-SINGLE
+         LINKED-SPINE-ONE)
 
 (struct linked-spine (first-node) #:transparent)
 ; LinkedSpine is (linked-spine TokenNode))
@@ -55,17 +51,17 @@
 ; Represents a Token of TokenType SPINE-TERMINATOR.
 
 ; BASE CASE
-(define EX (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
-(define TERM (token "*-" SPINE-TERMINATOR 1 0))
+(define EX (token "**kern" 'ExclusiveInterpretation 0 0))
+(define TERM (token "*-" 'SpineTerminator 1 0))
 (define TERM-NODE (terminator-node TERM))
 (define EX-NODE (token-node EX (box-immutable TERM-NODE)))
 (define LINKED-SPINE-BASE (linked-spine EX-NODE))
 
 ; NO SPLITS
-(define 4A (token "4a" SPINE-DATA 1 0))
-(define 4B (token "4b" SPINE-DATA 2 0))
-(define 4C (token "4c" SPINE-DATA 3 0))
-(define TERM-4 (token "*-" SPINE-TERMINATOR 4 0))
+(define 4A (token "4a" 'SpineData 1 0))
+(define 4B (token "4b" 'SpineData 2 0))
+(define 4C (token "4c" 'SpineData 3 0))
+(define TERM-4 (token "*-" 'SpineTerminator 4 0))
 (define TERM-4-NODE (terminator-node TERM-4))
 (define 4C-NODE (token-node 4C (box-immutable TERM-4)))
 (define 4B-NODE (token-node 4B (box-immutable 4C-NODE)))
@@ -74,16 +70,16 @@
 (define LINKED-SPINE-SINGLE (linked-spine EX-NODE-SINGLE))
 
 ; ONE SPLIT
-(define STAR-^ (token "*^" SPINE-SPLIT 1 0))
-(define 4A-2 (token "4a" SPINE-DATA 2 0))
-(define 4AA-2 (token "4aa" SPINE-DATA 2 1))
-(define 4B-3 (token "4b" SPINE-DATA 3 0))
-(define 4BB-3 (token "4bb" SPINE-DATA 3 1))
-(define 4C-4 (token "4c" SPINE-DATA 4 0))
-(define 4CC-4 (token "4cc" SPINE-DATA 4 1))
-(define STAR-v-1 (token "*v" SPINE-JOIN 5 0))
-(define STAR-v-2 (token "*v" SPINE-JOIN 5 1))
-(define TERM-6 (token "*-" SPINE-TERMINATOR 6 0))
+(define STAR-^ (token "*^" 'SpineSplit 1 0))
+(define 4A-2 (token "4a" 'SpineData 2 0))
+(define 4AA-2 (token "4aa" 'SpineData 2 1))
+(define 4B-3 (token "4b" 'SpineData 3 0))
+(define 4BB-3 (token "4bb" 'SpineData 3 1))
+(define 4C-4 (token "4c" 'SpineData 4 0))
+(define 4CC-4 (token "4cc" 'SpineData 4 1))
+(define STAR-v-1 (token "*v" 'SpineJoin 5 0))
+(define STAR-v-2 (token "*v" 'SpineJoin 5 1))
+(define TERM-6 (token "*-" 'SpineTerminator 6 0))
 (define TERM-6-NODE TERM-6)
 (define STAR-v-2-NODE (token-node STAR-v-2 (box-immutable TERM-6-NODE)))
 (define STAR-v-1-NODE (token-node STAR-v-1 (box-immutable TERM-6-NODE)))

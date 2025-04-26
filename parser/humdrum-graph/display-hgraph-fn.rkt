@@ -1,20 +1,20 @@
-#lang racket
+#lang racket/base
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data structures: HumdrumGraph
-;;    display-hgraph: prints each token in the graph
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#|
+	Function to simply display HumdrumGraph to screen.
+|#
 
-(require "../../../../parser/data-definitions/data-definitions.rkt"
-         "../data-definitions/data-definitions.rkt")
+(require racket/bool
+         racket/contract
+         racket/list
+         racket/local
+         "../HumdrumSyntax.rkt"
+         "HumdrumGraph.rkt")
 
 (provide display-hgraph)
 
-; display-hgraph
-; HumdrumGraph -> (void)
-; prints each token in the graph to screen
-
-(define (display-hgraph hgraph)
+(define/contract (display-hgraph hgraph)
+  (-> humdrum-graph? void?)
   (local [(define (fn-for-root root)
             (local [(define (iterator branches factor)
                       (cond [(empty? branches) (void)]
@@ -79,7 +79,7 @@
                                "#f"
                                (token-type token))
                            " "
-                           (number->string (token-record-number token))
+                           (number->string (token-record-index token))
                            ")"))
 
           (define (indentation factor)

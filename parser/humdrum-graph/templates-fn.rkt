@@ -1,11 +1,10 @@
 #lang racket
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data structures: AbstractHumdrumGraph
-;;    Function templates
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#|
+	Function templates for depth-first and breadth-first HumdrumGraph traversal.
+|#
 
-(require "../data-definitions/data-definitions.rkt")
+(require "HumdrumGraph.rkt")
 
 ;; Melodic or Depth-first traversal
 ;; (Regular recursion)

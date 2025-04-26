@@ -1,23 +1,19 @@
 #lang racket/base
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data structures: HumdrumGraph
-;;    longest-string-in: Produces the longest token string
-;;        in the HumdrumGraph
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#|
+	Function to find the longest string in a HumdrumGraph.
+|#
 
-(require racket/list
+(require racket/contract
+         racket/list
          racket/local
-         "../../../../parser/data-definitions/data-definitions.rkt"
-         "../data-definitions/data-definitions.rkt")
+         "../HumdrumSyntax.rkt"
+         "HumdrumGraph.rkt")
 
 (provide longest-string-in)
 
-; longest-string-in
-; HumdrumGraph -> String
-; produces the longest token string in the tree
-
-(define (longest-string-in hgraph)
+(define/contract (longest-string-in hgraph)
+  (-> humdrum-graph? string?)
   (local [(define (fn-for-root root)
             (local [(define (iterator branches longest)
                       (cond [(empty? branches) longest]
@@ -48,7 +44,7 @@
 
           #|
               "*^" can never be the longest string in parent because the left
-              and right children will at least contain "*v", which is equal in
+              and right children will at least contain "*-", which is equal in
               length to "*^".
           |#
           (define (fn-for-parent parent longest)

@@ -1,15 +1,15 @@
 #lang racket/base
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data structures: LinkedSpine
-;;    gspines->linked-spines: Converts a (listof GlobalSpine) to a (listof LinkedSpine)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#|
+	Function to convert a list of GlobalSpine to a list of LinkedSpine.
+|#
 
-(require racket/list
+(require racket/bool
+         racket/contract
+         racket/list
          racket/local
-         "../../../../parser/data-definitions/data-definitions.rkt"
-         "../../../../parser/functions/predicates.rkt"
-         "../data-definitions/data-definitions.rkt")
+         "../HumdrumSyntax.rkt"
+         "LinkedSpine.rkt")
 
 (provide gspines->linked-spines)
 
@@ -17,8 +17,21 @@
 ; (listof GlobalSpine) HumdrumFile -> (listof LinkedSpine)
 ; produce a list of LinkedSpines
 
-(define (gspines->linked-spines gspines hfile)
-  (local [(define records (hfile-records hfile))
+(define/contract (gspines->linked-spines gspines hfile)
+  (-> (listof global-spine?) humdrum-file? (listof linked-spine?))
+  (local [(define (split? t)
+            (symbol=? 'SpineSplit (token-type t)))
+
+          (define (join? t)
+            (symbol=? 'SpineJoin (token-type t)))
+
+          (define (split-or-join? t)
+            (or (split? t) (join? t)))
+
+          (define (null-interp? t)
+            (symbol=? 'NullInterpretation (token-type t)))
+
+          (define records (humdrum-file-records hfile))
 
           ; GlobalSpine -> LinkedSpine
           (define (gspine->linked-spine gspine)
@@ -47,11 +60,11 @@
 
           ; Token (listof Token) (listof Node) -> Node
           (define (pair-token token tokens next-nodes)
-            (cond [(spine-split? (token-token token))
+            (cond [(split? token)
                    (split-helper token (adjust-index token) next-nodes)]
-                  [(spine-join? (token-token token))
+                  [(join? token)
                    (token-helper token (adjust-index token) next-nodes)]
-                  [(null-interpretation? (token-token token))
+                  [(null-interp? token)
                    (token-helper token (adjust-index token) next-nodes)]
                   [(terminator-node? (first next-nodes))
                    (token-node token (box-immutable (at-same-field-index token next-nodes)))]
@@ -71,20 +84,11 @@
 
           ; Token (listof Token) -> Natural
           (define (adjust-index token)
-            (local [(define r-split (record-split (list-ref records (token-record-number token))))
+            (local [(define r-split (record-split (list-ref records (token-record-index token))))
                     (define index (token-field-index token))
 
                     (define (<index? t)
                       (< (token-field-index t) index))
-
-                    (define (split? t)
-                      (spine-split? (token-token t)))
-
-                    (define (join? t)
-                      (spine-join? (token-token t)))
-
-                    (define (split-or-join? t)
-                      (or (split? t) (join? t)))
 
                     (define (adjust-index lot)
                       (local [(define count-splits (count split? lot))

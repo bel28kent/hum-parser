@@ -1,57 +1,42 @@
 #lang racket/base
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; hum-parser: data-structures: HumdrumGraph
-;;    hgraph-to-hfile: converts a HumdrumGraph to HumdrumFile
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 #|
-  This function only assembles data in the given HumdrumGraph. Non-token records filtered
-  out when the HumdrumGraph was created are not inserted, so resultant HumdrumFile may be
-  smaller than original.
+	Function to convert a HumdrumGraph to a HumdrumFile.
+
+	N.B.:
+	This function only assembles data in the given HumdrumGraph. Non-token records filtered
+	out when the HumdrumGraph was created are not inserted, so resultant HumdrumFile may be
+	smaller than original.
 |#
 
-(require racket/list
+(require racket/contract
+         racket/list
          racket/local
-         "../../../../parser/data-definitions/data-definitions.rkt"
-         "../../../../parser/functions/type.rkt"
-         "../../../../parser/functions/split-and-gather.rkt"
-         "../data-definitions/data-definitions.rkt")
+         "HumdrumGraph.rkt"
+         "../HumdrumSyntax.rkt"
+         "../string-fn.rkt")
 
 (provide (all-defined-out))
 
-; hgraph->hfile
-; HumdrumGraph -> HumdrumFile
-; converts the graph to a HumdrumFile
-
-(define (hgraph->hfile hgraph)
+(define/contract (hgraph->hfile hgraph)
+  (-> humdrum-graph? humdrum-file?)
   (hfile
-    (lolot->lor
-      (hgraph->lolot hgraph))))
+    (tokens->records
+      (hgraph->tokens hgraph))))
 
-; lolot->lor
-; (listof (listof Token)) -> (listof Record)
-; converts the token lists to a (listof Record)
-
-(define (lolot->lor lolot)
-  (local [(define (lot->r lot)
-            (local [(define r (gather (map token-token lot)))]
+(define/contract (tokens->records tokens)
+  (-> (listof (listof token?)) (listof record?))
+  (local [(define (tokens->record tokens)
+            (local [(define r (gather (map token-token tokens) TokenSeparator))]
               (record r
-                      (type-record r)
-                      lot
-                      (token-record-number (first lot)))))]
-    (map lot->r lolot)))
+                      (type-humdrum-record r)
+                      tokens
+                      (token-record-index (first tokens)))))]
+    (map tokens->record tokens)))
 
-; hgraph->lolot
-; HumdrumGraph -> (listof (listof Token))
-; converts the graph to a (listof (listof Token))
-
-(define (hgraph->lolot hgraph)
-  (local [; Root -> (listof Record)
-          (define (fn-for-root root)
-                    ; acc. (listof (listof Node)). the rest of each branch.
-                    ; rec. (listof Token). the nodes at one level.
-                    ; lolot. (listof (listof Token)). the (listof Token) from previous cuts.
+(define/contract (hgraph->tokens hgraph)
+  (-> humdrum-graph? (listof (listof token?)))
+  (local [(define (fn-for-root root)
             (local [(define (iterator branches acc rec lolot)
                       (cond [(and (empty? branches) (empty? acc)) (reverse
                                                                     (cons (reverse rec) lolot))]
