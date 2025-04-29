@@ -1,13 +1,13 @@
 #lang racket/base
 
-(require "../../../../parser/data-definitions/data-definitions.rkt"
-         "../../../../parser/functions/file.rkt"
-         "../../../../parser/functions/spine-parser.rkt"
-         "../../../../parser/data-structures/humdrum-graph/data-definitions/data-definitions.rkt"
-         "../../../../parser/data-structures/humdrum-graph/functions/hgraph-to-hfile.rkt"
-         "../../../../parser/data-structures/humdrum-graph/functions/hfile-to-hgraph.rkt"
-         "../../../../parser/data-structures/linked-spine/data-definitions/data-definitions.rkt"
-         "../../../../parser/data-structures/linked-spine/functions/gspines-to-linked-spines.rkt"
+(require "../../../../../parser/HumdrumSyntax.rkt"
+         "../../../../../parser/file-fn.rkt"
+         "../../../../../parser/spine-parsing-fn.rkt"
+         "../../../../../parser/humdrum-graph/HumdrumGraph.rkt"
+         "../../../../../parser/humdrum-graph/hfile-to-hgraph-fn.rkt"
+         "../../../../../parser/humdrum-graph/hgraph-to-hfile-fn.rkt"
+         "../../../../../parser/linked-spine/LinkedSpine.rkt"
+         "../../../../../parser/linked-spine/gspines-to-linked-spines-fn.rkt"
          test-engine/racket-tests)
 
 ;; Node definitions
@@ -130,7 +130,7 @@
 (define KL-3-0 (token-node (token "*a:" 'KeyLabel 3 0) (box-immutable TS-4-0)))
 (define KS-2-0 (token-node (token "*k[]" 'KeySignature 2 0) (box-immutable KL-3-0)))
 (define CL-1-0 (token-node (token "*clefG2" 'Clef 1 0) (box-immutable KS-2-0)))
-(define KERN-0-0 (token-node (token "**kern" EXCLUSIVE-INTERPRETATION 0 0) (box-immutable CL-1-0)))
+(define KERN-0-0 (token-node (token "**kern" 'ExclusiveInterpretation 0 0) (box-immutable CL-1-0)))
 
 (define TERM-35-1 (terminator-node (token "*-" 'SpineTerminator 35 1)))
 (define M-34-1 (token-node (token "==" 'Measure 34 1) (box-immutable TERM-35-1)))
@@ -233,7 +233,7 @@
 (define KL-3-1 (token-node (token "*a:" 'KeyLabel 3 1) (box-immutable TS-4-1)))
 (define KS-2-1 (token-node (token "*k[]" 'KeySignature 2 1) (box-immutable KL-3-1)))
 (define CL-1-1 (token-node (token "*clefG2" 'Clef 1 1) (box-immutable KS-2-1)))
-(define KERN-0-1 (token-node (token "**kern" EXCLUSIVE-INTERPRETATION 0 1) (box-immutable CL-1-1)))
+(define KERN-0-1 (token-node (token "**kern" 'ExclusiveInterpretation 0 1) (box-immutable CL-1-1)))
 
 (define TERM-35-2 (terminator-node (token "*-" 'SpineTerminator 35 2)))
 (define M-34-2 (token-node (token "==" 'Measure 34 2) (box-immutable TERM-35-2)))
@@ -318,53 +318,53 @@
 (define KL-3-2 (token-node (token "*a:" 'KeyLabel 3 2) (box-immutable TS-4-2)))
 (define KS-2-2 (token-node (token "*k[]" 'KeySignature 2 2) (box-immutable KL-3-2)))
 (define CL-1-2 (token-node (token "*clefG2" 'Clef 1 2) (box-immutable KS-2-2)))
-(define KERN-0-2 (token-node (token "**kern" EXCLUSIVE-INTERPRETATION 0 2) (box-immutable CL-1-2)))
+(define KERN-0-2 (token-node (token "**kern" 'ExclusiveInterpretation 0 2) (box-immutable CL-1-2)))
 
 (check-expect (path->hfile "../../data/count/three-spines-three-splits.krn")
-              (hfile (list (record "**kern\t**kern\t**kern" TOKEN
-                                   (list (token "**kern" EXCLUSIVE-INTERPRETATION 0 0)
-                                         (token "**kern" EXCLUSIVE-INTERPRETATION 0 1)
-                                         (token "**kern" EXCLUSIVE-INTERPRETATION 0 2))
+              (hfile (list (record "**kern\t**kern\t**kern" 'ExclusiveInterpretation
+                                   (list (token "**kern" 'ExclusiveInterpretation 0 0)
+                                         (token "**kern" 'ExclusiveInterpretation 0 1)
+                                         (token "**kern" 'ExclusiveInterpretation 0 2))
                                    0)
-                           (record "*clefG2\t*clefG2\t*clefG2" TOKEN
+                           (record "*clefG2\t*clefG2\t*clefG2" 'TandemInterpretation
                                    (list (token "*clefG2" 'Clef 1 0)
                                          (token "*clefG2" 'Clef 1 1)
                                          (token "*clefG2" 'Clef 1 2))
                                    1)
-                           (record "*k[]\t*k[]\t*k[]" TOKEN
+                           (record "*k[]\t*k[]\t*k[]" 'TandemInterpretation
                                    (list (token "*k[]" 'KeySignature 2 0)
                                          (token "*k[]" 'KeySignature 2 1)
                                          (token "*k[]" 'KeySignature 2 2))
                                    2)
-                           (record "*a:\t*a:\t*a:" TOKEN
+                           (record "*a:\t*a:\t*a:" 'TandemInterpretation
                                    (list (token "*a:" 'KeyLabel 3 0)
                                          (token "*a:" 'KeyLabel 3 1)
                                          (token "*a:" 'KeyLabel 3 2))
                                    3)
-                           (record "*M3/4\t*M3/4\t*M3/4" TOKEN
+                           (record "*M3/4\t*M3/4\t*M3/4" 'TandemInterpretation
                                    (list (token "*M3/4" 'TimeSignature 4 0)
                                          (token "*M3/4" 'TimeSignature 4 1)
                                          (token "*M3/4" 'TimeSignature 4 2))
                                    4)
-                           (record "*^\t*\t*" TOKEN
+                           (record "*^\t*\t*" 'TandemInterpretation
                                    (list (token "*^" 'SpineSplit 5 0)
                                          (token "*" 'NullInterpretation 5 1)
                                          (token "*" 'NullInterpretation 5 2))
                                    5)
-                           (record "*\t*^\t*\t*" TOKEN
+                           (record "*\t*^\t*\t*" 'TandemInterpretation
                                    (list (token "*" 'NullInterpretation 6 0)
                                          (token "*^" 'SpineSplit 6 1)
                                          (token "*" 'NullInterpretation 6 2)
                                          (token "*" 'NullInterpretation 6 3))
                                    6)
-                           (record "*\t*\t*^\t*\t*" TOKEN
+                           (record "*\t*\t*^\t*\t*" 'TandemInterpretation
                                    (list (token "*" 'NullInterpretation 7 0)
                                          (token "*" 'NullInterpretation 7 1)
                                          (token "*^" 'SpineSplit 7 2)
                                          (token "*" 'NullInterpretation 7 3)
                                          (token "*" 'NullInterpretation 7 4))
                                    7)
-                           (record "*\t*\t*\t*\t*^\t*" TOKEN
+                           (record "*\t*\t*\t*\t*^\t*" 'TandemInterpretation
                                    (list (token "*" 'NullInterpretation 8 0)
                                          (token "*" 'NullInterpretation 8 1)
                                          (token "*" 'NullInterpretation 8 2)
@@ -372,7 +372,7 @@
                                          (token "*^" 'SpineSplit 8 4)
                                          (token "*" 'NullInterpretation 8 5))
                                    8)
-                           (record "*\t*\t*\t*\t*\t*^\t*" TOKEN
+                           (record "*\t*\t*\t*\t*\t*^\t*" 'TandemInterpretation
                                    (list (token "*" 'NullInterpretation 9 0)
                                          (token "*" 'NullInterpretation 9 1)
                                          (token "*" 'NullInterpretation 9 2)
@@ -381,7 +381,7 @@
                                          (token "*^" 'SpineSplit 9 5)
                                          (token "*" 'NullInterpretation 9 6))
                                    9)
-                           (record "*\t*\t*\t*\t*\t*\t*^\t*" TOKEN
+                           (record "*\t*\t*\t*\t*\t*\t*^\t*" 'TandemInterpretation
                                    (list (token "*" 'NullInterpretation 10 0)
                                          (token "*" 'NullInterpretation 10 1)
                                          (token "*" 'NullInterpretation 10 2)
@@ -391,7 +391,7 @@
                                          (token "*^" 'SpineSplit 10 6)
                                          (token "*" 'NullInterpretation 10 7))
                                    10)
-                           (record "*\t*\t*\t*\t*\t*\t*\t*\t*^" TOKEN
+                           (record "*\t*\t*\t*\t*\t*\t*\t*\t*^" 'TandemInterpretation
                                    (list (token "*" 'NullInterpretation 11 0)
                                          (token "*" 'NullInterpretation 11 1)
                                          (token "*" 'NullInterpretation 11 2)
@@ -402,7 +402,7 @@
                                          (token "*" 'NullInterpretation 11 7)
                                          (token "*^" 'SpineSplit 11 8))
                                    11)
-                           (record "*\t*\t*\t*\t*\t*\t*\t*\t*\t*^" TOKEN
+                           (record "*\t*\t*\t*\t*\t*\t*\t*\t*\t*^" 'TandemInterpretation
                                    (list (token "*" 'NullInterpretation 12 0)
                                          (token "*" 'NullInterpretation 12 1)
                                          (token "*" 'NullInterpretation 12 2)
@@ -414,7 +414,7 @@
                                          (token "*" 'NullInterpretation 12 8)
                                          (token "*^" 'SpineSplit 12 9))
                                    12)
-                           (record "*\t*\t*\t*\t*\t*\t*\t*\t*\t*\t*^" TOKEN
+                           (record "*\t*\t*\t*\t*\t*\t*\t*\t*\t*\t*^" 'TandemInterpretation
                                    (list (token "*" 'NullInterpretation 13 0)
                                          (token "*" 'NullInterpretation 13 1)
                                          (token "*" 'NullInterpretation 13 2)
@@ -427,7 +427,7 @@
                                          (token "*" 'NullInterpretation 13 9)
                                          (token "*^" 'SpineSplit 13 10))
                                    13)
-                           (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" TOKEN
+                           (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" 'Token
                                    (list (token "4c" 'SpineData 14 0)
                                          (token "4c" 'SpineData 14 1)
                                          (token "4c" 'SpineData 14 2)
@@ -441,7 +441,7 @@
                                          (token "4c" 'SpineData 14 10)
                                          (token "4c" 'SpineData 14 11))
                                    14)
-                           (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" TOKEN
+                           (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" 'Token
                                    (list (token "4c" 'SpineData 15 0)
                                          (token "4c" 'SpineData 15 1)
                                          (token "4c" 'SpineData 15 2)
@@ -455,7 +455,7 @@
                                          (token "4c" 'SpineData 15 10)
                                          (token "4c" 'SpineData 15 11))
                                    15)
-                           (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" TOKEN
+                           (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" 'Token
                                    (list (token "4c" 'SpineData 16 0)
                                          (token "4c" 'SpineData 16 1)
                                          (token "4c" 'SpineData 16 2)
@@ -469,7 +469,7 @@
                                          (token "4c" 'SpineData 16 10)
                                          (token "4c" 'SpineData 16 11))
                                    16)
-                           (record "=2\t=2\t=2\t=2\t=2\t=2\t=2\t=2\t=2\t=2\t=2\t=2" TOKEN
+                           (record "=2\t=2\t=2\t=2\t=2\t=2\t=2\t=2\t=2\t=2\t=2\t=2" 'Measure
                                    (list (token "=2" 'Measure 17 0)
                                          (token "=2" 'Measure 17 1)
                                          (token "=2" 'Measure 17 2)
@@ -483,7 +483,7 @@
                                          (token "=2" 'Measure 17 10)
                                          (token "=2" 'Measure 17 11))
                                    17)
-                           (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" TOKEN
+                           (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" 'Token
                                    (list (token "4c" 'SpineData 18 0)
                                          (token "4c" 'SpineData 18 1)
                                          (token "4c" 'SpineData 18 2)
@@ -497,7 +497,7 @@
                                          (token "4c" 'SpineData 18 10)
                                          (token "4c" 'SpineData 18 11))
                                    18)
-                           (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" TOKEN
+                           (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" 'Token
                                    (list (token "4c" 'SpineData 19 0)
                                          (token "4c" 'SpineData 19 1)
                                          (token "4c" 'SpineData 19 2)
@@ -511,7 +511,7 @@
                                          (token "4c" 'SpineData 19 10)
                                          (token "4c" 'SpineData 19 11))
                                    19)
-                           (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" TOKEN
+                           (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" 'Token
                                    (list (token "4c" 'SpineData 20 0)
                                          (token "4c" 'SpineData 20 1)
                                          (token "4c" 'SpineData 20 2)
@@ -525,7 +525,7 @@
                                          (token "4c" 'SpineData 20 10)
                                          (token "4c" 'SpineData 20 11))
                                    20)
-                           (record "=3\t=3\t=3\t=3\t=3\t=3\t=3\t=3\t=3\t=3\t=3\t=3" TOKEN
+                           (record "=3\t=3\t=3\t=3\t=3\t=3\t=3\t=3\t=3\t=3\t=3\t=3" 'Measure
                                    (list (token "=3" 'Measure 21 0)
                                          (token "=3" 'Measure 21 1)
                                          (token "=3" 'Measure 21 2)
@@ -539,7 +539,7 @@
                                          (token "=3" 'Measure 21 10)
                                          (token "=3" 'Measure 21 11))
                                    21)
-                           (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" TOKEN
+                           (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" 'Token
                                    (list (token "4c" 'SpineData 22 0)
                                          (token "4c" 'SpineData 22 1)
                                          (token "4c" 'SpineData 22 2)
@@ -553,7 +553,7 @@
                                          (token "4c" 'SpineData 22 10)
                                          (token "4c" 'SpineData 22 11))
                                    22)
-                           (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" TOKEN
+                           (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" 'Token
                                    (list (token "4c" 'SpineData 23 0)
                                          (token "4c" 'SpineData 23 1)
                                          (token "4c" 'SpineData 23 2)
@@ -567,7 +567,7 @@
                                          (token "4c" 'SpineData 23 10)
                                          (token "4c" 'SpineData 23 11))
                                    23)
-                           (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" TOKEN
+                           (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" 'Token
                                    (list (token "4c" 'SpineData 24 0)
                                          (token "4c" 'SpineData 24 1)
                                          (token "4c" 'SpineData 24 2)
@@ -581,7 +581,7 @@
                                          (token "4c" 'SpineData 24 10)
                                          (token "4c" 'SpineData 24 11))
                                    24)
-                           (record "*\t*\t*\t*\t*\t*\t*\t*\t*\t*\t*v\t*v" TOKEN
+                           (record "*\t*\t*\t*\t*\t*\t*\t*\t*\t*\t*v\t*v" 'TandemInterpretation
                                    (list (token "*" 'NullInterpretation 25 0)
                                          (token "*" 'NullInterpretation 25 1)
                                          (token "*" 'NullInterpretation 25 2)
@@ -595,7 +595,7 @@
                                          (token "*v" 'SpineJoin 25 10)
                                          (token "*v" 'SpineJoin 25 11))
                                    25)
-                           (record "*\t*\t*\t*\t*\t*\t*\t*\t*\t*v\t*v" TOKEN
+                           (record "*\t*\t*\t*\t*\t*\t*\t*\t*\t*v\t*v" 'TandemInterpretation
                                    (list (token "*" 'NullInterpretation 26 0)
                                          (token "*" 'NullInterpretation 26 1)
                                          (token "*" 'NullInterpretation 26 2)
@@ -608,7 +608,7 @@
                                          (token "*v" 'SpineJoin 26 9)
                                          (token "*v" 'SpineJoin 26 10))
                                    26)
-                           (record "*\t*\t*\t*\t*\t*\t*\t*\t*v\t*v" TOKEN
+                           (record "*\t*\t*\t*\t*\t*\t*\t*\t*v\t*v" 'TandemInterpretation
                                    (list (token "*" 'NullInterpretation 27 0)
                                          (token "*" 'NullInterpretation 27 1)
                                          (token "*" 'NullInterpretation 27 2)
@@ -620,7 +620,7 @@
                                          (token "*v" 'SpineJoin 27 8)
                                          (token "*v" 'SpineJoin 27 9))
                                    27)
-                           (record "*\t*\t*\t*\t*\t*\t*v\t*v\t*" TOKEN
+                           (record "*\t*\t*\t*\t*\t*\t*v\t*v\t*" 'TandemInterpretation
                                    (list (token "*" 'NullInterpretation 28 0)
                                          (token "*" 'NullInterpretation 28 1)
                                          (token "*" 'NullInterpretation 28 2)
@@ -631,7 +631,7 @@
                                          (token "*v" 'SpineJoin 28 7)
                                          (token "*" 'NullInterpretation 28 8))
                                    28)
-                           (record "*\t*\t*\t*\t*\t*v\t*v\t*" TOKEN
+                           (record "*\t*\t*\t*\t*\t*v\t*v\t*" 'TandemInterpretation
                                    (list (token "*" 'NullInterpretation 29 0)
                                          (token "*" 'NullInterpretation 29 1)
                                          (token "*" 'NullInterpretation 29 2)
@@ -641,7 +641,7 @@
                                          (token "*v" 'SpineJoin 29 6)
                                          (token "*" 'NullInterpretation 29 7))
                                    29)
-                           (record "*\t*\t*\t*\t*v\t*v\t*" TOKEN
+                           (record "*\t*\t*\t*\t*v\t*v\t*" 'TandemInterpretation
                                    (list (token "*" 'NullInterpretation 30 0)
                                          (token "*" 'NullInterpretation 30 1)
                                          (token "*" 'NullInterpretation 30 2)
@@ -650,7 +650,7 @@
                                          (token "*v" 'SpineJoin 30 5)
                                          (token "*" 'NullInterpretation 30 6))
                                    30)
-                           (record "*\t*\t*v\t*v\t*\t*" TOKEN
+                           (record "*\t*\t*v\t*v\t*\t*" 'TandemInterpretation
                                    (list (token "*" 'NullInterpretation 31 0)
                                          (token "*" 'NullInterpretation 31 1)
                                          (token "*v" 'SpineJoin 31 2)
@@ -658,32 +658,32 @@
                                          (token "*" 'NullInterpretation 31 4)
                                          (token "*" 'NullInterpretation 31 5))
                                    31)
-                           (record "*\t*v\t*v\t*\t*" TOKEN
+                           (record "*\t*v\t*v\t*\t*" 'TandemInterpretation
                                    (list (token "*" 'NullInterpretation 32 0)
                                          (token "*v" 'SpineJoin 32 1)
                                          (token "*v" 'SpineJoin 32 2)
                                          (token "*" 'NullInterpretation 32 3)
                                          (token "*" 'NullInterpretation 32 4))
                                    32)
-                           (record "*v\t*v\t*\t*" TOKEN
+                           (record "*v\t*v\t*\t*" 'TandemInterpretation
                                    (list (token "*v" 'SpineJoin 33 0)
                                          (token "*v" 'SpineJoin 33 1)
                                          (token "*" 'NullInterpretation 33 2)
                                          (token "*" 'NullInterpretation 33 3))
                                    33)
-                           (record "==\t==\t==" TOKEN
+                           (record "==\t==\t==" 'Measure
                                    (list (token "==" 'Measure 34 0)
                                          (token "==" 'Measure 34 1)
                                          (token "==" 'Measure 34 2))
                                    34)
-                           (record "*-\t*-\t*-" TOKEN
+                           (record "*-\t*-\t*-" 'TandemInterpretation
                                    (list (token "*-" 'SpineTerminator 35 0)
                                          (token "*-" 'SpineTerminator 35 1)
                                          (token "*-" 'SpineTerminator 35 2))
                                    35))))
 (check-expect (spine-parser (path->hfile "../../data/count/three-spines-three-splits.krn"))
-              (list (global-spine KERN
-                                  (list (list (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
+              (list (global-spine 'Kern
+                                  (list (list (token "**kern" 'ExclusiveInterpretation 0 0))
                                         (list (token "*clefG2" 'Clef 1 0))
                                         (list (token "*k[]" 'KeySignature 2 0))
                                         (list (token "*a:" 'KeyLabel 3 0))
@@ -798,8 +798,8 @@
                                         (list (token "==" 'Measure 34 0))
                                         (list (token "*-" 'SpineTerminator 35 0)))
                                   0)
-                    (global-spine KERN
-                                  (list (list (token "**kern" EXCLUSIVE-INTERPRETATION 0 1))
+                    (global-spine 'Kern
+                                  (list (list (token "**kern" 'ExclusiveInterpretation 0 1))
                                         (list (token "*clefG2" 'Clef 1 1))
                                         (list (token "*k[]" 'KeySignature 2 1))
                                         (list (token "*a:" 'KeyLabel 3 1))
@@ -896,8 +896,8 @@
                                         (list (token "==" 'Measure 34 1))
                                         (list (token "*-" 'SpineTerminator 35 1)))
                                   1)
-                    (global-spine KERN
-                                  (list (list (token "**kern" EXCLUSIVE-INTERPRETATION 0 2))
+                    (global-spine 'Kern
+                                  (list (list (token "**kern" 'ExclusiveInterpretation 0 2))
                                         (list (token "*clefG2" 'Clef 1 2))
                                         (list (token "*k[]" 'KeySignature 2 2))
                                         (list (token "*a:" 'KeyLabel 3 2))
@@ -976,7 +976,7 @@
                                         (list (token "==" 'Measure 34 2))
                                         (list (token "*-" 'SpineTerminator 35 2)))
                                   2)))
-(check-expect (hgraph->hfile (hgraph (root (list (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
+(check-expect (hgraph->hfile (hgraph (root (list (list (leaf (token "**kern" 'ExclusiveInterpretation 0 0))
                                                        (leaf (token "*clefG2" 'Clef 1 0))
                                                        (leaf (token "*k[]" 'KeySignature 2 0))
                                                        (leaf (token "*a:" 'KeyLabel 3 0))
@@ -1090,7 +1090,7 @@
                                                                      (leaf (token "*v" 'SpineJoin 33 1))))
                                                        (leaf (token "==" 'Measure 34 0))
                                                        (leaf (token "*-" 'SpineTerminator 35 0)))
-                                                 (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 1))
+                                                 (list (leaf (token "**kern" 'ExclusiveInterpretation 0 1))
                                                        (leaf (token "*clefG2" 'Clef 1 1))
                                                        (leaf (token "*k[]" 'KeySignature 2 1))
                                                        (leaf (token "*a:" 'KeyLabel 3 1))
@@ -1186,7 +1186,7 @@
                                                        (leaf (token "*" 'NullInterpretation 33 2))
                                                        (leaf (token "==" 'Measure 34 1))
                                                        (leaf (token "*-" 'SpineTerminator 35 1)))
-                                                 (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 2))
+                                                 (list (leaf (token "**kern" 'ExclusiveInterpretation 0 2))
                                                        (leaf (token "*clefG2" 'Clef 1 2))
                                                        (leaf (token "*k[]" 'KeySignature 2 2))
                                                        (leaf (token "*a:" 'KeyLabel 3 2))
@@ -1265,9 +1265,9 @@
                                                        (leaf (token "==" 'Measure 34 2))
                                                        (leaf (token "*-" 'SpineTerminator 35 2)))))))
               (path->hfile "../../data/count/three-spines-three-splits.krn"))
-(check-expect (tokens->records (list (list (token "**kern" EXCLUSIVE-INTERPRETATION 0 0)
-                                      (token "**kern" EXCLUSIVE-INTERPRETATION 0 1)
-                                      (token "**kern" EXCLUSIVE-INTERPRETATION 0 2))
+(check-expect (tokens->records (list (list (token "**kern" 'ExclusiveInterpretation 0 0)
+                                      (token "**kern" 'ExclusiveInterpretation 0 1)
+                                      (token "**kern" 'ExclusiveInterpretation 0 2))
                                 (list (token "*clefG2" 'Clef 1 0)
                                       (token "*clefG2" 'Clef 1 1)
                                       (token "*clefG2" 'Clef 1 2))
@@ -1553,50 +1553,50 @@
                                 (list (token "*-" 'SpineTerminator 35 0)
                                       (token "*-" 'SpineTerminator 35 1)
                                       (token "*-" 'SpineTerminator 35 2))))
-              (list (record "**kern\t**kern\t**kern" TOKEN
-                            (list (token "**kern" EXCLUSIVE-INTERPRETATION 0 0)
-                                  (token "**kern" EXCLUSIVE-INTERPRETATION 0 1)
-                                  (token "**kern" EXCLUSIVE-INTERPRETATION 0 2))
+              (list (record "**kern\t**kern\t**kern" 'ExclusiveInterpretation
+                            (list (token "**kern" 'ExclusiveInterpretation 0 0)
+                                  (token "**kern" 'ExclusiveInterpretation 0 1)
+                                  (token "**kern" 'ExclusiveInterpretation 0 2))
                             0)
-                    (record "*clefG2\t*clefG2\t*clefG2" TOKEN
+                    (record "*clefG2\t*clefG2\t*clefG2" 'TandemInterpretation
                             (list (token "*clefG2" 'Clef 1 0)
                                   (token "*clefG2" 'Clef 1 1)
                                   (token "*clefG2" 'Clef 1 2))
                             1)
-                    (record "*k[]\t*k[]\t*k[]" TOKEN
+                    (record "*k[]\t*k[]\t*k[]" 'TandemInterpretation
                             (list (token "*k[]" 'KeySignature 2 0)
                                   (token "*k[]" 'KeySignature 2 1)
                                   (token "*k[]" 'KeySignature 2 2))
                             2)
-                    (record "*a:\t*a:\t*a:" TOKEN
+                    (record "*a:\t*a:\t*a:" 'TandemInterpretation
                             (list (token "*a:" 'KeyLabel 3 0)
                                   (token "*a:" 'KeyLabel 3 1)
                                   (token "*a:" 'KeyLabel 3 2))
                             3)
-                    (record "*M3/4\t*M3/4\t*M3/4" TOKEN
+                    (record "*M3/4\t*M3/4\t*M3/4" 'TandemInterpretation
                             (list (token "*M3/4" 'TimeSignature 4 0)
                                   (token "*M3/4" 'TimeSignature 4 1)
                                   (token "*M3/4" 'TimeSignature 4 2))
                             4)
-                    (record "*^\t*\t*" TOKEN
+                    (record "*^\t*\t*" 'TandemInterpretation
                             (list (token "*^" 'SpineSplit 5 0)
                                   (token "*" 'NullInterpretation 5 1)
                                   (token "*" 'NullInterpretation 5 2))
                             5)
-                    (record "*\t*^\t*\t*" TOKEN
+                    (record "*\t*^\t*\t*" 'TandemInterpretation
                             (list (token "*" 'NullInterpretation 6 0)
                                   (token "*^" 'SpineSplit 6 1)
                                   (token "*" 'NullInterpretation 6 2)
                                   (token "*" 'NullInterpretation 6 3))
                             6)
-                    (record "*\t*\t*^\t*\t*" TOKEN
+                    (record "*\t*\t*^\t*\t*" 'TandemInterpretation
                             (list (token "*" 'NullInterpretation 7 0)
                                   (token "*" 'NullInterpretation 7 1)
                                   (token "*^" 'SpineSplit 7 2)
                                   (token "*" 'NullInterpretation 7 3)
                                   (token "*" 'NullInterpretation 7 4))
                             7)
-                    (record "*\t*\t*\t*\t*^\t*" TOKEN
+                    (record "*\t*\t*\t*\t*^\t*" 'TandemInterpretation
                             (list (token "*" 'NullInterpretation 8 0)
                                   (token "*" 'NullInterpretation 8 1)
                                   (token "*" 'NullInterpretation 8 2)
@@ -1604,7 +1604,7 @@
                                   (token "*^" 'SpineSplit 8 4)
                                   (token "*" 'NullInterpretation 8 5))
                             8)
-                    (record "*\t*\t*\t*\t*\t*^\t*" TOKEN
+                    (record "*\t*\t*\t*\t*\t*^\t*" 'TandemInterpretation
                             (list (token "*" 'NullInterpretation 9 0)
                                   (token "*" 'NullInterpretation 9 1)
                                   (token "*" 'NullInterpretation 9 2)
@@ -1613,7 +1613,7 @@
                                   (token "*^" 'SpineSplit 9 5)
                                   (token "*" 'NullInterpretation 9 6))
                             9)
-                    (record "*\t*\t*\t*\t*\t*\t*^\t*" TOKEN
+                    (record "*\t*\t*\t*\t*\t*\t*^\t*" 'TandemInterpretation
                             (list (token "*" 'NullInterpretation 10 0)
                                   (token "*" 'NullInterpretation 10 1)
                                   (token "*" 'NullInterpretation 10 2)
@@ -1623,7 +1623,7 @@
                                   (token "*^" 'SpineSplit 10 6)
                                   (token "*" 'NullInterpretation 10 7))
                             10)
-                    (record "*\t*\t*\t*\t*\t*\t*\t*\t*^" TOKEN
+                    (record "*\t*\t*\t*\t*\t*\t*\t*\t*^" 'TandemInterpretation
                             (list (token "*" 'NullInterpretation 11 0)
                                   (token "*" 'NullInterpretation 11 1)
                                   (token "*" 'NullInterpretation 11 2)
@@ -1634,7 +1634,7 @@
                                   (token "*" 'NullInterpretation 11 7)
                                   (token "*^" 'SpineSplit 11 8))
                             11)
-                    (record "*\t*\t*\t*\t*\t*\t*\t*\t*\t*^" TOKEN
+                    (record "*\t*\t*\t*\t*\t*\t*\t*\t*\t*^" 'TandemInterpretation
                             (list (token "*" 'NullInterpretation 12 0)
                                   (token "*" 'NullInterpretation 12 1)
                                   (token "*" 'NullInterpretation 12 2)
@@ -1646,7 +1646,7 @@
                                   (token "*" 'NullInterpretation 12 8)
                                   (token "*^" 'SpineSplit 12 9))
                             12)
-                    (record "*\t*\t*\t*\t*\t*\t*\t*\t*\t*\t*^" TOKEN
+                    (record "*\t*\t*\t*\t*\t*\t*\t*\t*\t*\t*^" 'TandemInterpretation
                             (list (token "*" 'NullInterpretation 13 0)
                                   (token "*" 'NullInterpretation 13 1)
                                   (token "*" 'NullInterpretation 13 2)
@@ -1659,7 +1659,7 @@
                                   (token "*" 'NullInterpretation 13 9)
                                   (token "*^" 'SpineSplit 13 10))
                             13)
-                    (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" TOKEN
+                    (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" 'Token
                             (list (token "4c" 'SpineData 14 0)
                                   (token "4c" 'SpineData 14 1)
                                   (token "4c" 'SpineData 14 2)
@@ -1673,7 +1673,7 @@
                                   (token "4c" 'SpineData 14 10)
                                   (token "4c" 'SpineData 14 11))
                             14)
-                    (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" TOKEN
+                    (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" 'Token
                             (list (token "4c" 'SpineData 15 0)
                                   (token "4c" 'SpineData 15 1)
                                   (token "4c" 'SpineData 15 2)
@@ -1687,7 +1687,7 @@
                                   (token "4c" 'SpineData 15 10)
                                   (token "4c" 'SpineData 15 11))
                             15)
-                    (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" TOKEN
+                    (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" 'Token
                             (list (token "4c" 'SpineData 16 0)
                                   (token "4c" 'SpineData 16 1)
                                   (token "4c" 'SpineData 16 2)
@@ -1701,7 +1701,7 @@
                                   (token "4c" 'SpineData 16 10)
                                   (token "4c" 'SpineData 16 11))
                             16)
-                    (record "=2\t=2\t=2\t=2\t=2\t=2\t=2\t=2\t=2\t=2\t=2\t=2" TOKEN
+                    (record "=2\t=2\t=2\t=2\t=2\t=2\t=2\t=2\t=2\t=2\t=2\t=2" 'Measure
                             (list (token "=2" 'Measure 17 0)
                                   (token "=2" 'Measure 17 1)
                                   (token "=2" 'Measure 17 2)
@@ -1715,7 +1715,7 @@
                                   (token "=2" 'Measure 17 10)
                                   (token "=2" 'Measure 17 11))
                             17)
-                    (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" TOKEN
+                    (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" 'Token
                             (list (token "4c" 'SpineData 18 0)
                                   (token "4c" 'SpineData 18 1)
                                   (token "4c" 'SpineData 18 2)
@@ -1729,7 +1729,7 @@
                                   (token "4c" 'SpineData 18 10)
                                   (token "4c" 'SpineData 18 11))
                             18)
-                    (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" TOKEN
+                    (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" 'Token
                             (list (token "4c" 'SpineData 19 0)
                                   (token "4c" 'SpineData 19 1)
                                   (token "4c" 'SpineData 19 2)
@@ -1743,7 +1743,7 @@
                                   (token "4c" 'SpineData 19 10)
                                   (token "4c" 'SpineData 19 11))
                             19)
-                    (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" TOKEN
+                    (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" 'Token
                             (list (token "4c" 'SpineData 20 0)
                                   (token "4c" 'SpineData 20 1)
                                   (token "4c" 'SpineData 20 2)
@@ -1757,7 +1757,7 @@
                                   (token "4c" 'SpineData 20 10)
                                   (token "4c" 'SpineData 20 11))
                             20)
-                    (record "=3\t=3\t=3\t=3\t=3\t=3\t=3\t=3\t=3\t=3\t=3\t=3" TOKEN
+                    (record "=3\t=3\t=3\t=3\t=3\t=3\t=3\t=3\t=3\t=3\t=3\t=3" 'Measure
                             (list (token "=3" 'Measure 21 0)
                                   (token "=3" 'Measure 21 1)
                                   (token "=3" 'Measure 21 2)
@@ -1771,7 +1771,7 @@
                                   (token "=3" 'Measure 21 10)
                                   (token "=3" 'Measure 21 11))
                             21)
-                    (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" TOKEN
+                    (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" 'Token
                             (list (token "4c" 'SpineData 22 0)
                                   (token "4c" 'SpineData 22 1)
                                   (token "4c" 'SpineData 22 2)
@@ -1785,7 +1785,7 @@
                                   (token "4c" 'SpineData 22 10)
                                   (token "4c" 'SpineData 22 11))
                             22)
-                    (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" TOKEN
+                    (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" 'Token
                             (list (token "4c" 'SpineData 23 0)
                                   (token "4c" 'SpineData 23 1)
                                   (token "4c" 'SpineData 23 2)
@@ -1799,7 +1799,7 @@
                                   (token "4c" 'SpineData 23 10)
                                   (token "4c" 'SpineData 23 11))
                             23)
-                    (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" TOKEN
+                    (record "4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c\t4c" 'Token
                             (list (token "4c" 'SpineData 24 0)
                                   (token "4c" 'SpineData 24 1)
                                   (token "4c" 'SpineData 24 2)
@@ -1813,7 +1813,7 @@
                                   (token "4c" 'SpineData 24 10)
                                   (token "4c" 'SpineData 24 11))
                             24)
-                    (record "*\t*\t*\t*\t*\t*\t*\t*\t*\t*\t*v\t*v" TOKEN
+                    (record "*\t*\t*\t*\t*\t*\t*\t*\t*\t*\t*v\t*v" 'TandemInterpretation
                             (list (token "*" 'NullInterpretation 25 0)
                                   (token "*" 'NullInterpretation 25 1)
                                   (token "*" 'NullInterpretation 25 2)
@@ -1827,7 +1827,7 @@
                                   (token "*v" 'SpineJoin 25 10)
                                   (token "*v" 'SpineJoin 25 11))
                             25)
-                    (record "*\t*\t*\t*\t*\t*\t*\t*\t*\t*v\t*v" TOKEN
+                    (record "*\t*\t*\t*\t*\t*\t*\t*\t*\t*v\t*v" 'TandemInterpretation
                             (list (token "*" 'NullInterpretation 26 0)
                                   (token "*" 'NullInterpretation 26 1)
                                   (token "*" 'NullInterpretation 26 2)
@@ -1840,7 +1840,7 @@
                                   (token "*v" 'SpineJoin 26 9)
                                   (token "*v" 'SpineJoin 26 10))
                             26)
-                    (record "*\t*\t*\t*\t*\t*\t*\t*\t*v\t*v" TOKEN
+                    (record "*\t*\t*\t*\t*\t*\t*\t*\t*v\t*v" 'TandemInterpretation
                             (list (token "*" 'NullInterpretation 27 0)
                                   (token "*" 'NullInterpretation 27 1)
                                   (token "*" 'NullInterpretation 27 2)
@@ -1852,7 +1852,7 @@
                                   (token "*v" 'SpineJoin 27 8)
                                   (token "*v" 'SpineJoin 27 9))
                             27)
-                    (record "*\t*\t*\t*\t*\t*\t*v\t*v\t*" TOKEN
+                    (record "*\t*\t*\t*\t*\t*\t*v\t*v\t*" 'TandemInterpretation
                             (list (token "*" 'NullInterpretation 28 0)
                                   (token "*" 'NullInterpretation 28 1)
                                   (token "*" 'NullInterpretation 28 2)
@@ -1863,7 +1863,7 @@
                                   (token "*v" 'SpineJoin 28 7)
                                   (token "*" 'NullInterpretation 28 8))
                             28)
-                    (record "*\t*\t*\t*\t*\t*v\t*v\t*" TOKEN
+                    (record "*\t*\t*\t*\t*\t*v\t*v\t*" 'TandemInterpretation
                             (list (token "*" 'NullInterpretation 29 0)
                                   (token "*" 'NullInterpretation 29 1)
                                   (token "*" 'NullInterpretation 29 2)
@@ -1873,7 +1873,7 @@
                                   (token "*v" 'SpineJoin 29 6)
                                   (token "*" 'NullInterpretation 29 7))
                             29)
-                    (record "*\t*\t*\t*\t*v\t*v\t*" TOKEN
+                    (record "*\t*\t*\t*\t*v\t*v\t*" 'TandemInterpretation
                             (list (token "*" 'NullInterpretation 30 0)
                                   (token "*" 'NullInterpretation 30 1)
                                   (token "*" 'NullInterpretation 30 2)
@@ -1882,7 +1882,7 @@
                                   (token "*v" 'SpineJoin 30 5)
                                   (token "*" 'NullInterpretation 30 6))
                             30)
-                    (record "*\t*\t*v\t*v\t*\t*" TOKEN
+                    (record "*\t*\t*v\t*v\t*\t*" 'TandemInterpretation
                             (list (token "*" 'NullInterpretation 31 0)
                                   (token "*" 'NullInterpretation 31 1)
                                   (token "*v" 'SpineJoin 31 2)
@@ -1890,31 +1890,31 @@
                                   (token "*" 'NullInterpretation 31 4)
                                   (token "*" 'NullInterpretation 31 5))
                             31)
-                    (record "*\t*v\t*v\t*\t*" TOKEN
+                    (record "*\t*v\t*v\t*\t*" 'TandemInterpretation
                             (list (token "*" 'NullInterpretation 32 0)
                                   (token "*v" 'SpineJoin 32 1)
                                   (token "*v" 'SpineJoin 32 2)
                                   (token "*" 'NullInterpretation 32 3)
                                   (token "*" 'NullInterpretation 32 4))
                             32)
-                    (record "*v\t*v\t*\t*" TOKEN
+                    (record "*v\t*v\t*\t*" 'TandemInterpretation
                             (list (token "*v" 'SpineJoin 33 0)
                                   (token "*v" 'SpineJoin 33 1)
                                   (token "*" 'NullInterpretation 33 2)
                                   (token "*" 'NullInterpretation 33 3))
                             33)
-                    (record "==\t==\t==" TOKEN
+                    (record "==\t==\t==" 'Measure
                             (list (token "==" 'Measure 34 0)
                                   (token "==" 'Measure 34 1)
                                   (token "==" 'Measure 34 2))
                             34)
-                    (record "*-\t*-\t*-" TOKEN
+                    (record "*-\t*-\t*-" 'TandemInterpretation
                             (list (token "*-" 'SpineTerminator 35 0)
                                   (token "*-" 'SpineTerminator 35 1)
                                   (token "*-" 'SpineTerminator 35 2))
                             35)))
 (check-expect (hgraph->tokens
-               (hgraph (root (list (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
+               (hgraph (root (list (list (leaf (token "**kern" 'ExclusiveInterpretation 0 0))
                                          (leaf (token "*clefG2" 'Clef 1 0))
                                          (leaf (token "*k[]" 'KeySignature 2 0))
                                          (leaf (token "*a:" 'KeyLabel 3 0))
@@ -2028,7 +2028,7 @@
                                                        (leaf (token "*v" 'SpineJoin 33 1))))
                                          (leaf (token "==" 'Measure 34 0))
                                          (leaf (token "*-" 'SpineTerminator 35 0)))
-                                   (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 1))
+                                   (list (leaf (token "**kern" 'ExclusiveInterpretation 0 1))
                                          (leaf (token "*clefG2" 'Clef 1 1))
                                          (leaf (token "*k[]" 'KeySignature 2 1))
                                          (leaf (token "*a:" 'KeyLabel 3 1))
@@ -2124,7 +2124,7 @@
                                          (leaf (token "*" 'NullInterpretation 33 2))
                                          (leaf (token "==" 'Measure 34 1))
                                          (leaf (token "*-" 'SpineTerminator 35 1)))
-                                   (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 2))
+                                   (list (leaf (token "**kern" 'ExclusiveInterpretation 0 2))
                                          (leaf (token "*clefG2" 'Clef 1 2))
                                          (leaf (token "*k[]" 'KeySignature 2 2))
                                          (leaf (token "*a:" 'KeyLabel 3 2))
@@ -2202,9 +2202,9 @@
                                          (leaf (token "*" 'NullInterpretation 33 3))
                                          (leaf (token "==" 'Measure 34 2))
                                          (leaf (token "*-" 'SpineTerminator 35 2)))))))
-              (list (list (token "**kern" EXCLUSIVE-INTERPRETATION 0 0)
-                          (token "**kern" EXCLUSIVE-INTERPRETATION 0 1)
-                          (token "**kern" EXCLUSIVE-INTERPRETATION 0 2))
+              (list (list (token "**kern" 'ExclusiveInterpretation 0 0)
+                          (token "**kern" 'ExclusiveInterpretation 0 1)
+                          (token "**kern" 'ExclusiveInterpretation 0 2))
                     (list (token "*clefG2" 'Clef 1 0)
                           (token "*clefG2" 'Clef 1 1)
                           (token "*clefG2" 'Clef 1 2))
@@ -2492,7 +2492,7 @@
                           (token "*-" 'SpineTerminator 35 2))))
 #|
 (check-expect (hfile->hgraph (path->hfile "../../data/count/three-spines-three-splits.krn"))
-              (hgraph (root (list (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 0))
+              (hgraph (root (list (list (leaf (token "**kern" 'ExclusiveInterpretation 0 0))
                                         (leaf (token "*clefG2" 'Clef 1 0))
                                         (leaf (token "*k[]" 'KeySignature 2 0))
                                         (leaf (token "*a:" 'KeyLabel 3 0))
@@ -2606,7 +2606,7 @@
                                                       (leaf (token "*v" 'SpineJoin 33 1))))
                                         (leaf (token "==" 'Measure 34 0))
                                         (leaf (token "*-" 'SpineTerminator 35 0)))
-                                  (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 1))
+                                  (list (leaf (token "**kern" 'ExclusiveInterpretation 0 1))
                                         (leaf (token "*clefG2" 'Clef 1 1))
                                         (leaf (token "*k[]" 'KeySignature 2 1))
                                         (leaf (token "*a:" 'KeyLabel 3 1))
@@ -2702,7 +2702,7 @@
                                         (leaf (token "*" 'NullInterpretation 33 2))
                                         (leaf (token "==" 'Measure 34 1))
                                         (leaf (token "*-" 'SpineTerminator 35 1)))
-                                  (list (leaf (token "**kern" EXCLUSIVE-INTERPRETATION 0 2))
+                                  (list (leaf (token "**kern" 'ExclusiveInterpretation 0 2))
                                         (leaf (token "*clefG2" 'Clef 1 2))
                                         (leaf (token "*k[]" 'KeySignature 2 2))
                                         (leaf (token "*a:" 'KeyLabel 3 2))
