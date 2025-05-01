@@ -15,9 +15,11 @@
          "../spine-parsing-fn.rkt"
          "HumdrumGraph.rkt")
 
-#|
 (provide hfile->hgraph)
 
+(define hfile->hgraph (λ (p) #f))
+
+#|
 ; hfile->hgraph
 ; HumdrumFile -> HumdrumGraph
 ; converts the HumdrumFile to a HumdrumGraph

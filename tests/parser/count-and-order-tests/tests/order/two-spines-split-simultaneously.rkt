@@ -1,13 +1,13 @@
 #lang racket/base
 
-(require "../../../../parser/data-definitions/data-definitions.rkt"
-         "../../../../parser/functions/file.rkt"
-         "../../../../parser/functions/spine-parser.rkt"
-         "../../../../parser/data-structures/humdrum-graph/data-definitions/data-definitions.rkt"
-         "../../../../parser/data-structures/humdrum-graph/functions/hgraph-to-hfile.rkt"
-         "../../../../parser/data-structures/humdrum-graph/functions/hfile-to-hgraph.rkt"
-         "../../../../parser/data-structures/linked-spine/data-definitions/data-definitions.rkt"
-         "../../../../parser/data-structures/linked-spine/functions/gspines-to-linked-spines.rkt"
+(require "../../../../../parser/HumdrumSyntax.rkt"
+         "../../../../../parser/file-fn.rkt"
+         "../../../../../parser/spine-parsing-fn.rkt"
+         "../../../../../parser/humdrum-graph/HumdrumGraph.rkt"
+         "../../../../../parser/humdrum-graph/hfile-to-hgraph-fn.rkt"
+         "../../../../../parser/humdrum-graph/hgraph-to-hfile-fn.rkt"
+         "../../../../../parser/linked-spine/LinkedSpine.rkt"
+         "../../../../../parser/linked-spine/gspines-to-linked-spines-fn.rkt"
          test-engine/racket-tests)
 
 ;; Node definitions
@@ -43,49 +43,49 @@
 (define KERN-0-1 (token-node (token "**kern" 'ExclusiveInterpretation 0 1) (box-immutable S-1-1)))
 
 (check-expect (path->hfile "../../data/order/two-spines-split-simultaneously.krn")
-              (hfile (list (record "**kern\t**kern" TOKEN
+              (hfile (list (record "**kern\t**kern" 'ExclusiveInterpretation
                                    (list (token "**kern" 'ExclusiveInterpretation 0 0)
                                          (token "**kern" 'ExclusiveInterpretation 0 1))
                                    0)
-                           (record "*^\t*^" TOKEN
+                           (record "*^\t*^" 'TandemInterpretation
                                    (list (token "*^" 'SpineSplit 1 0)
                                          (token "*^" 'SpineSplit 1 1))
                                    1)
-                           (record "4c\t4c\t4c\t4c" TOKEN
+                           (record "4c\t4c\t4c\t4c" 'Token
                                    (list (token "4c" 'SpineData 2 0)
                                          (token "4c" 'SpineData 2 1)
                                          (token "4c" 'SpineData 2 2)
                                          (token "4c" 'SpineData 2 3))
                                    2)
-                           (record "4c\t4c\t4c\t4c" TOKEN
+                           (record "4c\t4c\t4c\t4c" 'Token
                                    (list (token "4c" 'SpineData 3 0)
                                          (token "4c" 'SpineData 3 1)
                                          (token "4c" 'SpineData 3 2)
                                          (token "4c" 'SpineData 3 3))
                                    3)
-                           (record "4c\t4c\t4c\t4c" TOKEN
+                           (record "4c\t4c\t4c\t4c" 'Token
                                    (list (token "4c" 'SpineData 4 0)
                                          (token "4c" 'SpineData 4 1)
                                          (token "4c" 'SpineData 4 2)
                                          (token "4c" 'SpineData 4 3))
                                    4)
-                           (record "*\t*\t*v\t*v" TOKEN
+                           (record "*\t*\t*v\t*v" 'TandemInterpretation
                                    (list (token "*" 'NullInterpretation 5 0)
                                          (token "*" 'NullInterpretation 5 1)
                                          (token "*v" 'SpineJoin 5 2)
                                          (token "*v" 'SpineJoin 5 3))
                                    5)
-                           (record "*v\t*v\t*" TOKEN
+                           (record "*v\t*v\t*" 'TandemInterpretation
                                    (list (token "*v" 'SpineJoin 6 0)
                                          (token "*v" 'SpineJoin 6 1)
                                          (token "*" 'NullInterpretation 6 2))
                                    6)
-                           (record "*-\t*-" TOKEN
+                           (record "*-\t*-" 'TandemInterpretation
                                    (list (token "*-" 'SpineTerminator 7 0)
                                          (token "*-" 'SpineTerminator 7 1))
                                    7))))
 (check-expect (spine-parser (path->hfile "../../data/order/two-spines-split-simultaneously.krn"))
-              (list (global-spine KERN
+              (list (global-spine 'Kern
                                   (list (list (token "**kern" 'ExclusiveInterpretation 0 0))
                                         (list (token "*^" 'SpineSplit 1 0))
                                         (list (token "4c" 'SpineData 2 0)
@@ -100,7 +100,7 @@
                                               (token "*v" 'SpineJoin 6 1))
                                         (list (token "*-" 'SpineTerminator 7 0)))
                                   0)
-                    (global-spine KERN
+                    (global-spine 'Kern
                                   (list (list (token "**kern" 'ExclusiveInterpretation 0 1))
                                         (list (token "*^" 'SpineSplit 1 1))
                                         (list (token "4c" 'SpineData 2 2)
@@ -141,7 +141,7 @@
                                          (leaf (token "*" 'NullInterpretation 6 2))
                                          (leaf (token "*-" 'SpineTerminator 7 1)))))))
               (path->hfile "../../data/order/two-spines-split-simultaneously.krn"))
-(check-expect (lolot->lor (list (list (token "**kern" 'ExclusiveInterpretation 0 0)
+(check-expect (tokens->records (list (list (token "**kern" 'ExclusiveInterpretation 0 0)
                                       (token "**kern" 'ExclusiveInterpretation 0 1))
                                 (list (token "*^" 'SpineSplit 1 0)
                                       (token "*^" 'SpineSplit 1 1))
@@ -166,48 +166,48 @@
                                       (token "*" 'NullInterpretation 6 2))
                                 (list (token "*-" 'SpineTerminator 7 0)
                                       (token "*-" 'SpineTerminator 7 1))))
-              (list (record "**kern\t**kern" TOKEN
+              (list (record "**kern\t**kern" 'ExclusiveInterpretation
                             (list (token "**kern" 'ExclusiveInterpretation 0 0)
                                   (token "**kern" 'ExclusiveInterpretation 0 1))
                             0)
-                    (record "*^\t*^" TOKEN
+                    (record "*^\t*^" 'TandemInterpretation
                             (list (token "*^" 'SpineSplit 1 0)
                                   (token "*^" 'SpineSplit 1 1))
                             1)
-                    (record "4c\t4c\t4c\t4c" TOKEN
+                    (record "4c\t4c\t4c\t4c" 'Token
                             (list (token "4c" 'SpineData 2 0)
                                   (token "4c" 'SpineData 2 1)
                                   (token "4c" 'SpineData 2 2)
                                   (token "4c" 'SpineData 2 3))
                             2)
-                    (record "4c\t4c\t4c\t4c" TOKEN
+                    (record "4c\t4c\t4c\t4c" 'Token
                             (list (token "4c" 'SpineData 3 0)
                                   (token "4c" 'SpineData 3 1)
                                   (token "4c" 'SpineData 3 2)
                                   (token "4c" 'SpineData 3 3))
                             3)
-                    (record "4c\t4c\t4c\t4c" TOKEN
+                    (record "4c\t4c\t4c\t4c" 'Token
                             (list (token "4c" 'SpineData 4 0)
                                   (token "4c" 'SpineData 4 1)
                                   (token "4c" 'SpineData 4 2)
                                   (token "4c" 'SpineData 4 3))
                             4)
-                    (record "*\t*\t*v\t*v" TOKEN
+                    (record "*\t*\t*v\t*v" 'TandemInterpretation
                             (list (token "*" 'NullInterpretation 5 0)
                                   (token "*" 'NullInterpretation 5 1)
                                   (token "*v" 'SpineJoin 5 2)
                                   (token "*v" 'SpineJoin 5 3))
                             5)
-                    (record "*v\t*v\t*" TOKEN
+                    (record "*v\t*v\t*" 'TandemInterpretation
                             (list (token "*v" 'SpineJoin 6 0)
                                   (token "*v" 'SpineJoin 6 1)
                                   (token "*" 'NullInterpretation 6 2))
                             6)
-                    (record "*-\t*-" TOKEN
+                    (record "*-\t*-" 'TandemInterpretation
                             (list (token "*-" 'SpineTerminator 7 0)
                                   (token "*-" 'SpineTerminator 7 1))
                             7)))
-(check-expect (hgraph->lolot
+(check-expect (hgraph->tokens
                (hgraph (root (list (list (leaf (token "**kern" 'ExclusiveInterpretation 0 0))
                                          (parent (token "*^" 'SpineSplit 1 0)
                                                  (list (leaf (token "4c" 'SpineData 2 0))
@@ -287,5 +287,14 @@
 (check-expect (gspines->linked-spines (spine-parser (path->hfile "../../data/order/two-spines-split-simultaneously.krn"))
                                       (path->hfile "../../data/order/two-spines-split-simultaneously.krn"))
               (list (linked-spine KERN-0-0) (linked-spine KERN-0-1)))
+(check-expect (extract-spine-arity (path->hfile "../../data/order/two-spines-split-simultaneously.krn"))
+              (spine-arity 2 (list (list 1 1)
+                                   (list 1 1)
+                                   (list 2 2)
+                                   (list 2 2)
+                                   (list 2 2)
+                                   (list 2 2)
+                                   (list 2 1)
+                                   (list 1 1))))
 
 (test)
