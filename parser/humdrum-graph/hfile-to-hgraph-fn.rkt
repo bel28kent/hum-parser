@@ -17,18 +17,7 @@
 
 (provide hfile->hgraph)
 
-(define hfile->hgraph (λ (p) #f))
-
-#|
-; hfile->hgraph
-; HumdrumFile -> HumdrumGraph
-; converts the HumdrumFile to a HumdrumGraph
 (define/contract (hfile->hgraph hfile)
   (-> humdrum-file? humdrum-graph?)
-  (local [(define linked-spines (gspines->linked-spines (spine-parser hfile) hfile))
-
-          ; LinkedSpine -> (listof Node)
-          (define (linked-spine->branch l-spine)
-            ())]
-    (hgraph (root (map linked-spine->branch linked-spines)))))
-|#
+  (hgraph
+    (root empty)))

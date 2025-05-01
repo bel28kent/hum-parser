@@ -31,7 +31,6 @@
          (struct-out leaf)
          (struct-out parent))
 
-
 (struct humdrum-graph (root) #:constructor-name hgraph #:transparent)
 
 (struct root (branches) #:transparent)
@@ -54,8 +53,7 @@
 
 (struct parent (token left right) #:transparent)
 ; Parent is (parent Token (listof Node) (listof Node))
-;  Represents a node with two children. The last
-;  token in each list is a spine-join.
+;  Represents a node with two children.
 
 ; Empty HumdrumGraph
 (define EMPTY-HGRAPH (hgraph (root empty)))
