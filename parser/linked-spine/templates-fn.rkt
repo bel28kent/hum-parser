@@ -10,8 +10,8 @@
 
 (define (fn-for-linked-spine linked-spine)
   (local [(define (fn-for-node node)
-            (cond [(token-node?) (fn-for-token-node node)]
-                  [(split-node?) (fn-for-split-node node)]
+            (cond [(token-node? node) (fn-for-token-node node)]
+                  [(split-node? node) (fn-for-split-node node)]
                   [else
                     (fn-for-terminator-node node)]))
 
