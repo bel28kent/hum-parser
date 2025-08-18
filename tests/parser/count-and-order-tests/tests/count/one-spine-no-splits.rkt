@@ -192,7 +192,6 @@
                     (list (token "4c" 'SpineData 15 0))
                     (list (token "==" 'Measure 16 0))
                     (list (token "*-" 'SpineTerminator 17 0))))
-#|
 (check-expect (hfile->hgraph one-spine-no-splits)
               (hgraph (root (list (list (leaf (token "**kern" 'ExclusiveInterpretation 0 0))
                                         (leaf (token "*clefG2" 'Clef 1 0))
@@ -212,7 +211,6 @@
                                         (leaf (token "4c" 'SpineData 15 0))
                                         (leaf (token "==" 'Measure 16 0))
                                         (leaf (token "*-" 'SpineTerminator 17 0)))))))
-|#
 (check-expect (gspines->linked-spines (spine-parser
                                         one-spine-no-splits)
                                       one-spine-no-splits)

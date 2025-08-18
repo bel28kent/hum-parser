@@ -486,7 +486,6 @@
                           (token "*v" 'SpineJoin 17 1))
                     (list (token "==" 'Measure 18 0))
                     (list (token "*-" 'SpineTerminator 19 0))))
-#|
 (check-expect (hfile->hgraph (path->hfile "../../data/count/one-spine-one-split.krn"))
               (hgraph (root (list (list (leaf (token "**kern" 'ExclusiveInterpretation 0 0))
                                         (leaf (token "*clefG2" 'Clef 1 0))
@@ -520,7 +519,6 @@
                                                       (leaf (token "*v" 'SpineJoin 17 1))))
                                         (leaf (token "==" 'Measure 18 0))
                                         (leaf (token "*-" 'SpineTerminator 19 0)))))))
-|#
 (check-expect (gspines->linked-spines (spine-parser (path->hfile "../../data/count/one-spine-one-split.krn"))
                                       (path->hfile "../../data/count/one-spine-one-split.krn"))
               (list (linked-spine KERN-0-0)))

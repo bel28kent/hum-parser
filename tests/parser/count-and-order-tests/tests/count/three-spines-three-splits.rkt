@@ -2490,7 +2490,6 @@
                     (list (token "*-" 'SpineTerminator 35 0)
                           (token "*-" 'SpineTerminator 35 1)
                           (token "*-" 'SpineTerminator 35 2))))
-#|
 (check-expect (hfile->hgraph (path->hfile "../../data/count/three-spines-three-splits.krn"))
               (hgraph (root (list (list (leaf (token "**kern" 'ExclusiveInterpretation 0 0))
                                         (leaf (token "*clefG2" 'Clef 1 0))
@@ -2780,7 +2779,6 @@
                                         (leaf (token "*" 'NullInterpretation 33 3))
                                         (leaf (token "==" 'Measure 34 2))
                                         (leaf (token "*-" 'SpineTerminator 35 2)))))))
-|#
 (check-expect (gspines->linked-spines (spine-parser (path->hfile "../../data/count/three-spines-three-splits.krn"))
                                       (path->hfile "../../data/count/three-spines-three-splits.krn"))
               (list (linked-spine KERN-0-0) (linked-spine KERN-0-1) (linked-spine KERN-0-2)))
