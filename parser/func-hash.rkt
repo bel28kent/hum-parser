@@ -4,6 +4,8 @@
 	Functions for hash data types.
 |#
 
+(require (only-in racket/bool false? symbol=?))
+
 (define/contract (hash-match? hsh key str)
   (-> hash? symbol? string? boolean?)
   (regexp-match? (pregexp (hash-ref hsh key)) str))

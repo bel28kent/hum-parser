@@ -6,9 +6,6 @@
 	Reference: Humdrum Guide, Chapter 5.
 |#
 
-(require racket/bool
-         (only-in "abstract-fn.rkt" get-type hash-match? hash-member?))
-
 (provide StopSeparator
          TokenSeparator
          (struct-out global-spine)
