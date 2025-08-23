@@ -46,3 +46,24 @@
 
 (define (type-tandem str)
   (get-type str TandemInterpretation 'Unknown))
+
+(define (humdrum-record-type-match? type str)
+  (hash-match? HumdrumRecord type str))
+
+(define (type-humdrum-record str)
+  (get-type str HumdrumRecord 'error))
+
+(define (humdrum-token-type-match? type str)
+  (hash-match? HumdrumToken type str))
+
+(define (type-humdrum-token str)
+  (get-type str HumdrumToken 'error))
+
+(define (is-spine-content-str? str)
+  (is-spine-content-type?
+    (type-humdrum-record str)))
+
+(define (is-spine-content-type? symbol)
+  (false?
+    (or (symbol=? 'GlobalComment symbol)
+        (symbol=? 'ReferenceRecord symbol))))

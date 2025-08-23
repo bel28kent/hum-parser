@@ -15,7 +15,7 @@
                             'GlobalComment           "^!![^!].*$"
                             'LocalComment            "^![^!].*$"
                             'Measure                 "^="
-                            'Reference               "^!!!.*$"
+                            'ReferenceRecord         "^!!!.*$"
                             'TandemInterpretation    "^\\*[^\\*].*$"
                             'Token                   "^[^\\*!=].*"
 ))

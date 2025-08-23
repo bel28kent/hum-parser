@@ -15,13 +15,7 @@
          (struct-out humdrum-file)
          (struct-out record)
          (struct-out spine-arity)
-         (struct-out token)
-         humdrum-record-type-match?
-         type-humdrum-record
-         is-spine-content-str?
-         is-spine-content-type?
-         humdrum-token-type-match?
-         type-humdrum-token)
+         (struct-out token))
 
 (define StopSeparator " ")
 
@@ -89,29 +83,6 @@
                            (error type-name
                                   "String Symbol Natural Natural; Given: ~a ~a ~a ~a"
                                   token type record-index field-index)])))
-
-(define (humdrum-record-type-match? type str)
-  (hash-match? HumdrumRecordType type str))
-
-(define (type-humdrum-record str)
-  (get-type str HumdrumRecordType 'error))
-
-(define (is-spine-content-str? str)
-  (is-spine-content-type?
-    (type-humdrum-record str)))
-
-(define (is-spine-content-type? symbol)
-  (or (symbol=? 'ExclusiveInterpretation symbol)
-      (symbol=? 'LocalComment symbol)
-      (symbol=? 'Measure symbol)
-      (symbol=? 'TandemInterpretation symbol)
-      (symbol=? 'Token symbol)))
-
-(define (humdrum-token-type-match? type str)
-  (hash-match? HumdrumTokenType type str))
-
-(define (type-humdrum-token str)
-  (get-type str HumdrumTokenType 'error))
 
 (define (int&>=? i lower)
   (and (integer? i) (>= i lower)))
