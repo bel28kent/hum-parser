@@ -1,7 +1,7 @@
 #lang racket/base
 
 #|
-	Types related to Humdrum syntax.
+	Types for low-level parsing of Humdrum data. See TODO: docs/parsing.md.
 
 	Reference: Humdrum Guide, Chapter 5.
 |#
@@ -9,9 +9,7 @@
 (require racket/bool
          (only-in "abstract-fn.rkt" get-type hash-match? hash-member?))
 
-(provide HumdrumRecordType
-         HumdrumTokenType
-         StopSeparator
+(provide StopSeparator
          TokenSeparator
          (struct-out global-spine)
          (struct-out humdrum-file)
@@ -24,23 +22,6 @@
          is-spine-content-type?
          humdrum-token-type-match?
          type-humdrum-token)
-
-(define HumdrumRecordType (hash 'ExclusiveInterpretation "^\\*\\*.*$"
-                                'GlobalComment           "^!![^!].*$"
-                                'LocalComment            "^![^!].*$"
-                                'Measure                 "^="
-                                'Reference               "^!!!.*$"
-                                'TandemInterpretation    "^\\*[^\\*].*$"
-                                'Token                   "^[^\\*!=].*"
-))
-
-(define HumdrumTokenType (hash 'ExclusiveInterpretation "^\\*\\*\\w+$"
-                               'LocalComment            "^!{1}.*$"
-                               'Measure                 "^=[^\\s]*$"
-                               'NullSpineData           "^\\.$"
-                               'SpineData               "^[^\\*!=\\.].*$"
-                               'TandemInterpretation    "^\\*[^\\*]*$"
-))
 
 (define StopSeparator " ")
 

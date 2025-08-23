@@ -1,17 +1,15 @@
 #lang racket/base
 
 #|
-	Enumeration of known tandem interpretations.
+	Known tandem interpretations.
 
         Implemented as (hash Symbol RegularExpression ...)
+
+	To treat as an (unordered) enumeration:
+		(hash-keys TandemInterpretation)
 |#
 
-(require (only-in "abstract-fn.rkt" get-type hash-match? hash-member?))
-
-(provide TandemInterpretation
-         tandem-interpretation?
-         tandem-interpretation-match?
-         type-tandem)
+(provide TandemInterpretation)
 
 (define TandemInterpretation (hash 'AboveStaff            "^\\*above$"
                                    'AllaOttava            "^\\*8va$"
@@ -52,12 +50,3 @@
                                    'TimeSignature         "^\\*M\\d+/\\d+$"
                                    'Tremolo               "^\\*tremolo$"
 ))
-
-(define (tandem-interpretation? str)
-  (hash-member? TandemInterpretation str))
-
-(define (tandem-interpretation-match? interp str)
-  (hash-match? TandemInterpretation interp str))
-
-(define (type-tandem str)
-  (get-type str TandemInterpretation 'Unknown))

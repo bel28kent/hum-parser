@@ -1,17 +1,15 @@
 #lang racket/base
 
 #|
-	Enumeration of known exclusive interpretations.
+	Known exclusive interpretations.
 
 	Implemented as (hash Symbol RegularExpression ...)
+
+	To treat as an (unordered) enumeration:
+		(hash-keys ExclusiveInterpretation)
 |#
 
-(require (only-in "abstract-fn.rkt" get-type hash-match? hash-member?))
-
-(provide ExclusiveInterpretation
-         exclusive-interpretation?
-         exclusive-interpretation-match?
-         type-exclusive)
+(provide ExclusiveInterpretation)
 
 (define ExclusiveInterpretation (hash 'Dynam "^\\*{2}dynam$"
                                       'Kern  "^\\*{2}kern$"
@@ -20,12 +18,3 @@
                                       'Solfa "^\\*{2}solfa$"
                                       'Text  "^\\*{2}text$"
 ))
-
-(define (exclusive-interpretation? str)
-  (hash-member? ExclusiveInterpretation str))
-
-(define (exclusive-interpretation-match? interp str)
-  (hash-match? ExclusiveInterpretation interp str))
-
-(define (type-exclusive str)
-  (get-type str ExclusiveInterpretation 'Unknown))
