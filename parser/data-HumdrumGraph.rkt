@@ -1,91 +1,60 @@
 #lang racket/base
 
 #|
-    A HumdrumGraph is a directed graph. A HumdrumGraph is best
-    imagined as trees with branches and nodes, though it allows
-    for joins. They are two-dimensional and afford vertical
-    (depth-first) and horizontal (breadth-first) traversal. In
-    a musical context, these are akin to melodic and harmonic
-    analysis.
+	A HumdrumGraph is a directed graph. It is two-dimensional,
+	and affords vertical (depth-first) and horizontal
+	(breadth-first) traversal. In a musical context, these
+	are akin to melodic and harmonic analysis.
 
-    A HumdrumGraph has an arbitrary number of branches. Each branch
-    represents one global spine in a Humdrum file. Branches are
-    ordered; the leftmost branch is the leftmost spine of the Humdrum
-    file.
+	The humdrum-graph struct has two fields:
+		- humdrum-graph-vertices:
+			A list of lists of Humdrum tokens.
+		- humdrum-graph-edges:
+			A list of hashes. Each key is a token.
+			Each value is a list of tokens with an
+			edge to the key.
 
-    A branch is a list of nodes. This list is also ordered, with the
-    first node of each branch being the exclusive interpretation
-    of the corresponding spine, and the remaining tokens following
-    in the order that they would be read in a file.
+	The HumdrumGraph is ordered:
+		- The first list of vertices is the leftmost spine
+		  in the Humdrum file. The last list of vertices
+		  is the rightmost spine in the Humdrum file.
+		- The first vertex in each list is an exclusive
+		  interpretation, the first token in any spine.
+		  The last vertex in each list is a spine
+		  terminator, the last token in any spine. See
+		  Humdrum Guide, Chapter 5, "The Humdrum Syntax: A
+		  Formal Definition."
+		- All intervening data is in the order read from
+		  the Humdrum file.
 
-    A node is either a leaf or a parent. A leaf represents a single
-    token. A parent represents a spine split that creates a left and
-    right sub-branch.
+	NB: Each list in humdrum-graph-vertices is a flat list.
+	    If spine splits have occured, sibling tokens follow
+	    each other in the list:
+		4a
+		*^
+		4a	4cc
+		->
+		(list 4a *^ 4a 4cc)
+	    Thus, when traversing a HumdrumGraph, each token must
+	    ask if the next token in the list is a sibling or a
+	    child token.
 |#
 
-(require racket/list
-         "../HumdrumSyntax.rkt")
+(provide (struct-out humdrum-graph))
 
-(provide (struct-out humdrum-graph)
-         (struct-out root)
-         (struct-out leaf)
-         (struct-out parent))
-
-(struct humdrum-graph (root) #:constructor-name hgraph #:transparent)
-
-(struct root (branches) #:transparent)
-; Root is (root (listof (listof Node)))
-;  Represents the top of the graph.
-; CONSTRAINT: branches is an ordered list,
-;  matching the order of the Humdrum file.
-
-; Node is one of:
-;  - Leaf
-;  - Parent
-;  Represents a node of the graph, either
-;    a leaf (single token), or a parent
-;    (spine split token with left and right
-;    children).
-
-(struct leaf (token) #:transparent)
-; Leaf is (leaf Token)
-;  Represents a node with 0 or 1 children.
-
-(struct parent (token left right) #:transparent)
-; Parent is (parent Token (listof Node) (listof Node))
-;  Represents a node with two children.
-
-; Empty HumdrumGraph
-(define EMPTY-HGRAPH (hgraph (root empty)))
-
-; HumdrumGraph with one spine, no splits
-(define SIMPLE-AB-HGRAPH (hgraph (root (list (list
-                                              (leaf (token "**kern" 'ExclusiveInterpretation 0 0))
-                                              (leaf (token "4a" 'SpineData 1 0))
-                                              (leaf (token "4b" 'SpineData 2 0)))))))
-
-; HumdrumGraph with two spines, no splits
-(define HGRAPH-TWO-SPINES (hgraph (root (list (list
-                                               (leaf (token "**kern" 'ExclusiveInterpretation 0 0))
-                                               (leaf (token "4a" 'SpineData 1 0))
-                                               (leaf (token "4b" 'SpineData 2 0)))
-                                              (list
-                                               (leaf
-                                                (token "**dynam" 'ExclusiveInterpretation 0 0))
-                                               (leaf (token "f" 'SpineData 1 0))
-                                               (leaf (token "p" 'SpineData 2 0)))))))
-
-; HumdrumGraph with one spine, splits
-(define HGRAPH-ONE-SPLITS (hgraph (root (list (list
-                                               (leaf (token "**kern" 'ExclusiveInterpretation 0 0))
-                                               (leaf (token "4a" 'SpineData 1 0))
-                                               (parent (token "*^" 'SpineSplit 2 0)
-                                                       (list (leaf (token "4a" 'SpineData 3 0))
-                                                             (leaf (token "4a" 'SpineData 4 0))
-                                                             (leaf (token "*v" 'SpineJoin 5 0)))
-                                                       (list (leaf (token "4aa" 'SpineData 3 1))
-                                                             (leaf (token "4aa" 'SpineData 4 1))
-                                                             (leaf (token "*v" 'SpineJoin 5 1))))
-                                               (leaf (token "4a" 'SpineData 6 0))
-                                               (leaf (token "4b" 'SpineData 7 0))
-                                               (leaf (token "4c" 'SpineData 8 0)))))))
+(struct humdrum-graph (vertices edges)
+        #:guard (λ (vertices edges name)
+                   (unless (= (length vertices) (length edges))
+                           (error name
+                                  "Number of vertices and edges do not match"
+                                  vertices edges)))
+        #:transparent)
+; (humdrum-graph (listof (listof Vertex)) (listof Hash))
+;
+; Vertex is a Token.
+; (listof Vertex) is a Spine.
+;
+; Hash is a table of key (Token) - value (listof Token) pairs.
+;
+; Vertex is a node in the graph. Its associated (listof Token) in
+; the Hash contains its Edges.
