@@ -21,18 +21,27 @@
   (hash-ref edges vertex))
 
 ; TODO: optional argument to only return result of right-siblings, useful for bft.
-(define (siblings hgraph vertex)
+(define (siblings hgraph vertex [right? #f])
   ; TODO: returns a list of vertices that are siblings to vertex
   ; cf. NB in data-HumdrumGraph.rkt. This will involve asking
   ; if the next element(s) in the list that this vertex came from
   ; are siblings (spine split case) and looking for siblings in
   ; the neighboring spines.
-  (local [(define (spine-split ...)
-            ; TODO: returns a list of vertices that are siblings
-            ; to vertex AND in the same spine as vertex (spine
-            ; split case.
-            ; returns list of length >=0
-            empty)
+  (local [(define (spine-split vertex vertices)
+            (local [(define record-number (token-record-index vertex))
+
+                    (define (split? vertex_2)
+                      (if (= (token-record-index vertex_2) record-number)
+                          #t
+                          #f))
+
+                    (define (spine-split vertices siblings)
+                      (cond [(empty? vertices) (reverse siblings)]
+                            [else
+                              (if (split? (first vertices))
+                                  (spine-split (rest vertices) (cons (first vertices) siblings))
+                                  (reverse siblings))]))]
+              (spine-split vertices empty)))
 
           (define (left-siblings ...)
             ; TODO: returns a list of vertices that are siblings
