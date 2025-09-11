@@ -68,18 +68,19 @@
                                   "Natural ListOfListOfNatural; Given: ~a ~a"
                                   file byrecord)])))
 
-(struct token (token type record-index field-index)
+(struct token (token type record-index field-index spine-index)
         #:transparent
         #:guard (λ (token type record-index field-index type-name)
                    (cond [(and (string? token)
                                (symbol? type)
                                (int&>=? record-index 0)
-                               (int&>=? field-index 0))
-                          (values token type record-index field-index)]
+                               (int&>=? field-index 0)
+                               (int&>=? spine-index 0))
+                          (values token type record-index field-index spine-index)]
                          [else
                            (error type-name
-                                  "String Symbol Natural Natural; Given: ~a ~a ~a ~a"
-                                  token type record-index field-index)])))
+                                  "String Symbol Natural Natural Natural; Given: ~a ~a ~a ~a ~a"
+                                  token type record-index field-index spine-index)])))
 
 (define (int&>=? i lower)
   (and (integer? i) (>= i lower)))

@@ -27,17 +27,28 @@
 		- All intervening data is in the order read from
 		  the Humdrum file.
 
-	NB: Each list in humdrum-graph-vertices is a flat list.
-	    If spine splits have occured, sibling tokens follow
-	    each other in the list:
+	NB 1: Each list in humdrum-graph-vertices is a flat list.
+	      If spine splits have occured, sibling tokens follow
+	      each other in the list:
 		4a
 		*^
 		4a	4cc
 		->
 		(list 4a *^ 4a 4cc)
-	    Thus, when traversing a HumdrumGraph, each token must
-	    ask if the next token in the list is a sibling or a
-	    child token.
+	      Thus, when traversing a HumdrumGraph, each token must
+	      ask if the next token in the list is a sibling or a
+	      child token.
+
+	NB 2: It is not definitionally true that each (listof
+	      Vertex) in humdrum-graph-vertices or each hash in
+	      humdrum-graph-edges will be of the same size. This
+	      is because a spine can split independently of the
+	      splits in another spine; if one spine has split
+	      twice, for example, a sibling spine may have split
+	      zero or arbitrarily many times at the same location.
+	      Because of NB 1, the size of a (listof Vertex) or
+	      a hash will depend on the number of spine splits
+	      that occur in the respective spine.
 |#
 
 (provide (struct-out humdrum-graph))

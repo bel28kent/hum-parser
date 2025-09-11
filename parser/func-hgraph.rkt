@@ -20,18 +20,41 @@
 (define (children edges vertex)
   (hash-ref edges vertex))
 
-; TODO: optional argument to only return result of right-siblings, useful for bft.
-(define (siblings hgraph vertex [right? #f])
-  ; TODO: returns a list of vertices that are siblings to vertex
-  ; cf. NB in data-HumdrumGraph.rkt. This will involve asking
-  ; if the next element(s) in the list that this vertex came from
-  ; are siblings (spine split case) and looking for siblings in
-  ; the neighboring spines.
-  (local [(define (spine-split vertex vertices)
-            (local [(define record-number (token-record-index vertex))
+(define (get-sibling-hgraph hgraph vertex [right? #f])
+  ; HumdrumGraph Vertex Boolean -> HumdrumGraph
+  ; returns a HumdrumGraph of spines to the left or the right of the spine containing vertex.
+  (local [(define index (token-spine-index vertex))
 
-                    (define (split? vertex_2)
-                      (if (= (token-record-index vertex_2) record-number)
+          (define operator (if right? > <))
+
+          (define (get-first-index lst-or-hsh)
+            (cond [(list? lst-or-hsh) (first lst-or-hsh)]
+                  [else
+                    ; unordered, but we only need a spine index, which
+                    ; will be the same for all tokens in list of keys.
+                    (first (hash-keys lst-or-hsh))]))
+
+          (define (getter lst)
+            ; BinarySearchTree would be faster. If operator is <, will waste time on spines with
+            ; index > than; if operator is >, will waste time on spines with index <. Best case
+            ; is only one spine, so no lefts or rights.
+            (foldl (λ (f result)
+                      (if (operator (get-first-index (first lst)) index)
+                          (cons f result)
+                          result))
+                   empty
+                   lst))]
+    (humdrum-graph (getter (humdrum-graph-vertices hgraph))
+                   (getter (humdrum-graph-edges hgraph)))))
+
+(define (siblings hgraph vertex [right? #f])
+  ; HumdrumGraph Vertex Boolean -> (listof Vertex)
+  ; returns a list of vertices that are siblings to vertex
+  (local [(define record_number (token-record-index vertex))
+
+          (define (spine-split vertices)
+            (local [(define (split? vertex_2)
+                      (if (= (token-record-index vertex_2) record_number)
                           #t
                           #f))
 
@@ -43,20 +66,27 @@
                                   (reverse siblings))]))]
               (spine-split vertices empty)))
 
-          (define (left-siblings ...)
-            ; TODO: returns a list of vertices that are siblings
-            ; to vertex AND in any spines to the left of this
-            ; vertex's spine.
-            ; returns list of length >=0
-            empty)
+          (define (first-sibling vertices)
+            (cond [(empty? vertices) empty] ; is this case necessary?
+                  [(= (token-record-index (first vertices)) record_number) vertices]
+                  [else
+                    (first-sibling (rest vertices))]))
 
-          (define (right-siblings ...)
-            ; TODO: returns a list of vertices that are siblings
-            ; to vertex AND in any spines to the right of this
-            ; vertex's spine.
-            ; returns list of length >=0
-            empty)]
-    ()))
+          (define (abstract-siblings vertices)
+            (apply append
+                   (map spine-split
+                        (map first-sibling vertices))))
+
+          (define (left-siblings left_vertices)
+            (abstract-siblings left_vertices))
+
+          (define (right-siblings right_vertices)
+            (abstract-siblings right_vertices))]
+    (if right?
+        (right-siblings (get-sibling-hgraph hgraph vertex #t))
+        (append (left-siblings (get-sibling-hgraph hgraph vertex))
+                (spine-split (list-ref (humdrum-graph-vertices hgraph) index))
+                (right-siblings (get-sibling-hgraph hgraph vertex #t))))))
 
 ;; Converters
 
