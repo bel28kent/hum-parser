@@ -49,6 +49,25 @@
 	      Because of NB 1, the size of a (listof Vertex) or
 	      a hash will depend on the number of spine splits
 	      that occur in the respective spine.
+
+	      Additionally, the Humdrum Syntax allows for spines
+	      to be declared and terminated non-contiguously. The
+	      following examples are valid Humdrum:
+		!! Example 1
+		**kern	**kern
+		4a	4a
+		4b	4b
+		*-	*
+		4c
+		*-
+		!! Example 2
+		**kern
+		4a
+		4b
+		*+
+		*	**kern
+		4c	4c
+		*-	*-
 |#
 
 (provide (struct-out humdrum-graph))
